@@ -37,7 +37,7 @@ export async function signUpWithEmailAndPassword(email: string, password: string
   }
 }
 
-export async function updateProfileAction(data: { uid: string, displayName: string }): Promise<{
+export async function updateProfileAction(data: { uid: string, firstName: string, lastName: string, title: string }): Promise<{
     success: boolean;
     error?: string;
 }> {
@@ -46,8 +46,11 @@ export async function updateProfileAction(data: { uid: string, displayName: stri
     }
     try {
         await auth.updateUser(data.uid, {
-            displayName: data.displayName,
+            displayName: `${data.firstName} ${data.lastName}`,
         });
+        // Note: 'title' is not a default Firebase Auth field.
+        // To save it, you would typically use a database like Firestore.
+        // For now, we are just updating the displayName.
         return { success: true };
     } catch (error: any) {
         return { success: false, error: error.message };

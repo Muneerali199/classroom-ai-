@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
@@ -14,7 +15,6 @@ import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/hooks/use-auth';
-import Link from 'next/link';
 
 export default function Header() {
   const { user } = useAuth();
@@ -32,6 +32,11 @@ export default function Header() {
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
     return name[0].toUpperCase();
+  }
+  
+  const getFirstName = (name: string | null | undefined) => {
+    if (!name) return 'Teacher';
+    return name.split(' ')[0];
   }
 
   return (
