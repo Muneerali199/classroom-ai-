@@ -43,13 +43,13 @@ body {
     --sidebar-ring: 262.1 83.3% 57.8%;
   }
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 20% 98%;
-    --card: 224 71% 4%;
+    --background: 222 47% 11%; /* slate-900 */
+    --foreground: 210 20% 98%; /* slate-50 */
+    --card: 222 47% 11%; /* slate-900 with slight purple tint */
     --card-foreground: 210 20% 98%;
     --popover: 224 71% 4%;
     --popover-foreground: 210 20% 98%;
-    --primary: 263.4 90.2% 59.2%;
+    --primary: 263.4 90.2% 59.2%; /* Vibrant Purple */
     --primary-foreground: 210 20% 98%;
     --secondary: 215 28% 17%;
     --secondary-foreground: 210 20% 98%;
@@ -68,7 +68,7 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 224 71% 4%;
+    --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 20% 98%;
     --sidebar-primary: 263.4 90.2% 59.2%;
     --sidebar-primary-foreground: 210 20% 98%;
