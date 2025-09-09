@@ -12,10 +12,12 @@ export default function SignUpPage() {
                 <span className="text-2xl font-bold">EduTrack</span>
             </div>
         </div>
-        <h1 className="mb-1 text-2xl font-bold">Create an account</h1>
-        <p className="mb-6 text-muted-foreground">
-          Enter your details below to start using EduTrack.
-        </p>
+        <div className="text-center">
+            <h1 className="mb-1 text-2xl font-bold">Create an account</h1>
+            <p className="mb-6 text-muted-foreground">
+            Enter your details below to start using EduTrack.
+            </p>
+        </div>
         <SignUpForm />
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{' '}

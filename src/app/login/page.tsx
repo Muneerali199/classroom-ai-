@@ -12,10 +12,12 @@ export default function LoginPage() {
                 <span className="text-2xl font-bold">EduTrack</span>
             </div>
         </div>
-        <h1 className="mb-1 text-2xl font-bold">Welcome back</h1>
-        <p className="mb-6 text-muted-foreground">
-          Enter your email and password to sign in.
-        </p>
+        <div className="text-center">
+            <h1 className="mb-1 text-2xl font-bold">Welcome back</h1>
+            <p className="mb-6 text-muted-foreground">
+            Enter your email and password to sign in.
+            </p>
+        </div>
         <LoginForm />
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
