@@ -18,6 +18,12 @@ export function useAuth() {
       
       const isAuthPage = pathname === '/login' || pathname === '/signup';
       
+      // If user is logged in and on an auth page, redirect to dashboard
+      if (user && isAuthPage) {
+        router.push('/dashboard');
+      }
+      
+      // If user is not logged in and not on a public/auth page, redirect to login
       if (!user && !isAuthPage && pathname !== '/') {
         router.push('/login');
       }
