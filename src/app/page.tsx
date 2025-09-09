@@ -145,8 +145,8 @@ export default function LandingPage() {
   const isDarkMode = mounted && theme === 'dark';
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden dark:bg-gradient-to-br dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
+      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border dark:bg-black/20 dark:border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="flex items-center space-x-3">
@@ -270,7 +270,7 @@ export default function LandingPage() {
 
         <div className="relative z-10 text-center max-w-6xl mx-auto">
           <div className="mb-8">
-            <div className="inline-block p-4 rounded-2xl bg-primary/10 backdrop-blur-sm border border-border mb-6">
+            <div className="inline-block p-4 rounded-2xl bg-primary/10 backdrop-blur-sm border border-border dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-purple-500/20 dark:border-white/20 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto transform hover:scale-110 transition-transform duration-300">
                 <Logo className="w-8 h-8 text-white" />
               </div>
@@ -298,7 +298,7 @@ export default function LandingPage() {
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" className="dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/20">
               Learn More
             </Button>
           </div>
