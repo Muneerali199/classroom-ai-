@@ -1,4 +1,5 @@
-import Link from 'next/link';
+'use client';
+
 import { useRouter } from 'next/navigation';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
