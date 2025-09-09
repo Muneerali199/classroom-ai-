@@ -14,6 +14,7 @@ import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/hooks/use-auth';
+import Link from 'next/link';
 
 export default function Header() {
   const { user } = useAuth();
@@ -23,6 +24,15 @@ export default function Header() {
     await auth.signOut();
     router.push('/login');
   };
+  
+  const getInitials = (name: string | null | undefined, fallback: string) => {
+    if (!name) return fallback;
+    const parts = name.split(' ');
+    if (parts.length > 1) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name[0].toUpperCase();
+  }
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
@@ -35,21 +45,23 @@ export default function Header() {
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-9 w-9">
                 <AvatarImage src={user?.photoURL ?? "https://picsum.photos/100"} alt="User avatar" data-ai-hint="person" />
-                <AvatarFallback>{user?.email?.[0].toUpperCase() ?? 'T'}</AvatarFallback>
+                <AvatarFallback>{getInitials(user?.displayName || user?.email, 'T')}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Teacher</p>
+                <p className="text-sm font-medium leading-none">{user?.displayName ?? 'Teacher'}</p>
                 <p className="text-xs leading-none text-muted-foreground">
                   {user?.email ?? 'teacher@edutrack.com'}
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+                <Link href="/dashboard/profile">Profile</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>

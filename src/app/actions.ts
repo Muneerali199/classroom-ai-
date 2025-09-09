@@ -36,3 +36,20 @@ export async function signUpWithEmailAndPassword(email: string, password: string
     return { success: false, error: error.message };
   }
 }
+
+export async function updateProfileAction(data: { uid: string, displayName: string }): Promise<{
+    success: boolean;
+    error?: string;
+}> {
+    if (!auth) {
+        return { success: false, error: 'Firebase Admin not initialized. Check server logs.' };
+    }
+    try {
+        await auth.updateUser(data.uid, {
+            displayName: data.displayName,
+        });
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
