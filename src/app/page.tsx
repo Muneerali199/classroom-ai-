@@ -11,7 +11,7 @@ const teamMembers = [
   {
     name: 'Muneer Ali',
     role: 'Lead Developer',
-    avatar: '/muneer-ali.jpg',
+    avatar: 'https://picsum.photos/200/200?random=1',
     socials: {
       twitter: '#',
       linkedin: 'https://www.linkedin.com/in/muneer-ali/',
