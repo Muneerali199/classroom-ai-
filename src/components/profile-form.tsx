@@ -5,6 +5,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useState, useTransition, useEffect } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,9 +41,30 @@ const timezones = [
     'Asia/Bangkok', 'Asia/Hong_Kong', 'Asia/Tokyo', 'Australia/Sydney', 'Pacific/Auckland',
 ];
 const languages = [
-    'English', 'Spanish', 'French', 'German', 'Chinese (Mandarin)', 'Japanese', 'Hindi', 'Arabic', 'Portuguese', 
-    'Russian', 'Italian', 'Korean', 'Dutch', 'Turkish', 'Swedish', 'Polish', 'Indonesian', 'Vietnamese', 'Thai', 'Malay',
-    'Bengali', 'Urdu', 'Persian (Farsi)', 'Hebrew'
+    { value: 'en', label: 'English' },
+    { value: 'es', label: 'Spanish' },
+    { value: 'fr', label: 'French' },
+    { value: 'de', label: 'German' },
+    { value: 'zh', label: 'Chinese (Mandarin)' },
+    { value: 'ja', label: 'Japanese' },
+    { value: 'hi', label: 'Hindi' },
+    { value: 'ar', label: 'Arabic' },
+    { value: 'pt', label: 'Portuguese' },
+    { value: 'ru', label: 'Russian' },
+    { value: 'it', label: 'Italian' },
+    { value: 'ko', label: 'Korean' },
+    { value: 'nl', label: 'Dutch' },
+    { value: 'tr', label: 'Turkish' },
+    { value: 'sv', label: 'Swedish' },
+    { value: 'pl', label: 'Polish' },
+    { value: 'id', label: 'Indonesian' },
+    { value: 'vi', label: 'Vietnamese' },
+    { value: 'th', label: 'Thai' },
+    { value: 'ms', label: 'Malay' },
+    { value: 'bn', label: 'Bengali' },
+    { value: 'ur', label: 'Urdu' },
+    { value: 'fa', label: 'Persian (Farsi)' },
+    { value: 'he', label: 'Hebrew' }
 ];
 
 export default function ProfileForm() {
@@ -49,6 +72,10 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations('ProfileForm');
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
 
   const {
     register,
@@ -63,7 +90,7 @@ export default function ProfileForm() {
       lastName: '',
       title: '',
       email: '',
-      language: 'English',
+      language: locale,
       timezone: 'Etc/GMT+12',
       bio: '',
       emailNotifications: true,
@@ -80,22 +107,26 @@ export default function ProfileForm() {
         firstName: firstName,
         lastName: lastName,
         email: user.email || '',
-        // The rest would be loaded from a database in a real app
         title: '',
-        language: 'English',
+        language: locale,
         timezone: 'America/New_York',
         bio: '',
         emailNotifications: true,
         pushNotifications: false,
       });
     }
-  }, [user, reset]);
+  }, [user, reset, locale]);
+
+  const onLanguageChange = (newLocale: string) => {
+    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+    router.replace(newPath);
+  };
 
   const onSubmit: SubmitHandler<ProfileFormInputs> = (data) => {
     setError(null);
     startTransition(async () => {
       if (!user) {
-        setError('You must be logged in to update your profile.');
+        setError(t('loginError'));
         return;
       }
       const result = await updateProfileAction({
@@ -107,11 +138,11 @@ export default function ProfileForm() {
 
       if (result.success) {
         toast({
-          title: 'Profile Updated',
-          description: 'Your profile has been updated successfully.',
+          title: t('toast.successTitle'),
+          description: t('toast.successDescription'),
         });
       } else {
-        setError(result.error || 'An unexpected error occurred.');
+        setError(result.error || t('toast.errorUnknown'));
       }
     });
   };
@@ -120,13 +151,13 @@ export default function ProfileForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
        {error && (
         <Alert variant="destructive">
-          <AlertTitle>Update Failed</AlertTitle>
+          <AlertTitle>{t('updateFailed')}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-            <Label htmlFor="firstName">First Name</Label>
+            <Label htmlFor="firstName">{t('firstName')}</Label>
             <Input
             id="firstName"
             {...register('firstName')}
@@ -136,7 +167,7 @@ export default function ProfileForm() {
             )}
         </div>
          <div className="space-y-2">
-            <Label htmlFor="lastName">Last Name</Label>
+            <Label htmlFor="lastName">{t('lastName')}</Label>
             <Input
             id="lastName"
             {...register('lastName')}
@@ -147,10 +178,10 @@ export default function ProfileForm() {
         </div>
       </div>
        <div className="space-y-2">
-        <Label htmlFor="title">Role / Title</Label>
+        <Label htmlFor="title">{t('role')}</Label>
         <Input
           id="title"
-          placeholder="e.g. Grade 5 Teacher"
+          placeholder={t('rolePlaceholder')}
           {...register('title')}
         />
         {errors.title && (
@@ -158,7 +189,7 @@ export default function ProfileForm() {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t('email')}</Label>
         <Input
           id="email"
           type="email"
@@ -166,15 +197,15 @@ export default function ProfileForm() {
           disabled
         />
         <p className="text-xs text-muted-foreground">
-            Email address cannot be changed.
+            {t('emailCannotBeChanged')}
         </p>
       </div>
 
        <div className="space-y-2">
-        <Label htmlFor="bio">About Me</Label>
+        <Label htmlFor="bio">{t('aboutMe')}</Label>
         <Textarea
           id="bio"
-          placeholder="Tell us a little about yourself..."
+          placeholder={t('bioPlaceholder')}
           {...register('bio')}
           className="min-h-[100px]"
         />
@@ -185,23 +216,23 @@ export default function ProfileForm() {
 
        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
-              <Select name="language" defaultValue="English">
+              <Label htmlFor="language">{t('language')}</Label>
+              <Select name="language" defaultValue={locale} onValueChange={onLanguageChange}>
                 <SelectTrigger id="language">
-                    <SelectValue placeholder="Select language" />
+                    <SelectValue placeholder={t('languagePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                     {languages.map(lang => (
-                        <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
                     ))}
                 </SelectContent>
               </Select>
           </div>
            <div className="space-y-2">
-              <Label htmlFor="timezone">Timezone</Label>
+              <Label htmlFor="timezone">{t('timezone')}</Label>
               <Select name="timezone" defaultValue="America/New_York">
                 <SelectTrigger id="timezone">
-                    <SelectValue placeholder="Select timezone" />
+                    <SelectValue placeholder={t('timezonePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                     {timezones.map(tz => (
@@ -213,14 +244,14 @@ export default function ProfileForm() {
       </div>
 
       <div className="space-y-4">
-        <Label>Communication Preferences</Label>
+        <Label>{t('communicationPreferences')}</Label>
         <div className="flex items-center space-x-2">
           <Checkbox id="emailNotifications" defaultChecked />
           <label
             htmlFor="emailNotifications"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-           Email Notifications
+           {t('emailNotifications')}
           </label>
         </div>
          <div className="flex items-center space-x-2">
@@ -229,14 +260,14 @@ export default function ProfileForm() {
             htmlFor="pushNotifications"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-           Push Notifications
+           {t('pushNotifications')}
           </label>
         </div>
       </div>
 
       <Button type="submit" disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Save Changes
+        {t('saveChanges')}
       </Button>
     </form>
   );

@@ -1,0 +1,39 @@
+{
+  "DashboardNav": {
+    "dashboard": "Tablero",
+    "profile": "Perfil",
+    "students": "Estudiantes",
+    "attendance": "Asistencia"
+  },
+  "ProfilePage": {
+    "title": "Configuración de perfil",
+    "description": "Administre la configuración de su cuenta y personalice su experiencia.",
+    "cardTitle": "Tu perfil",
+    "cardDescription": "Actualice su nombre, idioma y otros datos personales aquí."
+  },
+  "ProfileForm": {
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "role": "Rol / Título",
+    "rolePlaceholder": "p.ej. Maestro de 5to grado",
+    "email": "Correo electrónico",
+    "emailCannotBeChanged": "La dirección de correo electrónico no se puede cambiar.",
+    "aboutMe": "Sobre mí",
+    "bioPlaceholder": "Cuéntanos un poco sobre ti...",
+    "language": "Idioma",
+    "languagePlaceholder": "Seleccionar idioma",
+    "timezone": "Zona horaria",
+    "timezonePlaceholder": "Seleccionar zona horaria",
+    "communicationPreferences": "Preferencias de comunicación",
+    "emailNotifications": "Notificaciones por correo electrónico",
+    "pushNotifications": "Notificaciones push",
+    "saveChanges": "Guardar cambios",
+    "updateFailed": "Error al actualizar",
+    "loginError": "Debes iniciar sesión para actualizar tu perfil.",
+    "toast": {
+      "successTitle": "Perfil actualizado",
+      "successDescription": "Tu perfil ha sido actualizado exitosamente.",
+      "errorUnknown": "Ocurrió un error inesperado."
+    }
+  }
+}

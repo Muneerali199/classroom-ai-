@@ -1,0 +1,39 @@
+{
+  "DashboardNav": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "students": "Students",
+    "attendance": "Attendance"
+  },
+  "ProfilePage": {
+    "title": "Profile Settings",
+    "description": "Manage your account settings and customize your experience.",
+    "cardTitle": "Your Profile",
+    "cardDescription": "Update your name, language, and other personal details here."
+  },
+  "ProfileForm": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "role": "Role / Title",
+    "rolePlaceholder": "e.g. Grade 5 Teacher",
+    "email": "Email",
+    "emailCannotBeChanged": "Email address cannot be changed.",
+    "aboutMe": "About Me",
+    "bioPlaceholder": "Tell us a little about yourself...",
+    "language": "Language",
+    "languagePlaceholder": "Select language",
+    "timezone": "Timezone",
+    "timezonePlaceholder": "Select timezone",
+    "communicationPreferences": "Communication Preferences",
+    "emailNotifications": "Email Notifications",
+    "pushNotifications": "Push Notifications",
+    "saveChanges": "Save Changes",
+    "updateFailed": "Update Failed",
+    "loginError": "You must be logged in to update your profile.",
+    "toast": {
+      "successTitle": "Profile Updated",
+      "successDescription": "Your profile has been updated successfully.",
+      "errorUnknown": "An unexpected error occurred."
+    }
+  }
+}
