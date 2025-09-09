@@ -7,12 +7,11 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarHeader,
 } from '@/components/ui/sidebar';
 
 import { students } from '@/lib/data';
@@ -54,14 +53,12 @@ export default function Home() {
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <SidebarInset>
-        <div className="flex min-h-svh flex-col">
-          <Header />
-          <main className="flex-1 p-4 md:p-6 lg:p-8">
-            <DashboardClient initialStudents={students} />
-          </main>
+      <main className="flex min-h-svh flex-col">
+        <Header />
+        <div className="flex-1 p-4 md:p-6 lg:p-8">
+          <DashboardClient initialStudents={students} />
         </div>
-      </SidebarInset>
+      </main>
     </SidebarProvider>
   );
 }
