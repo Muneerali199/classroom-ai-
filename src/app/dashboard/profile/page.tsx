@@ -1,5 +1,6 @@
 import ProfileForm from '@/components/profile-form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 export default function ProfilePage() {
   return (
@@ -9,13 +10,14 @@ export default function ProfilePage() {
           Profile Settings
         </h1>
         <p className="text-muted-foreground">
-          Manage your account settings and update your personal information.
+          Manage your account settings and customize your experience.
         </p>
       </div>
+      <Separator />
       <Card>
           <CardHeader>
               <CardTitle>Your Profile</CardTitle>
-              <CardDescription>Update your name and other details here.</CardDescription>
+              <CardDescription>Update your name, language, and other personal details here.</CardDescription>
           </CardHeader>
           <CardContent>
              <ProfileForm />
