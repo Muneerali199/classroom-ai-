@@ -66,15 +66,15 @@ export default function AttendanceTable({
   };
 
   return (
-    <Card className="w-full bg-white/5 border-white/10 backdrop-blur-lg">
+    <Card className="w-full bg-card/50 dark:bg-white/5 border dark:border-white/10 backdrop-blur-lg">
       <CardHeader>
         <CardTitle>Manual Attendance for {new Date(date).toLocaleDateString()}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="border border-white/10 rounded-lg overflow-hidden">
+        <div className="border rounded-lg overflow-hidden">
             <Table>
-            <TableHeader className="bg-white/5">
-                <TableRow className="border-white/10">
+            <TableHeader className="bg-muted/50 dark:bg-white/5">
+                <TableRow>
                 <TableHead>Student Name</TableHead>
                 <TableHead className="text-center">Status</TableHead>
                 <TableHead className="w-[180px]">Action</TableHead>
@@ -82,7 +82,7 @@ export default function AttendanceTable({
             </TableHeader>
             <TableBody>
                 {students.map((student) => (
-                <TableRow key={student.id} className="border-white/10">
+                <TableRow key={student.id}>
                     <TableCell className="font-medium">{student.name}</TableCell>
                     <TableCell className="text-center">
                         <Badge variant={getStatusVariant(getStatusForDate(student, date))}>
@@ -96,7 +96,7 @@ export default function AttendanceTable({
                         onAttendanceChange(student.id, date, value as AttendanceStatus)
                         }
                     >
-                        <SelectTrigger className="bg-transparent">
+                        <SelectTrigger>
                         <SelectValue placeholder="Mark attendance" />
                         </SelectTrigger>
                         <SelectContent>

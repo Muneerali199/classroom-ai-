@@ -61,7 +61,7 @@ export default function AttendanceSummaryGenerator({
   const selectedStudentName = students.find(s => s.id === selectedStudentId)?.name || 'the student';
 
   return (
-    <Card className="w-full bg-white/5 border-white/10 backdrop-blur-lg">
+    <Card className="w-full bg-card/50 dark:bg-white/5 border dark:border-white/10 backdrop-blur-lg">
       <CardHeader>
         <CardTitle>AI Attendance Summary</CardTitle>
         <CardDescription>
@@ -71,7 +71,7 @@ export default function AttendanceSummaryGenerator({
       <CardContent className="space-y-4">
         <div className="flex flex-col sm:flex-row gap-2">
           <Select onValueChange={setSelectedStudentId} value={selectedStudentId ?? ''}>
-            <SelectTrigger className="w-full sm:w-[280px] bg-transparent">
+            <SelectTrigger className="w-full sm:w-[280px]">
               <SelectValue placeholder="Select a student" />
             </SelectTrigger>
             <SelectContent>
@@ -96,12 +96,12 @@ export default function AttendanceSummaryGenerator({
         {(isPending || summary) && (
             <div className="pt-4">
                 <h3 className="font-semibold mb-2">Summary for {selectedStudentName}</h3>
-                <div className="p-4 border rounded-md bg-black/20 min-h-[120px]">
+                <div className="p-4 border rounded-md bg-background/50 dark:bg-black/20 min-h-[120px]">
                     {isPending ? (
                         <div className="space-y-2">
-                            <Skeleton className="h-4 w-full bg-white/20" />
-                            <Skeleton className="h-4 w-full bg-white/20" />
-                            <Skeleton className="h-4 w-3/4 bg-white/20" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-3/4" />
                         </div>
                     ) : (
                         <p className="text-sm text-foreground">{summary}</p>
@@ -111,7 +111,7 @@ export default function AttendanceSummaryGenerator({
         )}
       </CardContent>
       <CardFooter>
-          <Alert className="bg-transparent border-white/10">
+          <Alert className="bg-transparent border-border/50 dark:border-white/10">
               <Lightbulb className="h-4 w-4" />
               <AlertTitle>Powered by AI</AlertTitle>
               <AlertDescription>
