@@ -46,13 +46,13 @@ export default function AttendanceTable({
   const getStatusVariant = (status: AttendanceStatus) => {
     switch (status) {
       case 'Present':
-        return 'default';
+        return 'success';
       case 'Late':
-        return 'secondary';
+        return 'warning';
       case 'Absent':
         return 'destructive';
       case 'Excused':
-        return 'outline';
+        return 'secondary';
       default:
         return 'default';
     }
@@ -66,15 +66,15 @@ export default function AttendanceTable({
   };
 
   return (
-    <Card>
+    <Card className="w-full bg-white/5 border-white/10 backdrop-blur-lg">
       <CardHeader>
         <CardTitle>Manual Attendance for {new Date(date).toLocaleDateString()}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="border rounded-lg">
+        <div className="border border-white/10 rounded-lg overflow-hidden">
             <Table>
-            <TableHeader>
-                <TableRow>
+            <TableHeader className="bg-white/5">
+                <TableRow className="border-white/10">
                 <TableHead>Student Name</TableHead>
                 <TableHead className="text-center">Status</TableHead>
                 <TableHead className="w-[180px]">Action</TableHead>
@@ -82,7 +82,7 @@ export default function AttendanceTable({
             </TableHeader>
             <TableBody>
                 {students.map((student) => (
-                <TableRow key={student.id}>
+                <TableRow key={student.id} className="border-white/10">
                     <TableCell className="font-medium">{student.name}</TableCell>
                     <TableCell className="text-center">
                         <Badge variant={getStatusVariant(getStatusForDate(student, date))}>
@@ -96,7 +96,7 @@ export default function AttendanceTable({
                         onAttendanceChange(student.id, date, value as AttendanceStatus)
                         }
                     >
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-transparent">
                         <SelectValue placeholder="Mark attendance" />
                         </SelectTrigger>
                         <SelectContent>

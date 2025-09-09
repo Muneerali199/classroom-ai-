@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Lightbulb } from 'lucide-react';
+import { Lightbulb, Loader2 } from 'lucide-react';
 
 import type { Student } from '@/lib/types';
 import { getAttendanceSummaryAction } from '@/app/actions';
@@ -61,7 +61,7 @@ export default function AttendanceSummaryGenerator({
   const selectedStudentName = students.find(s => s.id === selectedStudentId)?.name || 'the student';
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-white/5 border-white/10 backdrop-blur-lg">
       <CardHeader>
         <CardTitle>AI Attendance Summary</CardTitle>
         <CardDescription>
@@ -71,7 +71,7 @@ export default function AttendanceSummaryGenerator({
       <CardContent className="space-y-4">
         <div className="flex flex-col sm:flex-row gap-2">
           <Select onValueChange={setSelectedStudentId} value={selectedStudentId ?? ''}>
-            <SelectTrigger className="w-full sm:w-[280px]">
+            <SelectTrigger className="w-full sm:w-[280px] bg-transparent">
               <SelectValue placeholder="Select a student" />
             </SelectTrigger>
             <SelectContent>
@@ -83,6 +83,7 @@ export default function AttendanceSummaryGenerator({
             </SelectContent>
           </Select>
           <Button onClick={handleGenerateSummary} disabled={isPending || !selectedStudentId}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isPending ? 'Generating...' : 'Generate Summary'}
           </Button>
         </div>
@@ -95,12 +96,12 @@ export default function AttendanceSummaryGenerator({
         {(isPending || summary) && (
             <div className="pt-4">
                 <h3 className="font-semibold mb-2">Summary for {selectedStudentName}</h3>
-                <div className="p-4 border rounded-md bg-secondary/50 min-h-[120px]">
+                <div className="p-4 border rounded-md bg-black/20 min-h-[120px]">
                     {isPending ? (
                         <div className="space-y-2">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-full bg-white/20" />
+                            <Skeleton className="h-4 w-full bg-white/20" />
+                            <Skeleton className="h-4 w-3/4 bg-white/20" />
                         </div>
                     ) : (
                         <p className="text-sm text-foreground">{summary}</p>
@@ -110,7 +111,7 @@ export default function AttendanceSummaryGenerator({
         )}
       </CardContent>
       <CardFooter>
-          <Alert>
+          <Alert className="bg-transparent border-white/10">
               <Lightbulb className="h-4 w-4" />
               <AlertTitle>Powered by AI</AlertTitle>
               <AlertDescription>

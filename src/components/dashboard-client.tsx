@@ -47,11 +47,11 @@ export default function DashboardClient({
     return (
         <div className="space-y-6">
             <div>
-                <Skeleton className="h-9 w-1/2" />
-                <Skeleton className="mt-2 h-5 w-1/3" />
+                <Skeleton className="h-9 w-1/2 bg-white/20" />
+                <Skeleton className="mt-2 h-5 w-1/3 bg-white/20" />
             </div>
-            <Skeleton className="h-10 w-full max-w-md" />
-            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-10 w-full max-w-md bg-white/20" />
+            <Skeleton className="h-96 w-full bg-white/20" />
         </div>
     );
   }
@@ -64,17 +64,17 @@ export default function DashboardClient({
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-headline tracking-tight">
-          Attendance Management
+          Hello, {user.displayName?.split(' ')[0] || 'Teacher'}!
         </h1>
-        <p className="text-muted-foreground">
-          Mark student attendance and generate AI-powered summaries.
+        <p className="text-gray-300">
+          Welcome back. Mark student attendance and generate AI-powered summaries.
         </p>
       </div>
 
       <Tabs defaultValue="marking" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 max-w-md">
-          <TabsTrigger value="marking">Manual Marking</TabsTrigger>
-          <TabsTrigger value="summary">AI Summary</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 max-w-md bg-black/20 border border-white/10 text-gray-300">
+          <TabsTrigger value="marking" className="data-[state=active]:bg-white/10 data-[state=active]:text-white">Manual Marking</TabsTrigger>
+          <TabsTrigger value="summary" className="data-[state=active]:bg-white/10 data-[state=active]:text-white">AI Summary</TabsTrigger>
         </TabsList>
         <TabsContent value="marking" className="mt-4">
           <AttendanceTable

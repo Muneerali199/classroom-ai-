@@ -29,10 +29,10 @@ export default function Header() {
   const getInitials = (name: string | null | undefined, fallback: string) => {
     if (!name) return fallback;
     const parts = name.split(' ');
-    if (parts.length > 1) {
+    if (parts.length > 1 && parts[0] && parts[parts.length - 1]) {
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
-    return name[0].toUpperCase();
+    return (name[0] || '').toUpperCase();
   }
   
   const getFirstName = (name: string | null | undefined) => {
@@ -41,7 +41,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
+    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-white/10 bg-black/20 backdrop-blur-lg px-4 md:px-6">
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
@@ -50,7 +50,7 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="h-9 w-9">
+              <Avatar className="h-9 w-9 border-2 border-white/20">
                 <AvatarImage src={user?.photoURL ?? "https://picsum.photos/100"} alt="User avatar" data-ai-hint="person" />
                 <AvatarFallback>{getInitials(user?.displayName || user?.email, 'T')}</AvatarFallback>
               </Avatar>

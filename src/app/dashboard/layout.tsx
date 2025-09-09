@@ -36,7 +36,7 @@ export default function DashboardLayout({
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Dashboard" asChild>
+              <SidebarMenuButton tooltip="Dashboard" asChild isActive>
                 <Link href="/dashboard">
                   <LayoutDashboard />
                   <span>Dashboard</span>
@@ -66,7 +66,7 @@ export default function DashboardLayout({
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <main className="flex min-h-svh flex-col md:pl-[var(--sidebar-width-icon)]">
+      <main className="flex min-h-svh flex-col md:pl-[var(--sidebar-width-icon)] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <Header />
         <div className="flex-1 p-4 md:p-6 lg:p-8">
           {children}
