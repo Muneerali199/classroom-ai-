@@ -9,13 +9,13 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const teamMembers = [
   {
-    name: 'Alex Johnson',
+    name: 'Muneer Ali',
     role: 'Lead Developer',
     avatar: 'https://picsum.photos/200/200?random=1',
     socials: {
       twitter: '#',
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/muneer-ali/',
+      github: 'https://github.com/Muneerali199/',
     },
     dataAiHint: 'person portrait',
   },
