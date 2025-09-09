@@ -1,4 +1,7 @@
 import type {NextConfig} from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -25,7 +28,9 @@ const nextConfig: NextConfig = {
     ],
   },
   // This is required to allow the Next.js dev server to accept requests from the preview server.
-  allowedDevOrigins: ['https://*.googleusercontent.com'],
+  experimental: {
+    allowedDevOrigins: ['https://*.googleusercontent.com'],
+  }
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
