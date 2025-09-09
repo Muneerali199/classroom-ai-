@@ -23,6 +23,9 @@ export async function signUpWithEmailAndPassword(email: string, password: string
   error?: string;
   uid?: string;
 }> {
+  if (!auth) {
+    return { success: false, error: 'Firebase Admin not initialized. Check server logs.' };
+  }
   try {
     const userRecord = await auth.createUser({
       email,
