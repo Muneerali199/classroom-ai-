@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -39,7 +40,8 @@ const timezones = [
 ];
 const languages = [
     'English', 'Spanish', 'French', 'German', 'Chinese (Mandarin)', 'Japanese', 'Hindi', 'Arabic', 'Portuguese', 
-    'Russian', 'Italian', 'Korean', 'Dutch', 'Turkish', 'Swedish', 'Polish', 'Indonesian', 'Vietnamese', 'Thai', 'Malay'
+    'Russian', 'Italian', 'Korean', 'Dutch', 'Turkish', 'Swedish', 'Polish', 'Indonesian', 'Vietnamese', 'Thai', 'Malay',
+    'Bengali', 'Urdu', 'Persian (Farsi)', 'Hebrew'
 ];
 
 export default function ProfileForm() {
