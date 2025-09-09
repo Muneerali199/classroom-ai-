@@ -15,6 +15,7 @@ import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/hooks/use-auth';
+import { ThemeToggle } from './theme-toggle';
 
 export default function Header() {
   const { user } = useAuth();
@@ -45,6 +46,7 @@ export default function Header() {
         <SidebarTrigger />
       </div>
       <div className="flex w-full items-center justify-end gap-4">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
