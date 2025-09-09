@@ -66,7 +66,7 @@ export default function DashboardLayout({
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <main className="flex min-h-svh flex-col">
+      <main className="flex min-h-svh flex-col md:pl-[var(--sidebar-width-icon)]">
         <Header />
         <div className="flex-1 p-4 md:p-6 lg:p-8">
           {children}
