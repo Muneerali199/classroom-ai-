@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -9,14 +10,12 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { useTranslations } from 'next-intl';
 import { Home, User, Users, BarChart3 } from 'lucide-react';
