@@ -1,3 +1,36 @@
-import nextConfig from './src/next.config.js';
+import type {NextConfig} from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+  // This is required to allow the Next.js dev server to accept requests from the preview server.
+  experimental: {
+    allowedDevOrigins: ['https://*.googleusercontent.com'],
+  }
+};
+
+export default withNextIntl(nextConfig);
