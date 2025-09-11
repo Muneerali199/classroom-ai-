@@ -38,18 +38,24 @@ const recognizeStudentsPrompt = ai.definePrompt({
   input: {schema: RecognizeStudentsInputSchema},
   output: {schema: RecognizeStudentsOutputSchema},
   model: googleAI.model('gemini-2.5-pro'),
-  prompt: `You are an advanced AI attendance system. Your task is to meticulously identify which students are present in a classroom photograph.
+  prompt: `You are an advanced AI attendance system. Your task is to meticulously identify which students are present in a classroom photograph using a two-step process.
 
-You will be given a primary photograph of the classroom and a list of students with their individual reference photos.
+**Step 1: Analyze the Classroom Photo**
+First, carefully examine the main classroom photo. For each person you can clearly see, provide a brief, objective description of their key facial features. Do not try to identify them yet.
 
-For each student, perform a detailed comparison between their reference photo and the faces visible in the classroom photograph. Pay close attention to key facial features. Be highly critical in your analysis. Only list a student as present if you are very confident they are in the classroom photo.
+**Step 2: Compare and Conclude**
+Now, review the list of students and their individual reference photos. For each student, perform a detailed comparison between their reference photo and the descriptions you created in Step 1.
 
-Return a list containing the names of only the students you can confidently identify. If you don't see any students, return an empty list.
+- Be highly critical in your analysis.
+- Only list a student as present if you are very confident they match one of the individuals in the classroom photo.
+- If a student's face is obscured or unclear in the classroom photo, do not mark them as present.
 
-Classroom Photo:
+After your analysis, return a list containing the names of only the students you can confidently identify as present. If you don't see any matching students, return an empty list.
+
+**Classroom Photo:**
 {{media url=classroomPhotoUri}}
 
-Student Reference Photos:
+**Student Reference Photos:**
 {{#each students}}
 - {{name}}: {{media url=photoUri}}
 {{/each}}
