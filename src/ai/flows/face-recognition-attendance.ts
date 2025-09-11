@@ -37,7 +37,7 @@ const recognizeStudentsPrompt = ai.definePrompt({
   name: 'recognizeStudentsPrompt',
   input: {schema: RecognizeStudentsInputSchema},
   output: {schema: RecognizeStudentsOutputSchema},
-  model: googleAI.model('gemini-1.5-pro'),
+  model: googleAI.model('gemini-2.5-flash'),
   prompt: `You are an advanced AI attendance system. Your task is to meticulously identify which students are present in a classroom photograph using a two-step process.
 
 **Step 1: Analyze the Classroom Photo**
