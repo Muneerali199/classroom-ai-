@@ -1,0 +1,29 @@
+{
+  "placeholderImages": [
+    {
+      "id": "s1",
+      "url": "https://picsum.photos/seed/s1/200/200",
+      "hint": "person man"
+    },
+    {
+      "id": "s2",
+      "url": "https://picsum.photos/seed/s2/200/200",
+      "hint": "person woman"
+    },
+    {
+      "id": "s3",
+      "url": "https://picsum.photos/seed/s3/200/200",
+      "hint": "person boy"
+    },
+    {
+      "id": "s4",
+      "url": "https://picsum.photos/seed/s4/200/200",
+      "hint": "person girl"
+    },
+    {
+      "id": "s5",
+      "url": "https://picsum.photos/seed/s5/200/200",
+      "hint": "person man"
+    }
+  ]
+}

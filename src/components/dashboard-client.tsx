@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import type { Student } from '@/lib/types';
+import type { Student, AttendanceStatus } from '@/lib/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AttendanceTable from '@/components/attendance-table';
 import AttendanceSummaryGenerator from '@/components/attendance-summary-generator';
+import ScanAttendanceClient from '@/components/scan-attendance-client';
 import { useAuth } from '@/hooks/use-auth';
 import { Skeleton } from './ui/skeleton';
 
@@ -22,7 +23,7 @@ export default function DashboardClient({
   const handleAttendanceChange = (
     studentId: string,
     date: string,
-    status: 'Present' | 'Absent' | 'Late' | 'Excused'
+    status: AttendanceStatus
   ) => {
     setStudents((prevStudents) =>
       prevStudents.map((student) => {
@@ -42,6 +43,28 @@ export default function DashboardClient({
       })
     );
   };
+  
+  const handleScanAttendanceUpdate = (presentStudentIds: string[]) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    setStudents(prevStudents => 
+        prevStudents.map(student => {
+            const isPresent = presentStudentIds.includes(student.id);
+            const newStatus: AttendanceStatus = isPresent ? 'Present' : 'Absent';
+            
+            const newAttendance = [...student.attendance];
+            const recordIndex = newAttendance.findIndex(att => att.date === todayStr);
+
+            if (recordIndex > -1) {
+                newAttendance[recordIndex] = { ...newAttendance[recordIndex], status: newStatus };
+            } else {
+                newAttendance.push({ date: todayStr, status: newStatus });
+            }
+            
+            return { ...student, attendance: newAttendance };
+        })
+    );
+  };
 
   if (loading) {
     return (
@@ -50,7 +73,7 @@ export default function DashboardClient({
                 <Skeleton className="h-9 w-1/2" />
                 <Skeleton className="mt-2 h-5 w-1/3" />
             </div>
-            <Skeleton className="h-10 w-full max-w-md" />
+            <Skeleton className="h-10 w-full max-w-lg" />
             <Skeleton className="h-96 w-full" />
         </div>
     );
@@ -72,8 +95,9 @@ export default function DashboardClient({
       </div>
 
       <Tabs defaultValue="marking" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 max-w-md bg-background/50 dark:bg-black/20 border dark:border-white/10">
+        <TabsList className="grid w-full grid-cols-3 max-w-lg bg-background/50 dark:bg-black/20 border dark:border-white/10">
           <TabsTrigger value="marking">Manual Marking</TabsTrigger>
+          <TabsTrigger value="scan">Scan Attendance</TabsTrigger>
           <TabsTrigger value="summary">AI Summary</TabsTrigger>
         </TabsList>
         <TabsContent value="marking" className="mt-4">
@@ -82,6 +106,9 @@ export default function DashboardClient({
             onAttendanceChange={handleAttendanceChange}
             date={today}
           />
+        </TabsContent>
+        <TabsContent value="scan" className="mt-4">
+            <ScanAttendanceClient students={students} onAttendanceUpdate={handleScanAttendanceUpdate} />
         </TabsContent>
         <TabsContent value="summary" className="mt-4">
           <AttendanceSummaryGenerator students={students} />

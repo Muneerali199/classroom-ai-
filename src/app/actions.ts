@@ -4,7 +4,31 @@ import {
   generateAttendanceSummary,
   type AttendanceSummaryInput,
 } from '@/ai/flows/attendance-summary-generation';
+import {
+  recognizeStudentsForAttendance,
+  type RecognizeStudentsInput,
+} from '@/ai/flows/face-recognition-attendance';
 import { auth } from '@/lib/firebase-admin';
+import { students as studentData } from '@/lib/data';
+import { placeholderImages } from '@/lib/placeholder-images.json';
+
+async function convertImageUrlToDataUri(url: string) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const mimeType = response.headers.get('content-type') || 'image/jpeg';
+    return `data:${mimeType};base64,${buffer.toString('base64')}`;
+  } catch (error) {
+    console.error(`Error converting image URL to data URI for ${url}:`, error);
+    // Return a placeholder or handle the error as appropriate
+    return '';
+  }
+}
+
 
 export async function getAttendanceSummaryAction(
   input: AttendanceSummaryInput
@@ -17,6 +41,34 @@ export async function getAttendanceSummaryAction(
     return { success: false, error: 'Failed to generate summary.' };
   }
 }
+
+export async function recognizeStudentsAction(classroomPhotoUri: string) {
+    try {
+        const studentReferencePhotos = await Promise.all(
+          studentData.map(async (student) => {
+            const studentImage = placeholderImages.find((img) => img.id === student.id);
+            const photoUri = studentImage
+              ? await convertImageUrlToDataUri(studentImage.url)
+              : '';
+            return {
+              name: student.name,
+              photoUri: photoUri,
+            };
+          })
+        );
+
+        const input: RecognizeStudentsInput = {
+            classroomPhotoUri,
+            students: studentReferencePhotos.filter(s => s.photoUri), // Filter out students with no image
+        };
+        const { presentStudents } = await recognizeStudentsForAttendance(input);
+        return { success: true, presentStudents };
+    } catch (error) {
+        console.error('Error in recognizeStudentsAction:', error);
+        return { success: false, error: 'Failed to recognize students from the photo.' };
+    }
+}
+
 
 export async function signUpWithEmailAndPassword(email: string, password: string): Promise<{
   success: boolean;
