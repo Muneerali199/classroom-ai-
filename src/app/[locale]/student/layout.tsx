@@ -56,7 +56,7 @@ function StudentSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Link href="/dashboard/profile">
+                <Link href="/student/profile">
                   <User />
                   Profile
                 </Link>
