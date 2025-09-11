@@ -7,7 +7,6 @@ import AttendanceTable from '@/components/attendance-table';
 import AttendanceSummaryGenerator from '@/components/attendance-summary-generator';
 import ScanAttendanceClient from '@/components/scan-attendance-client';
 import { useAuth } from '@/hooks/use-auth';
-import { Skeleton } from './ui/skeleton';
 
 interface DashboardClientProps {
   initialStudents: Student[];
@@ -16,7 +15,7 @@ interface DashboardClientProps {
 export default function DashboardClient({
   initialStudents,
 }: DashboardClientProps) {
-  const { user, loading } = useAuth();
+  const { user } = useAuth(); // We still need user info here
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [today] = useState(new Date().toISOString().split('T')[0]);
 
@@ -66,28 +65,11 @@ export default function DashboardClient({
     );
   };
 
-  if (loading) {
-    return (
-        <div className="space-y-6">
-            <div>
-                <Skeleton className="h-9 w-1/2" />
-                <Skeleton className="mt-2 h-5 w-1/3" />
-            </div>
-            <Skeleton className="h-10 w-full max-w-lg" />
-            <Skeleton className="h-96 w-full" />
-        </div>
-    );
-  }
-
-  if (!user) {
-    return null; // or a redirect component
-  }
-
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-headline tracking-tight">
-          Hello, {user.displayName?.split(' ')[0] || 'Teacher'}!
+          Hello, {user?.displayName?.split(' ')[0] || 'Teacher'}!
         </h1>
         <p className="text-muted-foreground">
           Welcome back. Mark student attendance and generate AI-powered summaries.
