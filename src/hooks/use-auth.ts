@@ -16,15 +16,16 @@ export function useAuth() {
       setUser(user);
       setLoading(false);
       
-      const isAuthPage = pathname === '/login' || pathname === '/signup';
-      
-      // If user is logged in and on an auth page, redirect to dashboard
-      if (user && isAuthPage) {
+      const isAuthPage = pathname.endsWith('/login') || pathname.endsWith('/signup');
+      const isLandingPage = pathname === '/' || pathname === '/en' || pathname === '/es' || pathname === '/hi';
+
+      // If user is logged in and on an auth page or landing page, redirect to dashboard
+      if (user && (isAuthPage || isLandingPage)) {
         router.push('/dashboard');
       }
       
       // If user is not logged in and not on a public/auth page, redirect to login
-      if (!user && !isAuthPage && pathname !== '/') {
+      if (!user && !isAuthPage && !isLandingPage) {
         router.push('/login');
       }
     });
