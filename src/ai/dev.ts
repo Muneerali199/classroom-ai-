@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/attendance-summary-generation.ts';
 import '@/ai/flows/face-recognition-attendance.ts';
+import '@/ai/flows/weekly-attendance-report.ts';

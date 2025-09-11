@@ -9,6 +9,10 @@ import {
   recognizeStudentsForAttendance,
   type RecognizeStudentsInput,
 } from '@/ai/flows/face-recognition-attendance';
+import { 
+    generateWeeklyReport, 
+    type WeeklyReportInput 
+} from '@/ai/flows/weekly-attendance-report';
 import { auth } from '@/lib/firebase-admin';
 import { students as studentData } from '@/lib/data';
 import { placeholderImages } from '@/lib/placeholder-images.json';
@@ -67,6 +71,17 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
     } catch (error) {
         console.error('Error in recognizeStudentsAction:', error);
         return { success: false, error: 'Failed to recognize students from the photo.' };
+    }
+}
+
+export { type WeeklyReportInput };
+export async function generateWeeklyReportAction(input: WeeklyReportInput) {
+    try {
+        const { report } = await generateWeeklyReport(input);
+        return { success: true, report };
+    } catch (error) {
+        console.error('Error in generateWeeklyReportAction:', error);
+        return { success: false, error: 'Failed to generate weekly report.' };
     }
 }
 

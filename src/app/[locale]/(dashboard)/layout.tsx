@@ -15,10 +15,22 @@ import Header from '@/components/header';
 import { Logo } from '@/components/icons';
 import Link from 'next/link';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
+import {usePathname} from 'next/navigation';
 
 
 function AppSidebar() {
   const t = useTranslations('DashboardNav');
+  const pathname = usePathname();
+
+  const getRelativePath = (path: string) => {
+    const segments = pathname.split('/');
+    const locale = segments[1];
+    return `/${locale}${path}`;
+  }
+
+  const isActive = (path: string) => {
+    return pathname === getRelativePath(path);
+  }
 
   return (
     <Sidebar>
@@ -36,31 +48,35 @@ function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
+              <SidebarMenuButton asChild isActive={isActive('/dashboard')}>
                 <Link href="/dashboard">
                   <Home />
                   {t('dashboard')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive('/dashboard/attendance')}>
+                <Link href="/dashboard/attendance">
+                  <BarChart3 />
+                  {t('attendance')}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
+                <Link href="#">
+                    <Users />
+                    {t('students')}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive('/dashboard/profile')}>
                 <Link href="/dashboard/profile">
                   <User />
                   {t('profile')}
                 </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Users />
-                {t('students')}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <BarChart3 />
-                {t('attendance')}
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
