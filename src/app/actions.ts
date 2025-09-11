@@ -1,3 +1,4 @@
+
 'use server';
 
 import {
@@ -70,7 +71,11 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
 }
 
 
-export async function signUpWithEmailAndPassword(email: string, password: string): Promise<{
+export async function signUpWithEmailAndPassword(
+  email: string,
+  password: string,
+  role: 'teacher' | 'student' | 'admin'
+): Promise<{
   success: boolean;
   error?: string;
   uid?: string;
@@ -83,6 +88,10 @@ export async function signUpWithEmailAndPassword(email: string, password: string
       email,
       password,
     });
+
+    // Set custom claim for the user's role
+    await auth.setCustomUserClaims(userRecord.uid, { role });
+
     return { success: true, uid: userRecord.uid };
   } catch (error: any) {
     return { success: false, error: error.message };

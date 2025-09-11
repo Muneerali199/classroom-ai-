@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,10 +14,14 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { signUpWithEmailAndPassword } from '@/app/actions';
 import { Loader2 } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const signUpSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+  role: z.enum(['teacher', 'student', 'admin'], {
+    required_error: 'You must select a role.',
+  }),
 });
 
 type SignUpFormInputs = z.infer<typeof signUpSchema>;
@@ -28,6 +33,8 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<SignUpFormInputs>({
     resolver: zodResolver(signUpSchema),
@@ -37,11 +44,11 @@ export default function SignUpForm() {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await signUpWithEmailAndPassword(data.email, data.password);
+      const result = await signUpWithEmailAndPassword(data.email, data.password, data.role);
       if (result.success) {
         // Now sign in the user on the client
         await signInWithEmailAndPassword(auth, data.email, data.password);
-        router.push('/dashboard');
+        // The useAuth hook will handle redirection based on the new role
       } else {
         setError(result.error || 'An unexpected error occurred.');
       }
@@ -81,6 +88,29 @@ export default function SignUpForm() {
         />
         {errors.password && (
           <p className="text-sm text-destructive">{errors.password.message}</p>
+        )}
+      </div>
+      <div className="space-y-2">
+        <Label>Sign up as</Label>
+        <RadioGroup
+          onValueChange={(value) => setValue('role', value as 'teacher' | 'student' | 'admin')}
+          className="flex space-x-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="teacher" id="teacher" />
+            <Label htmlFor="teacher">Teacher</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="student" id="student" />
+            <Label htmlFor="student">Student</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="admin" id="admin" />
+            <Label htmlFor="admin">Admin</Label>
+          </div>
+        </RadioGroup>
+        {errors.role && (
+          <p className="text-sm text-destructive">{errors.role.message}</p>
         )}
       </div>
       <Button type="submit" className="w-full" disabled={isLoading}>
