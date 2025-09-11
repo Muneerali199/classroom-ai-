@@ -1,0 +1,39 @@
+{
+  "DashboardNav": {
+    "dashboard": "डैशबोर्ड",
+    "profile": "प्रोफ़ाइल",
+    "students": "छात्र",
+    "attendance": "उपस्थिति"
+  },
+  "ProfilePage": {
+    "title": "प्रोफ़ाइल सेटिंग्स",
+    "description": "अपनी खाता सेटिंग्स प्रबंधित करें और अपने अनुभव को अनुकूलित करें।",
+    "cardTitle": "आपकी प्रोफ़ाइल",
+    "cardDescription": "अपना नाम, भाषा और अन्य व्यक्तिगत विवरण यहां अपडेट करें।"
+  },
+  "ProfileForm": {
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "role": "भूमिका / शीर्षक",
+    "rolePlaceholder": "उदा. ग्रेड 5 शिक्षक",
+    "email": "ईमेल",
+    "emailCannotBeChanged": "ईमेल पता नहीं बदला जा सकता।",
+    "aboutMe": "मेरे बारे में",
+    "bioPlaceholder": "हमें अपने बारे में कुछ बताएं...",
+    "language": "भाषा",
+    "languagePlaceholder": "भाषा चुनें",
+    "timezone": "समय क्षेत्र",
+    "timezonePlaceholder": "समय क्षेत्र चुनें",
+    "communicationPreferences": "संचार प्राथमिकताएं",
+    "emailNotifications": "ईमेल सूचनाएं",
+    "pushNotifications": "पुश सूचनाएं",
+    "saveChanges": "परिवर्तन सहेजें",
+    "updateFailed": "अपडेट विफल",
+    "loginError": "अपनी प्रोफ़ाइल अपडेट करने के लिए आपको लॉग इन होना चाहिए।",
+    "toast": {
+      "successTitle": "प्रोफ़ाइल अपडेट की गई",
+      "successDescription": "आपकी प्रोफ़ाइल सफलतापूर्वक अपडेट कर दी गई है।",
+      "errorUnknown": "एक अप्रत्याशित त्रुटि हुई।"
+    }
+  }
+}
