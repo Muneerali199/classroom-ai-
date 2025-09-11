@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const RecognizeStudentsInputSchema = z.object({
   classroomPhotoUri: z
@@ -36,13 +37,14 @@ const recognizeStudentsPrompt = ai.definePrompt({
   name: 'recognizeStudentsPrompt',
   input: {schema: RecognizeStudentsInputSchema},
   output: {schema: RecognizeStudentsOutputSchema},
-  prompt: `You are an advanced AI attendance system. Your task is to identify which students are present in a classroom photograph.
+  model: googleAI.model('gemini-2.5-pro'),
+  prompt: `You are an advanced AI attendance system. Your task is to meticulously identify which students are present in a classroom photograph.
 
 You will be given a primary photograph of the classroom and a list of students with their individual reference photos.
 
-Compare the faces in the classroom photograph with the reference photos provided for each student.
+For each student, perform a detailed comparison between their reference photo and the faces visible in the classroom photograph. Pay close attention to key facial features. Be highly critical in your analysis. Only list a student as present if you are very confident they are in the classroom photo.
 
-Return a list containing the names of only the students you can confidently identify in the classroom photograph. If you don't see any students, return an empty list.
+Return a list containing the names of only the students you can confidently identify. If you don't see any students, return an empty list.
 
 Classroom Photo:
 {{media url=classroomPhotoUri}}

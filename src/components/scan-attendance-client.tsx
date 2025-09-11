@@ -8,7 +8,6 @@ import { Loader2, Camera, UserCheck, UserX, Scan, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { recognizeStudentsAction } from '@/app/actions';
 import type { Student } from '@/lib/types';
-import { Badge } from './ui/badge';
 
 interface ScanAttendanceClientProps {
   students: Student[];
@@ -126,7 +125,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
             {isLoading && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white">
                     <Loader2 className="h-12 w-12 animate-spin" />
-                    <p className="mt-4 text-lg font-semibold">{isScanning && !isProcessing ? 'Capturing...' : 'Analyzing Image...'}</p>
+                    <p className="mt-4 text-lg font-semibold">{isScanning && !isProcessing ? 'Capturing...' : `Analyzing image for ${students.length} students...`}</p>
                     <p className="text-sm">Please hold steady.</p>
                 </div>
             )}
