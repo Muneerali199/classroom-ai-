@@ -56,4 +56,15 @@ export const students: Student[] = [
       { date: '2024-05-07', status: 'Present' },
     ],
   },
+  {
+    id: 's6',
+    name: 'Muneer',
+    attendance: [
+      { date: '2024-05-01', status: 'Present' },
+      { date: '2024-05-02', status: 'Present' },
+      { date: '2024-05-03', status: 'Present' },
+      { date: '2024-05-06', status: 'Present' },
+      { date: '2024-05-07', status: 'Present' },
+    ],
+  },
 ];
