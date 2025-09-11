@@ -14,8 +14,12 @@ import {
     type WeeklyReportInput 
 } from '@/ai/flows/weekly-attendance-report';
 import { auth } from '@/lib/firebase-admin';
-import { students as studentData } from '@/lib/data';
+import { students as studentData, attendanceSessions, sessionAttendanceRecords } from '@/lib/data';
 import { placeholderImages } from '@/lib/placeholder-images.json';
+import { AttendanceSession, SessionAttendanceRecord, Student } from '@/lib/types';
+import { randomUUID } from 'crypto';
+import QRCode from 'qrcode';
+
 
 async function convertImageUrlToDataUri(url: string) {
   try {
@@ -131,4 +135,89 @@ export async function updateProfileAction(data: { uid: string, firstName: string
     } catch (error: any) {
         return { success: false, error: error.message };
     }
+}
+
+// QR Code Actions
+export async function createAttendanceSessionAction(
+    courseId: string,
+    teacherId: string,
+    durationInMinutes: number
+): Promise<{ success: boolean; session?: AttendanceSession; qrCodeDataUrl?: string, error?: string }> {
+    try {
+        const now = new Date();
+        const endTime = new Date(now.getTime() + durationInMinutes * 60000);
+
+        const newSession: AttendanceSession = {
+            id: randomUUID(),
+            courseId,
+            teacherId,
+            startTime: now.toISOString(),
+            endTime: endTime.toISOString(),
+            createdAt: now.toISOString(),
+        };
+
+        attendanceSessions.push(newSession);
+
+        // Generate QR Code
+        const qrCodeData = JSON.stringify({ sessionId: newSession.id });
+        const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData);
+        
+        return { success: true, session: newSession, qrCodeDataUrl };
+
+    } catch (error: any) {
+        console.error("Error creating attendance session:", error);
+        return { success: false, error: "Failed to create a new session." };
+    }
+}
+
+export async function markStudentAttendanceAction(
+    sessionId: string,
+    studentId: string
+): Promise<{ success: boolean; message: string }> {
+    const session = attendanceSessions.find(s => s.id === sessionId);
+
+    if (!session) {
+        return { success: false, message: "Invalid or expired session." };
+    }
+
+    const now = new Date();
+    const startTime = new Date(session.startTime);
+    const endTime = new Date(session.endTime);
+
+    if (now < startTime || now > endTime) {
+        return { success: false, message: "Attendance can only be marked within the session window." };
+    }
+    
+    const existingRecord = sessionAttendanceRecords.find(r => r.sessionId === sessionId && r.studentId === studentId);
+    if (existingRecord) {
+        return { success: false, message: "You have already marked your attendance for this session." };
+    }
+
+    const newRecord: SessionAttendanceRecord = {
+        id: randomUUID(),
+        sessionId,
+        studentId,
+        timestamp: now.toISOString(),
+    };
+    
+    sessionAttendanceRecords.push(newRecord);
+
+    return { success: true, message: "Attendance marked successfully!" };
+}
+
+export async function getSessionAttendanceAction(sessionId: string): Promise<{
+    success: boolean,
+    records?: { studentName: string, timestamp: string }[],
+    error?: string
+}> {
+    const records = sessionAttendanceRecords.filter(r => r.sessionId === sessionId);
+    const studentRecords = records.map(record => {
+        const student = studentData.find(s => s.id === record.studentId);
+        return {
+            studentName: student?.name || 'Unknown Student',
+            timestamp: record.timestamp,
+        }
+    });
+
+    return { success: true, records: studentRecords };
 }

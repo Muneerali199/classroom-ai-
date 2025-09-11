@@ -1,4 +1,4 @@
-import type { Student } from '@/lib/types';
+import type { Student, AttendanceSession, SessionAttendanceRecord } from '@/lib/types';
 
 export const students: Student[] = [
   {
@@ -51,7 +51,7 @@ export const students: Student[] = [
     attendance: [
       { date: '2024-05-01', status: 'Excused' },
       { date: '2024-05-02', status: 'Present' },
-      { date: '2024-05-03', status: 'Present' },
+      { date: '2024-05-03', 'status': 'Present' },
       { date: '2024-05-06', status: 'Present' },
       { date: '2024-05-07', status: 'Present' },
     ],
@@ -68,3 +68,7 @@ export const students: Student[] = [
     ],
   },
 ];
+
+// In-memory "database" for QR code sessions
+export let attendanceSessions: AttendanceSession[] = [];
+export let sessionAttendanceRecords: SessionAttendanceRecord[] = [];

@@ -7,6 +7,7 @@ import AttendanceTable from '@/components/attendance-table';
 import AttendanceSummaryGenerator from '@/components/attendance-summary-generator';
 import ScanAttendanceClient from '@/components/scan-attendance-client';
 import { useAuth } from '@/hooks/use-auth';
+import QrSessionManager from './qr-session-manager';
 
 interface DashboardClientProps {
   initialStudents: Student[];
@@ -77,9 +78,10 @@ export default function DashboardClient({
       </div>
 
       <Tabs defaultValue="marking" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 max-w-lg bg-background/50 dark:bg-black/20 border dark:border-white/10">
+        <TabsList className="grid w-full grid-cols-4 max-w-2xl bg-background/50 dark:bg-black/20 border dark:border-white/10">
           <TabsTrigger value="marking">Manual Marking</TabsTrigger>
-          <TabsTrigger value="scan">Scan Attendance</TabsTrigger>
+          <TabsTrigger value="qr-code">QR Code</TabsTrigger>
+          <TabsTrigger value="scan">Facial Scan</TabsTrigger>
           <TabsTrigger value="summary">AI Summary</TabsTrigger>
         </TabsList>
         <TabsContent value="marking" className="mt-4">
@@ -88,6 +90,9 @@ export default function DashboardClient({
             onAttendanceChange={handleAttendanceChange}
             date={today}
           />
+        </TabsContent>
+         <TabsContent value="qr-code" className="mt-4">
+          <QrSessionManager students={students} />
         </TabsContent>
         <TabsContent value="scan" className="mt-4">
             <ScanAttendanceClient students={students} onAttendanceUpdate={handleScanAttendanceUpdate} />

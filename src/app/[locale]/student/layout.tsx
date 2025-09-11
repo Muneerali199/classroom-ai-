@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, User, BookOpen, BarChart3 } from 'lucide-react';
+import { Home, User, BookOpen, BarChart3, QrCode } from 'lucide-react';
 import Header from '@/components/header';
 import { Logo } from '@/components/icons';
 import Link from 'next/link';
@@ -37,6 +37,14 @@ function StudentSidebar() {
                 <Link href="/student/dashboard">
                   <Home />
                   Dashboard
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/student/scan-qr">
+                  <QrCode />
+                  Mark Attendance
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
