@@ -88,7 +88,6 @@ export default function QrScannerClient() {
                         isOpen={true}
                         onClose={() => setStatus('idle')}
                         onScanSuccess={handleScanSuccess}
-                        id={QR_SCANNER_ELEMENT_ID}
                     />
                 )}
 
