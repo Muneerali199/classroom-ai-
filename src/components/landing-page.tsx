@@ -122,7 +122,7 @@ export default function LandingPage() {
       social: { github: 'https://github.com/Akshay1267', linkedin: 'https://www.linkedin.com/in/akshay-jain-8816252a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', email: 'akshay.jain9568@gmail.com' },
     },
     {
-      name: 'Aveek',
+      name: 'Aveek Patel',
       role: 'Backend developer',
       image: 'https://picsum.photos/seed/david/200/200',
       dataAiHint: 'person portrait',
@@ -143,7 +143,7 @@ export default function LandingPage() {
       image: 'https://picsum.photos/seed/david/200/200',
       dataAiHint: 'person portrait',
       bio: 'Quality assurance tester ensuring product reliability and seamless user experience through meticulous testing and bug reporting.',
-      social: { github: '#', linkedin: '#', email: 'david@edutrack.com' },
+      social: { github: '#', linkedin: 'https://www.linkedin.com/in/khushi-gupta-0541112b3?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', email: 'http://gikhushi.20gmail.com' },
     },
   ];
   
@@ -237,11 +237,11 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section
         id="home"
-        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
+        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 sm:py-0"
       >
         <div className="absolute inset-0 overflow-hidden">
           <div
-            className="absolute -top-40 -right-40 w-80 h-80 bg-purple-400/20 dark:bg-purple-500/30 rounded-full blur-3xl animate-pulse transition-all duration-500"
+            className="absolute -top-20 sm:-top-40 -right-20 sm:-right-40 w-60 sm:w-80 h-60 sm:h-80 bg-purple-400/20 dark:bg-purple-500/30 rounded-full blur-3xl animate-pulse transition-all duration-500"
             style={{
               transform: `translate3d(${scrollYValue * 0.1}px, ${
                 scrollYValue * 0.1
@@ -249,7 +249,7 @@ export default function LandingPage() {
             }}
           />
           <div
-            className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/20 dark:bg-blue-500/30 rounded-full blur-3xl animate-pulse transition-all duration-500"
+            className="absolute -bottom-20 sm:-bottom-40 -left-20 sm:-left-40 w-60 sm:w-80 h-60 sm:h-80 bg-blue-400/20 dark:bg-blue-500/30 rounded-full blur-3xl animate-pulse transition-all duration-500"
             style={{
               transform: `translate3d(${-scrollYValue * 0.1}px, ${
                 -scrollYValue * 0.1
@@ -259,16 +259,16 @@ export default function LandingPage() {
           />
         </div>
 
-        <div className="relative z-10 text-center max-w-6xl mx-auto">
-          <div className="mb-8">
-            <div className="inline-block p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border border-gray-300/30 dark:border-white/20 mb-6 transition-all duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto transform hover:scale-110 transition-transform duration-300">
-                <Logo className="w-8 h-8 text-white" />
+        <div className="relative z-10 text-center max-w-6xl mx-auto px-4">
+          <div className="mb-6 sm:mb-8">
+            <div className="inline-block p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border border-gray-300/30 dark:border-white/20 transition-all duration-300">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto transform hover:scale-110 transition-transform duration-300">
+                <Logo className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
             <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
               EduTrack
             </span>
@@ -276,25 +276,25 @@ export default function LandingPage() {
             <span className="text-gray-900 dark:text-white">Activity & Attendance</span>
           </h1>
 
-          <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed">
             A mobile-first platform designed for educational institutions to
             manage curriculum activities, monitor student progress, and track
             attendance seamlessly with real-time analytics.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="group" asChild>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12">
+            <Button size="lg" className="group w-full sm:w-auto" asChild>
                 <Link href="/signup">
                 Get Started Free <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </Button>
-            <Button size="lg" variant="outline" className="bg-gray-900/10 dark:bg-white/10 border-gray-300/30 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-gray-900/10 dark:bg-white/10 border-gray-300/30 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20">
                 <Play className="mr-2"/>
                 Watch Demo
             </Button>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-4 h-4 text-green-400" />
               <span>99.9%+ Uptime</span>
@@ -312,7 +312,7 @@ export default function LandingPage() {
 
         <button
           onClick={() => scrollToSection('about')}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
         >
           <ChevronDown className="w-6 h-6 text-gray-500 dark:text-gray-400" />
         </button>
