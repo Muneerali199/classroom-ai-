@@ -158,15 +158,29 @@ export async function createAttendanceSessionAction(
 
         attendanceSessions.push(newSession);
 
-        // Generate QR Code
-        const qrCodeData = JSON.stringify({ sessionId: newSession.id });
-        const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData);
+        // Generate QR Code with better error correction and size
+        const qrCodeData = JSON.stringify({
+            sessionId: newSession.id,
+            courseId: courseId,
+            exp: endTime.getTime()
+        });
+
+        const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData, {
+            errorCorrectionLevel: 'H', // Highest error correction
+            margin: 2,
+            scale: 10,
+            width: 400,
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        });
         
         return { success: true, session: newSession, qrCodeDataUrl };
 
     } catch (error: any) {
         console.error("Error creating attendance session:", error);
-        return { success: false, error: "Failed to create a new session." };
+        return { success: false, error: error.message || "Failed to create a new session." };
     }
 }
 
@@ -174,35 +188,62 @@ export async function markStudentAttendanceAction(
     sessionId: string,
     studentId: string
 ): Promise<{ success: boolean; message: string }> {
-    const session = attendanceSessions.find(s => s.id === sessionId);
+    try {
+        const session = attendanceSessions.find(s => s.id === sessionId);
 
-    if (!session) {
-        return { success: false, message: "Invalid or expired session." };
+        if (!session) {
+            return { success: false, message: "Invalid or expired session." };
+        }
+
+        const now = new Date();
+        const startTime = new Date(session.startTime);
+        const endTime = new Date(session.endTime);
+
+        // Check if session is active
+        if (now < startTime) {
+            return { success: false, message: "This session hasn't started yet." };
+        }
+        
+        if (now > endTime) {
+            return { success: false, message: "This session has ended. Please wait for the next session." };
+        }
+        
+        // Check for existing attendance
+        const existingRecord = sessionAttendanceRecords.find(r => 
+            r.sessionId === sessionId && r.studentId === studentId
+        );
+        
+        if (existingRecord) {
+            return { 
+                success: false, 
+                message: "You've already marked your attendance for this session." 
+            };
+        }
+
+        // Record the attendance
+        const newRecord: SessionAttendanceRecord = {
+            id: randomUUID(),
+            sessionId,
+            studentId,
+            timestamp: now.toISOString(),
+        };
+        
+        sessionAttendanceRecords.push(newRecord);
+
+        // Get student name for the success message
+        const student = studentData.find(s => s.id === studentId);
+        return { 
+            success: true, 
+            message: `Attendance marked successfully for ${student?.name || 'Unknown Student'}!` 
+        };
+
+    } catch (error) {
+        console.error('Error marking attendance:', error);
+        return { 
+            success: false, 
+            message: "Failed to mark attendance. Please try again." 
+        };
     }
-
-    const now = new Date();
-    const startTime = new Date(session.startTime);
-    const endTime = new Date(session.endTime);
-
-    if (now < startTime || now > endTime) {
-        return { success: false, message: "Attendance can only be marked within the session window." };
-    }
-    
-    const existingRecord = sessionAttendanceRecords.find(r => r.sessionId === sessionId && r.studentId === studentId);
-    if (existingRecord) {
-        return { success: false, message: "You have already marked your attendance for this session." };
-    }
-
-    const newRecord: SessionAttendanceRecord = {
-        id: randomUUID(),
-        sessionId,
-        studentId,
-        timestamp: now.toISOString(),
-    };
-    
-    sessionAttendanceRecords.push(newRecord);
-
-    return { success: true, message: "Attendance marked successfully!" };
 }
 
 export async function getSessionAttendanceAction(sessionId: string): Promise<{

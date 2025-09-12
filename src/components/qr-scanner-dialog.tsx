@@ -8,8 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Html5QrcodeScanner } from 'html5-qrcode';
-import { useEffect } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
+import { useEffect, useRef, useState } from 'react';
+import { Loader2, Camera } from 'lucide-react';
+import { Button } from './ui/button';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 
 interface QrScannerDialogProps {
   isOpen: boolean;
@@ -24,65 +27,75 @@ export function QrScannerDialog({
   onScanSuccess,
   id,
 }: QrScannerDialogProps) {
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const html5QrCode = useRef<Html5Qrcode | null>(null);
   useEffect(() => {
-    let qrScanner: Html5QrcodeScanner | null = null;
-
-    const initializeScanner = async () => {
+    const startScanner = async () => {
       if (!isOpen) return;
-
-      // Wait for the element to be available in the DOM
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const element = document.getElementById(id);
-      if (!element) {
-        console.error(`QR scanner element with id '${id}' not found`);
-        return;
-      }
-
-      // Create scanner instance
-      qrScanner = new Html5QrcodeScanner(
-        id,
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          rememberLastUsedCamera: true,
-          showTorchButtonIfSupported: true
-        },
-        false // verbose flag
-      );
+      
+      setIsInitializing(true);
+      setCameraError(null);
 
       try {
-        await qrScanner.render(
-          (decodedText) => {
-            // Success callback
-            if (qrScanner) {
-              qrScanner.clear().then(() => {
+        // Clean up any existing instance
+        if (html5QrCode.current) {
+          await html5QrCode.current.stop();
+          html5QrCode.current = null;
+        }
+
+        // Create new instance
+        html5QrCode.current = new Html5Qrcode(id);
+
+        // Get available cameras
+        const devices = await Html5Qrcode.getCameras();
+        if (!devices || devices.length === 0) {
+          throw new Error('No camera devices found');
+        }
+
+        // Start scanning with the first available camera
+        await html5QrCode.current.start(
+          devices[0].id,
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+          },
+          async (decodedText) => {
+            if (html5QrCode.current) {
+              try {
+                await html5QrCode.current.stop();
+                html5QrCode.current = null;
                 onScanSuccess(decodedText);
                 onClose();
-              }).catch(console.error);
+              } catch (error) {
+                console.error('Error stopping scanner:', error);
+              }
             }
           },
-          (error) => {
-            // Failure callback - ignore QR detection errors as they're expected
-            console.debug('QR Scan Error:', error);
+          (errorMessage) => {
+            // Ignore normal scanning errors
+            if (!errorMessage.includes('No MultiFormat Readers')) {
+              console.debug('QR Error:', errorMessage);
+            }
           }
         );
       } catch (error) {
-        console.error('Failed to initialize QR scanner:', error);
+        const message = error instanceof Error ? error.message : 'Failed to start camera';
+        setCameraError(message);
+        console.error('Scanner initialization error:', error);
+      } finally {
+        setIsInitializing(false);
       }
     };
 
-    // Initialize scanner when dialog opens
-    initializeScanner();
+    startScanner();
 
-    // Cleanup when dialog closes or component unmounts
+    // Cleanup function
     return () => {
-      if (qrScanner) {
-        try {
-          qrScanner.clear();
-        } catch (error) {
-          console.error('Failed to clear QR scanner:', error);
-        }
+      if (html5QrCode.current) {
+        html5QrCode.current.stop()
+          .catch(error => console.warn('Error stopping scanner:', error));
+        html5QrCode.current = null;
       }
     };
   }, [isOpen, onScanSuccess, onClose, id]);
@@ -95,7 +108,35 @@ export function QrScannerDialog({
           Point your camera at the QR code shown by your teacher to mark your attendance.
         </DialogDescription>
         <div className="mt-6 bg-muted/50 rounded-lg p-4">
-          <div id={id} className="qr-scanner-container min-h-[300px] overflow-hidden" />
+          {isInitializing ? (
+            <div className="min-h-[300px] flex flex-col items-center justify-center gap-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">Initializing camera...</p>
+            </div>
+          ) : cameraError ? (
+            <div className="min-h-[300px]">
+              <Alert variant="destructive">
+                <Camera className="h-4 w-4" />
+                <AlertTitle>Camera Error</AlertTitle>
+                <AlertDescription>{cameraError}</AlertDescription>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-4"
+                  onClick={() => {
+                    setCameraError(null);
+                    setIsInitializing(true);
+                  }}
+                >
+                  Try Again
+                </Button>
+              </Alert>
+            </div>
+          ) : (
+            <div className="min-h-[300px] relative">
+              <div id={id} className="qr-scanner-container overflow-hidden" />
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
