@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 
-export default function RoleSelection() {
+function RoleSelectionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const uid = searchParams.get('uid');
@@ -85,5 +85,18 @@ export default function RoleSelection() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RoleSelectionPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto flex flex-col items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <p className="mt-4 text-sm text-muted-foreground">Loading...</p>
+      </div>
+    }>
+      <RoleSelectionContent />
+    </Suspense>
   );
 }

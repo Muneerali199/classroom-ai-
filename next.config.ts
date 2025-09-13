@@ -1,10 +1,10 @@
 import type {NextConfig} from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntl = createNextIntlPlugin();
+// Point to your existing i18n.ts file in the src directory
+const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -27,10 +27,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // This is required to allow the Next.js dev server to accept requests from the preview server.
-  experimental: {
-    allowedDevOrigins: ['https://*.googleusercontent.com'],
-  }
+  webpack: (config) => {
+    config.ignoreWarnings = [
+      { module: /handlebars/ },
+    ];
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);

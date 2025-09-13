@@ -1,4 +1,3 @@
-
 'use server';
 
 import {
@@ -15,11 +14,13 @@ import {
 } from '@/ai/flows/weekly-attendance-report';
 import { auth } from '@/lib/firebase-admin';
 import { students as studentData, attendanceSessions, sessionAttendanceRecords } from '@/lib/data';
-import { placeholderImages } from '@/lib/placeholder-images.json';
+import placeholderImagesData from '@/lib/placeholder-images.json';
 import { AttendanceSession, SessionAttendanceRecord, Student } from '@/lib/types';
 import { randomUUID } from 'crypto';
 import QRCode from 'qrcode';
 
+// Extract placeholderImages from the imported data
+const placeholderImages = placeholderImagesData.placeholderImages || placeholderImagesData || [];
 
 async function convertImageUrlToDataUri(url: string) {
   try {
