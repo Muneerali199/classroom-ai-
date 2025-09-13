@@ -2,11 +2,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, type User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { usePathname, useRouter } from 'next/navigation';
 
-interface UserWithRole extends User {
+interface UserWithRole {
+  id: string;
+  uid?: string;
+  email?: string;
+  user_metadata?: any;
+  displayName?: string;
+  photoURL?: string;
   role?: string;
 }
 
@@ -17,18 +23,25 @@ export function useAuth() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const tokenResult = await user.getIdTokenResult();
-        const role = tokenResult.claims.role as string;
-        setUser({ ...user, role });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
+      if (session?.user) {
+        const role = session.user.user_metadata?.role as string;
+        const displayName = session.user.user_metadata?.displayName || session.user.user_metadata?.full_name;
+        const photoURL = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
+        setUser({
+          ...session.user,
+          uid: session.user.id,
+          displayName,
+          photoURL,
+          role
+        });
       } else {
         setUser(null);
       }
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -68,3 +81,4 @@ export function useAuth() {
 
   return { user, loading };
 }
+

@@ -63,7 +63,7 @@ export default function AttendanceAnalyticsClient({ students }: AttendanceAnalyt
       const result = await generateWeeklyReportAction(input);
 
       if (result.success) {
-        setReport(result.report);
+        setReport(result.report || null);
       } else {
         setError(result.error || 'An unknown error occurred.');
       }

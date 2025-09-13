@@ -8,6 +8,8 @@ import AttendanceSummaryGenerator from '@/components/attendance-summary-generato
 import ScanAttendanceClient from '@/components/scan-attendance-client';
 import { useAuth } from '@/hooks/use-auth';
 import QrSessionManager from './qr-session-manager';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/hooks/use-toast';
 
 interface DashboardClientProps {
   initialStudents: Student[];
@@ -17,60 +19,126 @@ export default function DashboardClient({
   initialStudents,
 }: DashboardClientProps) {
   const { user } = useAuth(); // We still need user info here
+  const { toast } = useToast();
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [today] = useState(new Date().toISOString().split('T')[0]);
 
-  const handleAttendanceChange = (
+  const handleAttendanceChange = async (
     studentId: string,
     date: string,
     status: AttendanceStatus
   ) => {
-    setStudents((prevStudents) =>
-      prevStudents.map((student) => {
-        if (student.id === studentId) {
+    try {
+      // Save to Supabase
+      if (supabase) {
+        const { error } = await supabase
+          .from('attendance')
+          .upsert({
+            student_id: studentId,
+            date: date,
+            status: status,
+          });
+
+        if (error) {
+          throw new Error(`Failed to save attendance: ${error.message}`);
+        }
+      }
+
+      // Update local state
+      setStudents((prevStudents) =>
+        prevStudents.map((student) => {
+          if (student.id === studentId) {
+            const newAttendance = [...student.attendance];
+            const recordIndex = newAttendance.findIndex((att) => att.date === date);
+
+            if (recordIndex > -1) {
+              newAttendance[recordIndex] = { ...newAttendance[recordIndex], status };
+            } else {
+              newAttendance.push({ date, status });
+            }
+
+            return { ...student, attendance: newAttendance };
+          }
+          return student;
+        })
+      );
+
+      toast({
+        title: 'Attendance Updated',
+        description: 'Attendance record has been saved successfully.',
+      });
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save attendance. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+  
+  const handleScanAttendanceUpdate = async (presentStudentIds: string[]) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    try {
+      // Save attendance records to Supabase
+      if (supabase) {
+        const attendanceRecords = students.map(student => {
+          const isPresent = presentStudentIds.includes(student.id);
+          return {
+            student_id: student.id,
+            date: todayStr,
+            status: isPresent ? 'Present' : 'Absent',
+          };
+        });
+
+        const { error } = await supabase
+          .from('attendance')
+          .upsert(attendanceRecords);
+
+        if (error) {
+          throw new Error(`Failed to save attendance: ${error.message}`);
+        }
+      }
+
+      // Update local state
+      setStudents(prevStudents =>
+        prevStudents.map(student => {
+          const isPresent = presentStudentIds.includes(student.id);
+          const newStatus: AttendanceStatus = isPresent ? 'Present' : 'Absent';
+
           const newAttendance = [...student.attendance];
-          const recordIndex = newAttendance.findIndex((att) => att.date === date);
+          const recordIndex = newAttendance.findIndex(att => att.date === todayStr);
 
           if (recordIndex > -1) {
-            newAttendance[recordIndex] = { ...newAttendance[recordIndex], status };
+            newAttendance[recordIndex] = { ...newAttendance[recordIndex], status: newStatus };
           } else {
-            newAttendance.push({ date, status });
+            newAttendance.push({ date: todayStr, status: newStatus });
           }
 
           return { ...student, attendance: newAttendance };
-        }
-        return student;
-      })
-    );
-  };
-  
-  const handleScanAttendanceUpdate = (presentStudentIds: string[]) => {
-    const todayStr = new Date().toISOString().split('T')[0];
-    
-    setStudents(prevStudents => 
-        prevStudents.map(student => {
-            const isPresent = presentStudentIds.includes(student.id);
-            const newStatus: AttendanceStatus = isPresent ? 'Present' : 'Absent';
-            
-            const newAttendance = [...student.attendance];
-            const recordIndex = newAttendance.findIndex(att => att.date === todayStr);
-
-            if (recordIndex > -1) {
-                newAttendance[recordIndex] = { ...newAttendance[recordIndex], status: newStatus };
-            } else {
-                newAttendance.push({ date: todayStr, status: newStatus });
-            }
-            
-            return { ...student, attendance: newAttendance };
         })
-    );
+      );
+
+      toast({
+        title: 'Attendance Updated',
+        description: 'Facial recognition attendance has been recorded.',
+      });
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save attendance. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-headline tracking-tight">
-          Hello, {user?.displayName?.split(' ')[0] || 'Teacher'}!
+          Hello, {user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || 'Teacher'}!
         </h1>
         <p className="text-muted-foreground">
           Welcome back. Mark student attendance and generate AI-powered summaries.

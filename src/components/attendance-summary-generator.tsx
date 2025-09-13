@@ -51,7 +51,7 @@ export default function AttendanceSummaryGenerator({
       });
 
       if (result.success) {
-        setSummary(result.summary);
+        setSummary(result.summary || null);
       } else {
         setError(result.error || 'An unknown error occurred.');
       }

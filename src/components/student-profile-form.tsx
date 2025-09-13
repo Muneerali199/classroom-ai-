@@ -106,7 +106,7 @@ export default function StudentProfileForm() {
         return;
       }
       const result = await updateProfileAction({
-        uid: user.uid,
+        uid: user.id!,
         firstName: data.firstName,
         lastName: data.lastName,
         title: 'Student',

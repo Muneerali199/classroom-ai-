@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from './ui/button';
 import { CheckCircle, XCircle, QrCode } from 'lucide-react';
-import { students } from '@/lib/data';
+import { getStudents } from '@/lib/data';
+import { TeacherInfoDialog } from '@/components/ui/teacher-info-dialog';
 import dynamic from 'next/dynamic';
 
 // Dynamically import QR scanner to avoid SSR issues with camera access
@@ -22,6 +23,13 @@ export default function QrScannerClient() {
     const [status, setStatus] = useState<'idle' | 'scanning' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
     const [scannerKey, setScannerKey] = useState(0); // Add key to force re-mount of scanner
+    const [showTeacherDialog, setShowTeacherDialog] = useState(false);
+    const [qrData, setQrData] = useState<{
+        sessionId: string;
+        courseId: string;
+        teacherName: string;
+        exp: number;
+    } | null>(null);
 
     const handleScanSuccess = async (decodedText: string) => {
         try {
@@ -31,23 +39,21 @@ export default function QrScannerClient() {
             } catch {
                 throw new Error("Invalid QR code format");
             }
-            
-            if (!data.sessionId) {
-                throw new Error("Invalid QR code format - no session ID found");
+
+            if (!data.sessionId || !data.teacherName || !data.courseId) {
+                throw new Error("Invalid QR code format - missing required information");
             }
 
-            const student = students.find(s => s.name === user?.displayName);
-            if (!student) {
-                throw new Error("Could not identify the student. Please ensure your profile name is correct.");
+            // Check if session has expired
+            if (data.exp && Date.now() > data.exp) {
+                throw new Error("This attendance session has expired");
             }
 
-            const result = await markStudentAttendanceAction(data.sessionId, student.id);
-            if (result.success) {
-                setStatus('success');
-                setMessage(result.message || 'Successfully marked attendance');
-            } else {
-                throw new Error(result.message || 'Failed to mark attendance');
-            }
+            // Store QR data and show teacher info dialog
+            setQrData(data);
+            setStatus('idle'); // Reset scanner status
+            setShowTeacherDialog(true);
+
         } catch (error) {
             setStatus('error');
             setMessage(error instanceof Error ? error.message : 'Failed to scan QR code');
@@ -64,6 +70,43 @@ export default function QrScannerClient() {
         setStatus('idle');
         setMessage('');
         setScannerKey(prev => prev + 1); // Reset scanner when starting over
+    };
+
+    const handleConfirmAttendance = async () => {
+        if (!qrData) return;
+        
+        setShowTeacherDialog(false);
+        setStatus('scanning'); // Show loading state
+        
+        try {
+            // Fetch students from Supabase
+            const students = await getStudents();
+            const userName = user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || user?.email;
+            const student = students.find((s: { name: string }) => s.name === userName);
+
+            if (!student) {
+                throw new Error("Could not identify the student. Please ensure your profile name is correct.");
+            }
+
+            const result = await markStudentAttendanceAction(qrData.sessionId, student.id);
+            if (result.success) {
+                setStatus('success');
+                setMessage(result.message || 'Successfully marked attendance');
+            } else {
+                throw new Error(result.message || 'Failed to mark attendance');
+            }
+        } catch (error) {
+            setStatus('error');
+            setMessage(error instanceof Error ? error.message : 'Failed to mark attendance');
+        }
+        
+        setQrData(null);
+    };
+
+    const handleCancelAttendance = () => {
+        setShowTeacherDialog(false);
+        setQrData(null);
+        setStatus('idle');
     };
 
     return (
@@ -109,6 +152,18 @@ export default function QrScannerClient() {
                     </Alert>
                 )}
             </CardContent>
+            
+            {/* Teacher Info Dialog */}
+            {qrData && (
+                <TeacherInfoDialog
+                    isOpen={showTeacherDialog}
+                    onConfirm={handleConfirmAttendance}
+                    onCancel={handleCancelAttendance}
+                    teacherName={qrData.teacherName}
+                    courseId={qrData.courseId}
+                    sessionEndTime={new Date(qrData.exp).toISOString()}
+                />
+            )}
         </Card>
     );
 }

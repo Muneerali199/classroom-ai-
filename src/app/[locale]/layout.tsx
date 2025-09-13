@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import FirebaseProvider from '@/components/firebase-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -14,11 +13,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
   const messages = await getMessages();
 
   return (
@@ -43,9 +43,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <FirebaseProvider>
                 {children}
-            </FirebaseProvider>
             <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>

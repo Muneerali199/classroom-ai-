@@ -1,6 +1,7 @@
-import { students } from '@/lib/data';
+import { getStudents } from '@/lib/data';
 import DashboardClient from '@/components/dashboard-client';
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const students = await getStudents();
   return <DashboardClient initialStudents={students} />;
 }

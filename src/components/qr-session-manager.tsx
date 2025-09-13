@@ -32,6 +32,9 @@ export default function QrSessionManager({ students }: QrSessionManagerProps) {
   const [isPending, startTransition] = useTransition();
   const [attendanceRecords, setAttendanceRecords] = useState<{ studentName: string; timestamp: string }[]>([]);
 
+  // Check if user is a teacher
+  const isTeacher = user?.role === 'teacher' || user?.user_metadata?.role === 'teacher';
+
   const handleCreateSession = () => {
     setError(null);
     if (!user) {
@@ -39,8 +42,14 @@ export default function QrSessionManager({ students }: QrSessionManagerProps) {
       return;
     }
 
+    if (!isTeacher) {
+      setError('Only teachers can create QR code attendance sessions.');
+      return;
+    }
+
     startTransition(async () => {
-      const result = await createAttendanceSessionAction('CMPT-101', user.uid, duration);
+      const teacherName = user.user_metadata?.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Unknown Teacher';
+      const result = await createAttendanceSessionAction('CMPT-101', user.id!, duration, teacherName);
       if (result.success && result.session && result.qrCodeDataUrl) {
         setSession(result.session);
         setQrCode(result.qrCodeDataUrl);
@@ -69,6 +78,31 @@ export default function QrSessionManager({ students }: QrSessionManagerProps) {
 
   const isSessionActive = session && new Date() < new Date(session.endTime);
 
+  // Show access restriction for non-teachers
+  if (!isTeacher) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-1">
+        <Card>
+          <CardHeader>
+            <CardTitle>QR Code Attendance</CardTitle>
+            <CardDescription>
+              Generate QR codes for student attendance tracking.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Alert variant="default" className="bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-800">
+              <QrCode className="h-4 w-4" />
+              <AlertTitle>Teacher Access Only</AlertTitle>
+              <AlertDescription>
+                QR code attendance sessions can only be created by teachers. If you are a teacher, please ensure your account role is set correctly.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
@@ -90,9 +124,10 @@ export default function QrSessionManager({ students }: QrSessionManagerProps) {
                   onChange={(e) => setDuration(Number(e.target.value))}
                   min="1"
                   max="120"
+                  disabled={!isTeacher}
                 />
               </div>
-              <Button onClick={handleCreateSession} disabled={isPending} className="w-full">
+              <Button onClick={handleCreateSession} disabled={isPending || !isTeacher} className="w-full">
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isPending ? 'Creating Session...' : 'Create New Session'}
               </Button>

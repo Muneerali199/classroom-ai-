@@ -6,7 +6,7 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-Latest-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Latest-green?style=for-the-badge&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
 </div>
@@ -23,7 +23,7 @@ EduTrack is a cutting-edge, mobile-first platform designed for educational insti
   - Automated attendance summaries using AI
 
 - **Role-Based Access Control**
-  - Secure authentication with Firebase
+  - Secure authentication with Supabase
   - Separate dashboards for students, teachers, and administrators
   - Granular permission management
 
@@ -47,8 +47,7 @@ EduTrack is a cutting-edge, mobile-first platform designed for educational insti
   - React Hook Form
 
 - **Backend & Authentication**
-  - Firebase
-  - Firebase Admin
+  - Supabase (Database & Auth)
 
 - **AI & Analytics**
   - Genkit AI Framework
@@ -65,7 +64,7 @@ EduTrack is a cutting-edge, mobile-first platform designed for educational insti
 
 - Node.js 18+ 
 - npm or yarn
-- Firebase account
+- Supabase account
 
 ### Installation
 
@@ -130,7 +129,7 @@ classroom-ai-/
 
 ## 🔒 Authentication and Authorization
 
-EduTrack implements a robust authentication system using Firebase Authentication with role-based access control:
+EduTrack implements a robust authentication system using Supabase Authentication with role-based access control:
 
 - **Students**: Access to personal attendance records, profile management
 - **Teachers**: Attendance management, student progress tracking
@@ -199,7 +198,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [Next.js](https://nextjs.org/)
-- [Firebase](https://firebase.google.com/)
+- [Supabase](https://supabase.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [ShadcnUI](https://ui.shadcn.com/)
 - [Genkit AI](https://genkit.ai/)

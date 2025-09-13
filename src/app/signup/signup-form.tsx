@@ -5,18 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { signUpWithEmailAndPassword } from '@/app/actions';
+import { AuthService } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { PasswordPolicy } from '@/components/ui/password-policy';
 
-// Enhanced password validation to match Firebase policy
+// Enhanced password validation for secure authentication
 const passwordValidation = z.string()
   .min(6, 'Password must be at least 6 characters')
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -60,11 +58,16 @@ export default function SignUpForm() {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await signUpWithEmailAndPassword(data.email, data.password, data.role);
+      const result = await AuthService.signUp({
+        email: data.email,
+        password: data.password,
+        displayName: data.email.split('@')[0], // Use email prefix as display name
+        role: data.role,
+      });
+      
       if (result.success) {
-        // Now sign in the user on the client
-        await signInWithEmailAndPassword(auth, data.email, data.password);
         // The useAuth hook will handle redirection based on the new role
+        router.push('/dashboard');
       } else {
         setError(result.error || 'An unexpected error occurred.');
       }
@@ -79,18 +82,11 @@ export default function SignUpForm() {
     setIsGoogleLoading(true);
     setError(null);
     try {
-      const provider = new GoogleAuthProvider();
-      // Add custom parameters to request the role selection after authentication
-      provider.setCustomParameters({
-        prompt: 'select_account'
-      });
-      
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      
-      // You'll need to handle role assignment for Google sign-up
-      // This might involve redirecting to a role selection page or using a cloud function
-      router.push('/role-selection?uid=' + user.uid);
+      const result = await AuthService.signInWithGoogle();
+      if (!result.success) {
+        setError(result.error || 'Failed to sign up with Google');
+      }
+      // Redirect will be handled by the OAuth provider
     } catch (error: any) {
       setError(error.message);
     } finally {
