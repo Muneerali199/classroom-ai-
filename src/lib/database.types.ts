@@ -62,6 +62,7 @@ export interface Database {
           start_time: string
           end_time: string
           created_at: string
+          pin?: string
         }
         Insert: {
           id: string
@@ -71,6 +72,7 @@ export interface Database {
           start_time: string
           end_time: string
           created_at?: string
+          pin?: string
         }
         Update: {
           id?: string
@@ -80,6 +82,7 @@ export interface Database {
           start_time?: string
           end_time?: string
           created_at?: string
+          pin?: string
         }
         Relationships: []
       }

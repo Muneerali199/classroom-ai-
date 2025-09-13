@@ -7,7 +7,7 @@ import AttendanceTable from '@/components/attendance-table';
 import AttendanceSummaryGenerator from '@/components/attendance-summary-generator';
 import ScanAttendanceClient from '@/components/scan-attendance-client';
 import { useAuth } from '@/hooks/use-auth';
-import QrSessionManager from './qr-session-manager';
+import PinSessionManager from './pin-session-manager';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -148,7 +148,7 @@ export default function DashboardClient({
       <Tabs defaultValue="marking" className="w-full">
         <TabsList className="grid w-full grid-cols-4 max-w-2xl bg-background/50 dark:bg-black/20 border dark:border-white/10">
           <TabsTrigger value="marking">Manual Marking</TabsTrigger>
-          <TabsTrigger value="qr-code">QR Code</TabsTrigger>
+          <TabsTrigger value="pin-code">PIN Attendance</TabsTrigger>
           <TabsTrigger value="scan">Facial Scan</TabsTrigger>
           <TabsTrigger value="summary">AI Summary</TabsTrigger>
         </TabsList>
@@ -159,8 +159,8 @@ export default function DashboardClient({
             date={today}
           />
         </TabsContent>
-         <TabsContent value="qr-code" className="mt-4">
-          <QrSessionManager students={students} />
+        <TabsContent value="pin-code" className="mt-4">
+          <PinSessionManager students={students} />
         </TabsContent>
         <TabsContent value="scan" className="mt-4">
             <ScanAttendanceClient students={students} onAttendanceUpdate={handleScanAttendanceUpdate} />

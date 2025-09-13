@@ -17,7 +17,6 @@ import { getStudents, getAttendanceSessions, getSessionAttendanceRecords } from 
 import placeholderImagesData from '@/lib/placeholder-images.json';
 import { AttendanceSession, SessionAttendanceRecord, Student } from '@/lib/types';
 import { randomUUID } from 'crypto';
-import QRCode from 'qrcode';
 
 // Extract placeholderImages from the imported data
 const placeholderImages = placeholderImagesData.placeholderImages || placeholderImagesData || [];
@@ -152,16 +151,45 @@ export async function updateProfileAction(data: { uid: string, firstName: string
 }
 
 
-// QR Code Actions
-export async function createAttendanceSessionAction(
+
+export async function getSessionAttendanceAction(sessionId: string): Promise<{
+    success: boolean,
+    records?: { studentName: string, timestamp: string }[],
+    error?: string
+}> {
+    try {
+        const records = await getSessionAttendanceRecords();
+        const sessionRecords = records.filter((r: SessionAttendanceRecord) => r.sessionId === sessionId);
+        const students = await getStudents();
+
+        const studentRecords = sessionRecords.map((record: SessionAttendanceRecord) => {
+            const student = students.find((s: Student) => s.id === record.studentId);
+            return {
+                studentName: student?.name || 'Unknown Student',
+                timestamp: record.timestamp,
+            }
+        });
+
+        return { success: true, records: studentRecords };
+    } catch (error) {
+        console.error('Error getting session attendance:', error);
+        return { success: false, error: 'Failed to get session attendance records.' };
+    }
+}
+
+// PIN-based Attendance Actions
+export async function createPinAttendanceSessionAction(
     courseId: string,
     teacherId: string,
     durationInMinutes: number,
     teacherName: string
-): Promise<{ success: boolean; session?: AttendanceSession; qrCodeDataUrl?: string, error?: string }> {
+): Promise<{ success: boolean; session?: AttendanceSession; pin?: string, error?: string }> {
     try {
         const now = new Date();
         const endTime = new Date(now.getTime() + durationInMinutes * 60000);
+
+        // Generate a 6-digit PIN
+        const pin = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newSession: AttendanceSession = {
             id: randomUUID(),
@@ -171,13 +199,13 @@ export async function createAttendanceSessionAction(
             startTime: now.toISOString(),
             endTime: endTime.toISOString(),
             createdAt: now.toISOString(),
+            pin: pin, // Store PIN in session
         };
 
         // Save to Supabase using admin client for server-side operations
         try {
             const supabaseClient = supabaseAdmin || getSupabase();
             
-            // Try to insert with teacher_name, fallback to without if column doesn't exist
             let insertData = {
                 id: newSession.id,
                 course_id: courseId,
@@ -185,9 +213,10 @@ export async function createAttendanceSessionAction(
                 start_time: now.toISOString(),
                 end_time: endTime.toISOString(),
                 created_at: now.toISOString(),
+                pin: pin, // Add PIN to database
             };
 
-            // Check if teacher_name column exists by attempting to insert with it
+            // Try to insert with teacher_name and pin
             let { error } = await supabaseClient
                 .from('attendance_sessions')
                 .insert({
@@ -212,62 +241,54 @@ export async function createAttendanceSessionAction(
             throw new Error(`Failed to save session to database: ${supabaseError.message}`);
         }
 
-        // Generate QR Code with better error correction and size
-        const qrCodeData = JSON.stringify({
-            sessionId: newSession.id,
-            courseId: courseId,
-            teacherName: teacherName,
-            exp: endTime.getTime()
-        });
-
-        const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData, {
-            errorCorrectionLevel: 'H', // Highest error correction
-            margin: 2,
-            scale: 10,
-            width: 400,
-            color: {
-                dark: '#000000',
-                light: '#FFFFFF'
-            }
-        });
-
-        return { success: true, session: newSession, qrCodeDataUrl };
+        return { success: true, session: newSession, pin };
 
     } catch (error: any) {
-        console.error("Error creating attendance session:", error);
+        console.error("Error creating PIN attendance session:", error);
         return { success: false, error: error.message || "Failed to create a new session." };
     }
 }
 
-export async function markStudentAttendanceAction(
-    sessionId: string,
-    studentId: string
+export async function markStudentAttendanceWithPinAction(
+    pin: string
 ): Promise<{ success: boolean; message: string }> {
     try {
+        // Get current user from Supabase
+        const supabaseClient = getSupabase();
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+        
+        if (userError || !user) {
+            return { success: false, message: "You must be logged in to mark attendance." };
+        }
+
+        // Find active session with matching PIN
         const sessions = await getAttendanceSessions();
-        const session = sessions.find((s: AttendanceSession) => s.id === sessionId);
-
-        if (!session) {
-            return { success: false, message: "Invalid or expired session." };
-        }
-
         const now = new Date();
-        const startTime = new Date(session.startTime);
-        const endTime = new Date(session.endTime);
+        
+        const activeSession = sessions.find((s: any) => {
+            const session = s as AttendanceSession & { pin?: string };
+            const startTime = new Date(session.startTime);
+            const endTime = new Date(session.endTime);
+            return session.pin === pin && now >= startTime && now <= endTime;
+        });
 
-        // Check if session is active
-        if (now < startTime) {
-            return { success: false, message: "This session hasn't started yet." };
+        if (!activeSession) {
+            return { success: false, message: "Invalid PIN or session has expired." };
         }
 
-        if (now > endTime) {
-            return { success: false, message: "This session has ended. Please wait for the next session." };
+        // Get student information
+        const students = await getStudents();
+        const userName = user.user_metadata?.firstName || user.user_metadata?.full_name?.split(' ')[0] || user.email;
+        const student = students.find((s: { name: string }) => s.name === userName);
+
+        if (!student) {
+            return { success: false, message: "Could not identify the student. Please ensure your profile name is correct." };
         }
 
         // Check for existing attendance
         const records = await getSessionAttendanceRecords();
         const existingRecord = records.find((r: SessionAttendanceRecord) =>
-            r.sessionId === sessionId && r.studentId === studentId
+            r.sessionId === activeSession.id && r.studentId === student.id
         );
 
         if (existingRecord) {
@@ -280,20 +301,20 @@ export async function markStudentAttendanceAction(
         // Record the attendance
         const newRecord: SessionAttendanceRecord = {
             id: randomUUID(),
-            sessionId,
-            studentId,
+            sessionId: activeSession.id,
+            studentId: student.id,
             timestamp: now.toISOString(),
         };
 
-        // Save to Supabase using regular client
+        // Save to Supabase
         try {
             const supabaseClient = supabaseAdmin || getSupabase();
             const { error } = await supabaseClient
                 .from('session_attendance_records')
                 .insert({
                     id: newRecord.id,
-                    session_id: sessionId,
-                    student_id: studentId,
+                    session_id: activeSession.id,
+                    student_id: student.id,
                     timestamp: now.toISOString(),
                 });
 
@@ -304,44 +325,16 @@ export async function markStudentAttendanceAction(
             throw new Error(`Failed to save attendance record: ${supabaseError.message}`);
         }
 
-        // Get student name for the success message
-        const students = await getStudents();
-        const student = students.find((s: Student) => s.id === studentId);
         return {
             success: true,
             message: `Attendance marked successfully for ${student?.name || 'Unknown Student'}!`
         };
 
     } catch (error) {
-        console.error('Error marking attendance:', error);
+        console.error('Error marking attendance with PIN:', error);
         return {
             success: false,
             message: "Failed to mark attendance. Please try again."
         };
-    }
-}
-
-export async function getSessionAttendanceAction(sessionId: string): Promise<{
-    success: boolean,
-    records?: { studentName: string, timestamp: string }[],
-    error?: string
-}> {
-    try {
-        const records = await getSessionAttendanceRecords();
-        const sessionRecords = records.filter((r: SessionAttendanceRecord) => r.sessionId === sessionId);
-        const students = await getStudents();
-
-        const studentRecords = sessionRecords.map((record: SessionAttendanceRecord) => {
-            const student = students.find((s: Student) => s.id === record.studentId);
-            return {
-                studentName: student?.name || 'Unknown Student',
-                timestamp: record.timestamp,
-            }
-        });
-
-        return { success: true, records: studentRecords };
-    } catch (error) {
-        console.error('Error getting session attendance:', error);
-        return { success: false, error: 'Failed to get session attendance records.' };
     }
 }

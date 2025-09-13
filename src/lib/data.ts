@@ -72,7 +72,7 @@ export const students: Student[] = [
   },
 ];
 
-// In-memory "database" for QR code sessions
+// In-memory "database" for attendance sessions
 export let attendanceSessions: AttendanceSession[] = [];
 export let sessionAttendanceRecords: SessionAttendanceRecord[] = [];
 */
