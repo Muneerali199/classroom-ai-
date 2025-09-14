@@ -77,26 +77,6 @@ export class AuthService {
     }
   }
 
-  static async signInWithGoogle(): Promise<AuthResponse> {
-    try {
-      const supabase = getSupabase()
-      
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      })
-
-      if (error) {
-        return { success: false, error: error.message }
-      }
-
-      return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
-    }
-  }
 
   static async signOut(): Promise<AuthResponse> {
     try {

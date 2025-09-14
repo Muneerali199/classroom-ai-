@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  email: z.string().email('Please enter a valid email address').min(1, 'Email is required'),
   password: z.string().min(1, 'Password is required'),
 });
 
@@ -22,19 +22,28 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export default function LoginForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid },
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
+    mode: 'onChange',
   });
+
+  const emailValue = watch('email');
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
+    
     try {
       const result = await AuthService.signIn({
         email: data.email,
@@ -42,113 +51,179 @@ export default function LoginForm() {
       });
       
       if (result.success) {
-        router.push('/dashboard');
+        setSuccess('Sign in successful! Redirecting...');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
       } else {
-        setError(result.error || 'Failed to sign in');
+        setError(result.error || 'Failed to sign in. Please check your credentials.');
       }
     } catch (error: any) {
-      setError(error.message);
+      setError(error.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsGoogleLoading(true);
+  const handlePasswordReset = async () => {
+    if (!emailValue || !emailValue.includes('@')) {
+      setError('Please enter a valid email address first');
+      return;
+    }
+
+    setIsResettingPassword(true);
     setError(null);
+    setSuccess(null);
+
     try {
-      const result = await AuthService.signInWithGoogle();
-      if (!result.success) {
-        setError(result.error || 'Failed to sign in with Google');
+      const result = await AuthService.resetPassword(emailValue);
+      if (result.success) {
+        setSuccess('Password reset email sent! Check your inbox.');
+        setShowPasswordReset(false);
+      } else {
+        setError(result.error || 'Failed to send reset email');
       }
-      // Redirect will be handled by the OAuth provider
     } catch (error: any) {
-      setError(error.message);
+      setError(error.message || 'Failed to send reset email');
     } finally {
-      setIsGoogleLoading(false);
+      setIsResettingPassword(false);
     }
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+            <AlertCircle className="h-4 w-4" />
             <AlertTitle>Authentication Failed</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-sm">{error}</AlertDescription>
           </Alert>
         )}
+        
+        {success && (
+          <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertTitle className="text-green-800 dark:text-green-200">Success!</AlertTitle>
+            <AlertDescription className="text-sm text-green-700 dark:text-green-300">{success}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            {...register('email')}
-          />
+          <Label htmlFor="email" className="text-sm font-medium">
+            Email Address
+          </Label>
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email address"
+              className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register('email')}
+            />
+          </div>
           {errors.email && (
-            <p className="text-sm text-destructive">{errors.email.message}</p>
+            <p className="text-sm text-red-500 flex items-center gap-1">
+              <AlertCircle className="h-3 w-3" />
+              {errors.email.message}
+            </p>
           )}
         </div>
+
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            {...register('password')}
-          />
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password" className="text-sm font-medium">
+              Password
+            </Label>
+            <button
+              type="button"
+              onClick={() => setShowPasswordReset(true)}
+              className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+            >
+              Forgot password?
+            </button>
+          </div>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              className="pr-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              {...register('password')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           {errors.password && (
-            <p className="text-sm text-destructive">{errors.password.message}</p>
+            <p className="text-sm text-red-500 flex items-center gap-1">
+              <AlertCircle className="h-3 w-3" />
+              {errors.password.message}
+            </p>
           )}
         </div>
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Sign In
+
+        <Button 
+          type="submit" 
+          className="w-full h-11 text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]" 
+          disabled={isLoading || !isValid}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Signing In...
+            </>
+          ) : (
+            'Sign In to Dashboard'
+          )}
         </Button>
       </form>
-      
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+
+      {showPasswordReset && (
+        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
+          <h3 className="text-sm font-medium mb-2">Reset Password</h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+            Enter your email address and we'll send you a link to reset your password.
+          </p>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              onClick={handlePasswordReset}
+              disabled={isResettingPassword || !emailValue}
+              size="sm"
+              className="flex-1"
+            >
+              {isResettingPassword ? (
+                <>
+                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                'Send Reset Link'
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowPasswordReset(false)}
+              size="sm"
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
+      )}
+
+      <div className="text-center">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Secure login powered by EduTrack Authentication
+        </p>
       </div>
-      
-      <Button 
-        type="button" 
-        variant="outline" 
-        className="w-full" 
-        onClick={handleGoogleSignIn}
-        disabled={isGoogleLoading}
-      >
-        {isGoogleLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-            <path
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              fill="#4285F4"
-            />
-            <path
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              fill="#34A853"
-            />
-            <path
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              fill="#FBBC05"
-            />
-            <path
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              fill="#EA4335"
-            />
-          </svg>
-        )}
-        Sign in with Google
-      </Button>
     </div>
   );
 }
