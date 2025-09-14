@@ -22,26 +22,9 @@ export interface AuthResponse {
 
 export class AuthService {
   static async checkEmailExists(email: string): Promise<boolean> {
-    try {
-      const supabase = getSupabase()
-      
-      // Check if email exists in auth.users table
-      const { data, error } = await supabase
-        .from('auth.users')
-        .select('email')
-        .eq('email', email.toLowerCase().trim())
-        .limit(1)
-
-      if (error) {
-        console.warn('Could not check email existence:', error.message)
-        return false // Return false if we can't check, let the creation attempt handle it
-      }
-
-      return data && data.length > 0
-    } catch (error) {
-      console.warn('Error checking email existence:', error)
-      return false
-    }
+    // Note: We can't directly query auth.users table from client
+    // Let the RPC function handle duplicate checking
+    return false
   }
   static async createUser(data: CreateUserData): Promise<AuthResponse> {
     try {
@@ -54,22 +37,7 @@ export class AuthService {
         return { success: false, error: 'Must be logged in to create users' }
       }
 
-      // First check if user with this email already exists
-      const { data: existingUsers, error: checkError } = await supabase
-        .from('auth.users')
-        .select('email')
-        .eq('email', data.email.toLowerCase().trim())
-        .limit(1)
-
-      if (checkError) {
-        console.warn('Could not check for existing users:', checkError.message)
-        // Continue with creation attempt even if check fails
-      } else if (existingUsers && existingUsers.length > 0) {
-        return { 
-          success: false, 
-          error: `A user with email "${data.email}" already exists. Please use a different email address.` 
-        }
-      }
+      // The create_user_account RPC function will handle duplicate checking
 
       // Call the database function to create the user
       const { data: result, error } = await supabase.rpc('create_user_account', {
@@ -102,15 +70,22 @@ export class AuthService {
         return { success: false, error: error.message }
       }
 
-      if (!result.success) {
+      if (!result) {
+        return { success: false, error: 'Failed to create user account - no response from server' }
+      }
+
+      // Type cast the result since we know the RPC function returns an object with success/error properties
+      const response = result as { success: boolean; error?: string }
+
+      if (!response.success) {
         // Handle specific application errors
-        if (result.error && result.error.includes('duplicate')) {
+        if (response.error && response.error.includes('duplicate')) {
           return { 
             success: false, 
             error: `A user with email "${data.email}" already exists. Please use a different email address.` 
           }
         }
-        return { success: false, error: result.error || 'Failed to create user account' }
+        return { success: false, error: response.error || 'Failed to create user account' }
       }
 
       return { success: true }
@@ -269,8 +244,11 @@ export class AuthService {
           deleter_id: currentUser.id
         })
 
-        if (!error && result && result.success) {
-          return { success: true }
+        if (!error && result) {
+          const response = result as { success: boolean; error?: string }
+          if (response.success) {
+            return { success: true }
+          }
         }
       } catch (funcError) {
         console.warn('Database function not available, using fallback method')
@@ -394,8 +372,15 @@ export class AuthService {
         return { success: false, error: `Failed to reset password: ${error.message}` }
       }
 
-      if (!result.success) {
-        return { success: false, error: result.error || 'Failed to reset password' }
+      if (!result) {
+        return { success: false, error: 'Failed to reset password - no response from server' }
+      }
+
+      // Type cast the result since we know the RPC function returns an object with success/error properties
+      const response = result as { success: boolean; error?: string }
+
+      if (!response.success) {
+        return { success: false, error: response.error || 'Failed to reset password' }
       }
 
       return { success: true }

@@ -16,7 +16,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, Hash, Timer, Users, Copy, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { createPinAttendanceSessionAction, getSessionAttendanceAction } from '@/app/actions';
-import type { AttendanceSession, Student } from '@/lib/types';
+import type { AttendanceSession } from '@/lib/database.types';
+import type { Student } from '@/lib/types';
 
 interface PinSessionManagerProps {
     students: Student[];
@@ -69,8 +70,8 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
       }
 
       // Stop polling if session has ended
-      const sessionToEnd = session || { endTime: new Date(0).toISOString() };
-      if (new Date() > new Date(sessionToEnd.endTime)) {
+      const sessionToEnd = session || { end_time: new Date(0).toISOString() };
+      if (new Date() > new Date(sessionToEnd.end_time)) {
         clearInterval(interval);
       }
     }, 5000); // Poll every 5 seconds
@@ -84,7 +85,7 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
     }
   };
 
-  const isSessionActive = session && new Date() < new Date(session.endTime);
+  const isSessionActive = session && new Date() < new Date(session.end_time);
 
   // Show access restriction for non-teachers
   if (!isTeacher) {
@@ -170,7 +171,7 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
                 </div>
               )}
               <p className="text-sm text-muted-foreground">
-                Session ends at {new Date(session.endTime).toLocaleTimeString()}
+                Session ends at {new Date(session.end_time).toLocaleTimeString()}
               </p>
               <Button variant="outline" onClick={() => setSession(null)}>
                 End Session and Start New
@@ -212,7 +213,7 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Timer className="h-5 w-5" />
-                  <span>Session Ends: {new Date(session.endTime).toLocaleTimeString()}</span>
+                  <span>Session Ends: {new Date(session.end_time).toLocaleTimeString()}</span>
                 </div>
               </div>
               <div className="border rounded-b-lg max-h-80 overflow-y-auto">

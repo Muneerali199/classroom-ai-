@@ -1,5 +1,5 @@
 import { getSupabase } from './supabase'
-import type { Teacher } from './types'
+import type { Teacher, AttendanceStatus } from './types'
 
 export interface TeacherResponse {
   success: boolean
@@ -31,14 +31,14 @@ export class TeacherService {
       }
 
       // Group attendance by teacher_id
-      const attendanceMap = new Map<string, { date: string; status: string }[]>()
+      const attendanceMap = new Map<string, { date: string; status: AttendanceStatus }[]>()
       attendanceData?.forEach((record: { teacher_id: string; date: string; status: string }) => {
         if (!attendanceMap.has(record.teacher_id)) {
           attendanceMap.set(record.teacher_id, [])
         }
         attendanceMap.get(record.teacher_id)!.push({
           date: record.date,
-          status: record.status,
+          status: record.status as AttendanceStatus,
         })
       })
 
@@ -186,8 +186,15 @@ export class TeacherService {
         return { success: false, error: `Failed to reset password: ${error.message}` }
       }
 
-      if (!result.success) {
-        return { success: false, error: result.error || 'Failed to reset password' }
+      if (!result) {
+        return { success: false, error: 'Failed to reset password - no response from server' }
+      }
+
+      // Type cast the result since we know the RPC function returns an object with success/error properties
+      const response = result as { success: boolean; error?: string }
+
+      if (!response.success) {
+        return { success: false, error: response.error || 'Failed to reset password' }
       }
 
       return { success: true }
@@ -219,7 +226,7 @@ export class TeacherService {
         .upsert({
           teacher_id: teacherId,
           date: date,
-          status: status,
+          status: status as 'Present' | 'Absent' | 'Late' | 'Excused' | 'Sick Leave' | 'Personal Leave',
           notes: notes,
           recorded_by: currentUser.id,
           recorded_at: new Date().toISOString()

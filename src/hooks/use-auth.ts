@@ -23,6 +23,11 @@ export function useAuth() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+    
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       if (session?.user) {
         const role = session.user.user_metadata?.role as string;

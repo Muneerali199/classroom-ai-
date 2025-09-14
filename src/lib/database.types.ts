@@ -9,6 +9,111 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      teachers: {
+        Row: {
+          id: string
+          name: string
+          email?: string
+          teacher_id?: string
+          department?: string
+          subject?: string
+          phone_number?: string
+          address?: string
+          date_of_birth?: string
+          hire_date?: string
+          employment_status?: 'Full-time' | 'Part-time' | 'Contract' | 'Substitute'
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          qualifications?: string
+          notes?: string
+          photo_url?: string
+          auth_user_id?: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string
+        }
+        Insert: {
+          id: string
+          name: string
+          email?: string
+          teacher_id?: string
+          department?: string
+          subject?: string
+          phone_number?: string
+          address?: string
+          date_of_birth?: string
+          hire_date?: string
+          employment_status?: 'Full-time' | 'Part-time' | 'Contract' | 'Substitute'
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          qualifications?: string
+          notes?: string
+          photo_url?: string
+          auth_user_id?: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          teacher_id?: string
+          department?: string
+          subject?: string
+          phone_number?: string
+          address?: string
+          date_of_birth?: string
+          hire_date?: string
+          employment_status?: 'Full-time' | 'Part-time' | 'Contract' | 'Substitute'
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          qualifications?: string
+          notes?: string
+          photo_url?: string
+          auth_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      teacher_attendance: {
+        Row: {
+          id: number
+          teacher_id: string
+          date: string
+          status: 'Present' | 'Absent' | 'Late' | 'Excused' | 'Sick Leave' | 'Personal Leave'
+          notes?: string
+          recorded_by?: string
+          recorded_at?: string
+        }
+        Insert: {
+          id?: number
+          teacher_id: string
+          date: string
+          status: 'Present' | 'Absent' | 'Late' | 'Excused' | 'Sick Leave' | 'Personal Leave'
+          notes?: string
+          recorded_by?: string
+          recorded_at?: string
+        }
+        Update: {
+          id?: number
+          teacher_id?: string
+          date?: string
+          status?: 'Present' | 'Absent' | 'Late' | 'Excused' | 'Sick Leave' | 'Personal Leave'
+          notes?: string
+          recorded_by?: string
+          recorded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_attendance_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       students: {
         Row: {
           id: string
@@ -177,6 +282,13 @@ export interface Database {
           user_display_name: string
           user_role: string
           creator_id: string
+        }
+        Returns: Json
+      }
+      delete_student_account: {
+        Args: {
+          student_id: string
+          deleter_id: string
         }
         Returns: Json
       }

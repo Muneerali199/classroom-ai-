@@ -1,4 +1,4 @@
-import type { Student, AttendanceSession, SessionAttendanceRecord, Teacher } from '@/lib/types';
+import type { Student, AttendanceSession, SessionAttendanceRecord, Teacher, AttendanceStatus } from '@/lib/types';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
 
 // Commented out static data as backup
@@ -100,14 +100,14 @@ export async function getStudents(): Promise<Student[]> {
     }
 
     // Group attendance by student_id
-    const attendanceMap = new Map<string, { date: string; status: string }[]>();
+    const attendanceMap = new Map<string, { date: string; status: AttendanceStatus }[]>();
     attendanceData?.forEach((record: { student_id: string; date: string; status: string }) => {
       if (!attendanceMap.has(record.student_id)) {
         attendanceMap.set(record.student_id, []);
       }
       attendanceMap.get(record.student_id)!.push({
         date: record.date,
-        status: record.status,
+        status: record.status as AttendanceStatus,
       });
     });
 
@@ -214,7 +214,8 @@ export async function getTeachers(): Promise<Teacher[]> {
         id: user.id,
         name: user.user_metadata?.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Unknown Teacher',
         email: user.email,
-        course: user.user_metadata?.course || 'General',
+        subject: user.user_metadata?.course || 'General',
+        attendance: [], // Initialize empty attendance array
       }));
 
     return teachers;
@@ -222,9 +223,9 @@ export async function getTeachers(): Promise<Teacher[]> {
     console.error('Error fetching teachers:', error);
     // Return fallback teachers if database fetch fails
     return [
-      { id: 'teacher1', name: 'Dr. Smith', email: 'smith@school.edu', course: 'Mathematics' },
-      { id: 'teacher2', name: 'Prof. Johnson', email: 'johnson@school.edu', course: 'Science' },
-      { id: 'teacher3', name: 'Ms. Davis', email: 'davis@school.edu', course: 'English' },
+      { id: 'teacher1', name: 'Dr. Smith', email: 'smith@school.edu', subject: 'Mathematics', attendance: [] },
+      { id: 'teacher2', name: 'Prof. Johnson', email: 'johnson@school.edu', subject: 'Science', attendance: [] },
+      { id: 'teacher3', name: 'Ms. Davis', email: 'davis@school.edu', subject: 'English', attendance: [] },
     ];
   }
 }
