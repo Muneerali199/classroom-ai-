@@ -49,7 +49,7 @@ This directory contains SQL scripts to migrate the static data from `src/lib/dat
 ## Data Migrated
 
 - **6 students** with their basic information
-- **30 attendance records** across the 6 students for dates 2024-05-01 to 2024-05-07
+- **30 attendance records** across the 6 students for dates 2025-05-01 to 2025-05-07
 - No session data was migrated as the arrays were empty in the source
 
 ## Notes

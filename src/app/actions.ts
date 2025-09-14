@@ -94,7 +94,7 @@ export async function generateWeeklyReportAction(input: WeeklyReportInput) {
 export async function signUpWithEmailAndPassword(
   email: string,
   password: string,
-  role: 'teacher' | 'student' | 'admin'
+  role: 'teacher' | 'student' | 'dean'
 ): Promise<{
   success: boolean;
   error?: string;
