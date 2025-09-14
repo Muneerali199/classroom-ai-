@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/icons';
 
 interface FooterProps {
@@ -9,6 +10,9 @@ interface FooterProps {
 }
 
 export default function Footer({ scrollToSection }: FooterProps) {
+  const pathname = usePathname();
+  const locale = pathname.split('/')[1];
+
   return (
     <footer
       id="contact"
@@ -34,12 +38,12 @@ export default function Footer({ scrollToSection }: FooterProps) {
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-6">Product</h3>
             <div className="space-y-3">
-              <button
-                onClick={() => scrollToSection('features')}
+              <Link
+                href={`/${locale}/features`}
                 className="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
               >
                 Features
-              </button>
+              </Link>
               <button className="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
                 Pricing
               </button>
