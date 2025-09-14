@@ -13,14 +13,57 @@ export interface Database {
         Row: {
           id: string
           name: string
+          email?: string
+          student_id?: string
+          grade?: string
+          date_of_birth?: string
+          phone_number?: string
+          address?: string
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          blood_type?: string
+          medical_notes?: string
+          photo_url?: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string
+          auth_user_id?: string
         }
         Insert: {
           id: string
           name: string
+          email?: string
+          student_id?: string
+          grade?: string
+          date_of_birth?: string
+          phone_number?: string
+          address?: string
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          blood_type?: string
+          medical_notes?: string
+          photo_url?: string
+          created_at?: string
+          updated_at?: string
+          created_by?: string
+          auth_user_id?: string
         }
         Update: {
           id?: string
           name?: string
+          email?: string
+          student_id?: string
+          grade?: string
+          date_of_birth?: string
+          phone_number?: string
+          address?: string
+          emergency_contact_name?: string
+          emergency_contact_phone?: string
+          blood_type?: string
+          medical_notes?: string
+          photo_url?: string
+          updated_at?: string
+          auth_user_id?: string
         }
         Relationships: []
       }
@@ -134,6 +177,20 @@ export interface Database {
           user_display_name: string
           user_role: string
           creator_id: string
+        }
+        Returns: Json
+      }
+      reset_student_password: {
+        Args: {
+          student_auth_id: string
+          new_password: string
+        }
+        Returns: Json
+      }
+      reset_teacher_password: {
+        Args: {
+          teacher_auth_id: string
+          new_password: string
         }
         Returns: Json
       }

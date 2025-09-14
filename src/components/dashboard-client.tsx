@@ -94,7 +94,7 @@ export default function DashboardClient({
 
         const { error } = await supabase
           .from('attendance')
-          .upsert(attendanceRecords);
+          .upsert(attendanceRecords as any);
 
         if (error) {
           throw new Error(`Failed to save attendance: ${error.message}`);

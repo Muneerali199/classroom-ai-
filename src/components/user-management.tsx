@@ -55,9 +55,10 @@ type DeanCreateUserFormInputs = z.infer<typeof deanCreateUserSchema>;
 
 interface UserManagementProps {
   userRole: 'dean' | 'teacher';
+  onSuccess?: () => void;
 }
 
-export default function UserManagement({ userRole }: UserManagementProps) {
+export default function UserManagement({ userRole, onSuccess }: UserManagementProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -97,6 +98,7 @@ export default function UserManagement({ userRole }: UserManagementProps) {
         setSuccess(`${data.role.charAt(0).toUpperCase() + data.role.slice(1)} account created successfully!`);
         reset();
         setIsDialogOpen(false);
+        onSuccess?.();
       } else {
         setError(result.error || 'Failed to create user account');
       }

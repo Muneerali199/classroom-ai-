@@ -111,22 +111,32 @@ export async function getStudents(): Promise<Student[]> {
       });
     });
 
-    return studentsData?.map((student: { id: string; name: string }) => ({
+    return studentsData?.map((student: any) => ({
       id: student.id,
       name: student.name,
+      email: student.email,
+      student_id: student.student_id,
+      grade: student.grade,
+      date_of_birth: student.date_of_birth,
+      phone_number: student.phone_number,
+      address: student.address,
+      emergency_contact_name: student.emergency_contact_name,
+      emergency_contact_phone: student.emergency_contact_phone,
+      blood_type: student.blood_type,
+      medical_notes: student.medical_notes,
+      photo_url: student.photo_url,
+      created_at: student.created_at,
+      updated_at: student.updated_at,
+      created_by: student.created_by,
+      auth_user_id: student.auth_user_id,
       attendance: attendanceMap.get(student.id) || [],
     })) || [];
     
   } catch (error: any) {
     console.error('Error fetching students:', error);
-    // Return fallback data if database is not accessible
-    return [
-      { id: 's1', name: 'Michael Johnson', attendance: [] },
-      { id: 's2', name: 'Emily Davis', attendance: [] },
-      { id: 's3', name: 'Christopher Miller', attendance: [] },
-      { id: 's4', name: 'Jessica Wilson', attendance: [] },
-      { id: 's5', name: 'David Martinez', attendance: [] },
-    ];
+    // Return empty array if database is not accessible to avoid mock data
+    console.warn('Database not accessible, returning empty student list');
+    return [];
   }
 }
 
