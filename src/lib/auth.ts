@@ -1,11 +1,11 @@
 import { getSupabase } from './supabase'
 import { AuthError, User } from '@supabase/supabase-js'
 
-export interface SignUpData {
+export interface CreateUserData {
   email: string
   password: string
   displayName: string
-  role: 'teacher' | 'admin' | 'student'
+  role: 'teacher' | 'dean' | 'student'
 }
 
 export interface SignInData {
@@ -20,31 +20,35 @@ export interface AuthResponse {
 }
 
 export class AuthService {
-  static async signUp(data: SignUpData): Promise<AuthResponse> {
+  static async createUser(data: CreateUserData): Promise<AuthResponse> {
     try {
       const supabase = getSupabase()
       
-      const { data: authData, error } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          data: {
-            displayName: data.displayName,
-            full_name: data.displayName,
-            role: data.role,
-          },
-        },
+      // Get current user to pass as creator_id
+      const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !currentUser) {
+        return { success: false, error: 'Must be logged in to create users' }
+      }
+
+      // Call the database function to create the user
+      const { data: result, error } = await supabase.rpc('create_user_account', {
+        user_email: data.email,
+        user_password: data.password,
+        user_display_name: data.displayName,
+        user_role: data.role,
+        creator_id: currentUser.id
       })
 
       if (error) {
         return { success: false, error: error.message }
       }
 
-      if (!authData.user) {
-        return { success: false, error: 'Failed to create user account' }
+      if (!result.success) {
+        return { success: false, error: result.error || 'Failed to create user account' }
       }
 
-      return { success: true, user: authData.user }
+      return { success: true }
     } catch (error: any) {
       return { success: false, error: error.message || 'An unexpected error occurred' }
     }

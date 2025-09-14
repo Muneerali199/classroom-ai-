@@ -47,12 +47,12 @@ export function useAuth() {
   useEffect(() => {
     if (loading) return;
 
-    const isAuthPage = pathname.includes('/login') || pathname.includes('/signup');
+    const isAuthPage = pathname.includes('/login');
     const localePrefix = pathname.split('/').filter(Boolean)[0];
     const isLandingPage = pathname === '/' || (['en', 'es', 'hi'].includes(localePrefix) && pathname.split('/').filter(Boolean).length === 1)
 
     const isTeacherDashboard = pathname.startsWith('/dashboard') || pathname.startsWith(`/${localePrefix}/dashboard`);
-    const isAdminDashboard = pathname.startsWith('/admin') || pathname.startsWith(`/${localePrefix}/admin`);
+    const isDeanDashboard = pathname.startsWith('/dean') || pathname.startsWith(`/${localePrefix}/dean`);
     const isStudentDashboard = pathname.startsWith('/student') || pathname.startsWith(`/${localePrefix}/student`);
 
     if (user) {
@@ -60,13 +60,13 @@ export function useAuth() {
       
       if (isAuthPage || isLandingPage) {
         // Redirect logged-in users from auth/landing pages to their dashboard
-        if (role === 'admin') router.push('/admin/dashboard');
+        if (role === 'dean') router.push('/dean/dashboard');
         else if (role === 'student') router.push('/student/dashboard');
         else router.push('/dashboard'); // Default to teacher dashboard
       } else {
         // Prevent users from accessing dashboards of other roles
         if (role === 'teacher' && !isTeacherDashboard) router.push('/dashboard');
-        if (role === 'admin' && !isAdminDashboard) router.push('/admin/dashboard');
+        if (role === 'dean' && !isDeanDashboard) router.push('/dean/dashboard');
         if (role === 'student' && !isStudentDashboard) router.push('/student/dashboard');
       }
 

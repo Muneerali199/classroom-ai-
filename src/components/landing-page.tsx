@@ -40,9 +40,9 @@ export default function LandingPage() {
   const features = [
     {
       icon: <Shield className="w-8 h-8" />,
-      title: 'Secure Authentication',
+      title: 'Controlled Authentication',
       description:
-        'Role-based access control with Supabase Auth ensuring data security for students, teachers, and administrators.',
+        'Dean-managed account creation with no public signup. Secure role-based access control ensuring institutional data privacy.',
       color: 'from-blue-500 to-cyan-500',
     },
     {
@@ -184,9 +184,6 @@ export default function LandingPage() {
                <Button variant="ghost" asChild>
                 <Link href="/login">Login</Link>
                 </Button>
-                <Button asChild>
-                    <Link href="/signup">Sign Up</Link>
-                </Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -224,9 +221,6 @@ export default function LandingPage() {
               <div className="border-t border-white/10 pt-2 flex flex-col gap-2">
                 <Button variant="ghost" asChild className="w-full">
                     <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild className="w-full">
-                    <Link href="/signup">Sign Up</Link>
                 </Button>
               </div>
             </div>
@@ -277,15 +271,15 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed">
-            A mobile-first platform designed for educational institutions to
-            manage curriculum activities, monitor student progress, and track
-            attendance seamlessly with real-time analytics.
+            Secure, institution-managed education platform with controlled access.
+            Streamline attendance tracking, manage student progress, and maintain 
+            data security with dean-supervised account management.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12">
             <Button size="lg" className="group w-full sm:w-auto" asChild>
-                <Link href="/signup">
-                Get Started Free <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                <Link href="/login">
+                Login to Get Started <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto bg-gray-900/10 dark:bg-white/10 border-gray-300/30 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20">
@@ -301,11 +295,11 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-4 h-4 text-green-400" />
-              <span>Real-time Sync</span>
+              <span>Institution Managed</span>
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-4 h-4 text-green-400" />
-              <span>Secure & Scalable</span>
+              <span>Role-Based Access</span>
             </div>
           </div>
         </div>
@@ -316,6 +310,75 @@ export default function LandingPage() {
         >
           <ChevronDown className="w-6 h-6 text-gray-500 dark:text-gray-400" />
         </button>
+      </section>
+
+      {/* Controlled Access Section */}
+      <section id="access" className="py-20 sm:py-32 relative bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+                Secure, Institution-Managed Access
+              </span>
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
+              No public signups. Complete institutional control over user access and data security.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">🎓 Dean</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">Full system administration</p>
+              <ul className="text-sm text-left space-y-1">
+                <li>• Create teacher accounts</li>
+                <li>• Create student accounts</li>
+                <li>• Manage system settings</li>
+                <li>• Full access control</li>
+              </ul>
+            </div>
+
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">👨‍🏫 Teacher</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">Class management & student creation</p>
+              <ul className="text-sm text-left space-y-1">
+                <li>• Create student accounts</li>
+                <li>• Manage attendance sessions</li>
+                <li>• Track class progress</li>
+                <li>• Generate reports</li>
+              </ul>
+            </div>
+
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">👨‍🎓 Student</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">Attendance tracking & progress</p>
+              <ul className="text-sm text-left space-y-1">
+                <li>• Join attendance sessions</li>
+                <li>• View attendance history</li>
+                <li>• Update profile information</li>
+                <li>• Access learning materials</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="inline-flex items-center gap-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              <p className="text-yellow-800 dark:text-yellow-200 font-medium">
+                No public registration • Dean-controlled access • Institutional data privacy
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* About Section */}
@@ -331,8 +394,8 @@ export default function LandingPage() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Revolutionizing educational management with cutting-edge
-              technology, real-time analytics, and seamless user experience.
+              Secure, institution-controlled educational management with dean-supervised
+              access, ensuring data privacy and role-based permissions.
             </p>
           </div>
 
@@ -343,10 +406,10 @@ export default function LandingPage() {
                   Our Mission
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                  We're building the future of educational technology by
-                  providing institutions with powerful tools to manage
-                  curriculum activities, track student progress, and streamline
-                  attendance management through intelligent automation.
+                  We're building secure educational technology by providing institutions 
+                  with controlled access management, dean-supervised user creation, and 
+                  role-based permissions ensuring complete data privacy and institutional 
+                  oversight of attendance and student management systems.
                 </p>
               </div>
 
@@ -357,7 +420,7 @@ export default function LandingPage() {
                   </div>
                   <h4 className="font-bold text-gray-900 dark:text-white mb-2">For Everyone</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Students, teachers, and administrators all benefit from our
+                    Students, teachers, and deans all benefit from our
                     intuitive platform.
                   </p>
                 </div>
@@ -603,14 +666,14 @@ export default function LandingPage() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join hundreds of educational institutions already using EduTrack to
-            streamline their operations and improve student outcomes.
+            Contact your institution's dean to get secure access to EduTrack's 
+            comprehensive attendance and student management platform.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
              <Button size="lg" asChild>
-                <Link href="/signup">
-                    Get Started Free
+                <Link href="/login">
+                    Login to Get Started
                 </Link>
             </Button>
             <Button size="lg" variant="outline" className="bg-gray-900/10 dark:bg-white/10 border-gray-300/30 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20">

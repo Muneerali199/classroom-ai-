@@ -24,10 +24,7 @@ export default function LoginPage() {
         </div>
         <LoginForm />
         <p className="mt-6 text-center text-sm text-gray-400">
-          Don&apos;t have an account?{' '}
-          <Link href="/signup" className="font-medium text-blue-400 hover:underline">
-            Sign up
-          </Link>
+          Need an account? Contact your dean or teacher.
         </p>
       </div>
     </div>

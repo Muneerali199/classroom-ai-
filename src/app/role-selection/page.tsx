@@ -70,8 +70,8 @@ function RoleSelectionContent() {
               <Label htmlFor="student">Student</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="admin" id="admin" />
-              <Label htmlFor="admin">Admin</Label>
+              <RadioGroupItem value="dean" id="dean" />
+              <Label htmlFor="dean">Dean</Label>
             </div>
           </RadioGroup>
           

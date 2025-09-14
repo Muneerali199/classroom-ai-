@@ -16,7 +16,7 @@ import { Logo } from '@/components/icons';
 import Link from 'next/link';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
 
-function AdminSidebar() {
+function DeanSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -25,7 +25,7 @@ function AdminSidebar() {
             <Logo className="w-6 h-6 text-white" />
           </div>
           <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            EduTrack Admin
+            EduTrack Dean
           </span>
         </div>
       </SidebarHeader>
@@ -34,7 +34,7 @@ function AdminSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild isActive>
-                <Link href="/admin/dashboard">
+                <Link href="/dean/dashboard">
                   <Home />
                   Dashboard
                 </Link>
@@ -75,7 +75,7 @@ function AdminSidebar() {
   );
 }
 
-export default function AdminLayout({
+export default function DeanLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -83,7 +83,7 @@ export default function AdminLayout({
   return (
     <DashboardAuthWrapper>
       <SidebarProvider>
-        <AdminSidebar />
+        <DeanSidebar />
         <SidebarInset>
           <Header />
           <main className="p-4 sm:p-6 lg:p-8">{children}</main>

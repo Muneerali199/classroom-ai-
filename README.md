@@ -22,10 +22,12 @@ EduTrack is a cutting-edge, mobile-first platform designed for educational insti
   - Real-time synchronization
   - Automated attendance summaries using AI
 
-- **Role-Based Access Control**
+- **Controlled User Management**
+  - No public signup - dean-managed account creation
+  - Three-tier role system (Dean → Teacher → Student)
   - Secure authentication with Supabase
-  - Separate dashboards for students, teachers, and administrators
-  - Granular permission management
+  - Separate dashboards for students, teachers, and deans
+  - Database-level permission validation
 
 - **AI-Powered Insights**
   - Automated attendance summary generation
@@ -36,6 +38,28 @@ EduTrack is a cutting-edge, mobile-first platform designed for educational insti
   - Responsive interface
   - Cross-device compatibility
   - Intuitive user experience
+
+## 🔐 Authentication System
+
+EduTrack uses a **controlled authentication system** with no public signup. Account creation is restricted to authorized personnel only:
+
+### User Roles & Permissions
+
+| Role | Can Create | Dashboard Access | Permissions |
+|------|------------|------------------|-------------|
+| **🎓 Dean** | Teachers, Students, Deans | `/dean/dashboard` | Full system administration |
+| **👨‍🏫 Teacher** | Students only | `/dashboard` | Class management, student creation |
+| **👨‍🎓 Student** | None | `/student/dashboard` | Attendance tracking only |
+
+### Account Creation Workflow
+
+1. **Dean** creates teacher accounts via Dean Dashboard
+2. **Teachers** create student accounts via Teacher Dashboard  
+3. **Students** login with credentials provided by teachers
+4. All accounts use strong password requirements and role-based validation
+
+📋 **[Complete Authentication Documentation](docs/AUTH_SYSTEM.md)**
+📋 **[User Creation Workflow Guide](docs/USER_CREATION_WORKFLOW.md)**
 
 ## 🛠️ Tech Stack
 
