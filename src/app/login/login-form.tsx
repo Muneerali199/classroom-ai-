@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { AuthService } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,8 +36,16 @@ export default function LoginForm() {
     setIsLoading(true);
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
-      router.push('/dashboard');
+      const result = await AuthService.signIn({
+        email: data.email,
+        password: data.password,
+      });
+      
+      if (result.success) {
+        router.push('/dashboard');
+      } else {
+        setError(result.error || 'Failed to sign in');
+      }
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -50,9 +57,11 @@ export default function LoginForm() {
     setIsGoogleLoading(true);
     setError(null);
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push('/dashboard');
+      const result = await AuthService.signInWithGoogle();
+      if (!result.success) {
+        setError(result.error || 'Failed to sign in with Google');
+      }
+      // Redirect will be handled by the OAuth provider
     } catch (error: any) {
       setError(error.message);
     } finally {

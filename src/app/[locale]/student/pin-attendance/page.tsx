@@ -1,7 +1,7 @@
-import QrScannerClient from "@/components/qr-scanner-client";
+import PinAttendanceClient from "@/components/pin-attendance-client";
 import { Separator } from "@/components/ui/separator";
 
-export default function ScanQrPage() {
+export default function PinAttendancePage() {
     return (
         <div className="space-y-6">
             <div>
@@ -9,11 +9,11 @@ export default function ScanQrPage() {
                     Mark Your Attendance
                 </h1>
                 <p className="text-muted-foreground">
-                    Scan the QR code provided by your teacher to mark your attendance.
+                    Enter the PIN provided by your teacher to mark your attendance.
                 </p>
             </div>
             <Separator />
-            <QrScannerClient />
+            <PinAttendanceClient />
         </div>
     );
 }

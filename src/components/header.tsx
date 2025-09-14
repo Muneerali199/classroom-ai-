@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { auth } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/use-auth';
 import { ThemeToggle } from './theme-toggle';
 
@@ -22,7 +22,7 @@ export default function Header() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await auth.signOut();
+    await supabase.auth.signOut();
     router.push('/login');
   };
   

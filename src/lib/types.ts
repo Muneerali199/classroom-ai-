@@ -11,10 +11,18 @@ export interface Student {
   attendance: AttendanceRecord[];
 }
 
+export interface Teacher {
+  id: string;
+  name: string;
+  email?: string;
+  course?: string;
+}
+
 export interface AttendanceSession {
   id: string;
   courseId: string;
   teacherId: string;
+  teacherName?: string;
   startTime: string; // ISO 8601 string
   endTime: string;   // ISO 8601 string
   createdAt: string; // ISO 8601 string

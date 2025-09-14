@@ -130,7 +130,7 @@ export default function ProfileForm() {
         return;
       }
       const result = await updateProfileAction({
-        uid: user.uid,
+        uid: user.uid || user.id,
         firstName: data.firstName,
         lastName: data.lastName,
         title: data.title || '',

@@ -2,8 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { setDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -18,7 +17,7 @@ function RoleSelectionContent() {
   const [error, setError] = useState<string | null>(null);
 
   const handleRoleSelection = async () => {
-    if (!uid || !role) {
+    if (!role) {
       setError('Please select a role');
       return;
     }
@@ -27,11 +26,13 @@ function RoleSelectionContent() {
     setError(null);
 
     try {
-      // Update user role in Firestore
-      await setDoc(doc(db, 'users', uid), {
-        role: role,
-      }, { merge: true });
-      
+      // Update user role in Supabase user metadata
+      const { error } = await supabase.auth.updateUser({
+        data: { role }
+      });
+
+      if (error) throw error;
+
       router.push('/dashboard');
     } catch (error: any) {
       setError(error.message);

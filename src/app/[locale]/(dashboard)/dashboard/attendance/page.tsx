@@ -1,8 +1,9 @@
-import { students } from '@/lib/data';
+import { getStudents } from '@/lib/data';
 import AttendanceAnalyticsClient from '@/components/attendance-analytics-client';
 import { Separator } from '@/components/ui/separator';
 
-export default function AttendancePage() {
+export default async function AttendancePage() {
+  const students = await getStudents();
   return (
     <div className="space-y-6">
        <div>

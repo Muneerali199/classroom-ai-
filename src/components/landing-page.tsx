@@ -42,7 +42,7 @@ export default function LandingPage() {
       icon: <Shield className="w-8 h-8" />,
       title: 'Secure Authentication',
       description:
-        'Role-based access control with Firebase Auth ensuring data security for students, teachers, and administrators.',
+        'Role-based access control with Supabase Auth ensuring data security for students, teachers, and administrators.',
       color: 'from-blue-500 to-cyan-500',
     },
     {
@@ -85,7 +85,7 @@ export default function LandingPage() {
   const techStack = [
     { name: 'Next.js', category: 'Web Framework', color: 'bg-gray-900' },
     { name: 'React', category: 'UI Library', color: 'bg-blue-500' },
-    { name: 'Firebase', category: 'Backend & Auth', color: 'bg-orange-500' },
+    { name: 'Supabase', category: 'Backend & Auth', color: 'bg-green-500' },
     { name: 'Genkit', category: 'AI Framework', color: 'bg-emerald-500' },
     { name: 'TypeScript', category: 'Language', color: 'bg-blue-600' },
     { name: 'Tailwind CSS', category: 'Styling', color: 'bg-cyan-500' },
@@ -494,7 +494,7 @@ export default function LandingPage() {
                 <Cloud className="w-12 h-12 text-blue-400 mx-auto mb-4" />
                 <h4 className="font-bold text-gray-900 dark:text-white mb-2">Cloud-Native</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Fully serverless architecture with Firebase and Genkit.
+                  Fully serverless architecture with Supabase and Genkit.
                 </p>
               </div>
               <div className="text-center">
