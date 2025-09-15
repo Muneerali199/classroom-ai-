@@ -15,7 +15,7 @@ import {
 import { supabase, getSupabase, supabaseAdmin } from '@/lib/supabase';
 import { getStudents, getAttendanceSessions, getSessionAttendanceRecords } from '@/lib/data';
 import placeholderImagesData from '@/lib/placeholder-images.json';
-import { AttendanceSession, SessionAttendanceRecord, Student } from '@/lib/types';
+import { AttendanceSession, AttendanceSessionInsert, SessionAttendanceRecord, Student } from '@/lib/database.types';
 import { randomUUID } from 'crypto';
 
 // Extract placeholderImages from the imported data
@@ -159,11 +159,12 @@ export async function getSessionAttendanceAction(sessionId: string): Promise<{
 }> {
     try {
         const records = await getSessionAttendanceRecords();
-        const sessionRecords = records.filter((r: SessionAttendanceRecord) => r.sessionId === sessionId);
+        const sessionRecords = records.filter((r: any) => r.session_id === sessionId || r.sessionId === sessionId);
         const students = await getStudents();
 
-        const studentRecords = sessionRecords.map((record: SessionAttendanceRecord) => {
-            const student = students.find((s: Student) => s.id === record.studentId);
+        const studentRecords = sessionRecords.map((record: any) => {
+            const studentId = record.student_id || record.studentId;
+            const student = students.find((s: Student) => s.id === studentId);
             return {
                 studentName: student?.name || 'Unknown Student',
                 timestamp: record.timestamp,
@@ -191,14 +192,16 @@ export async function createPinAttendanceSessionAction(
         // Generate a 6-digit PIN
         const pin = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const newSession: AttendanceSession = {
-            id: randomUUID(),
-            courseId,
-            teacherId,
-            teacherName,
-            startTime: now.toISOString(),
-            endTime: endTime.toISOString(),
-            createdAt: now.toISOString(),
+        const sessionId = randomUUID();
+        
+        const newSession: AttendanceSessionInsert = {
+            id: sessionId,
+            course_id: courseId,
+            teacher_id: teacherId,
+            teacher_name: teacherName,
+            start_time: now.toISOString(),
+            end_time: endTime.toISOString(),
+            created_at: now.toISOString(),
             pin: pin, // Store PIN in session
         };
 
@@ -206,15 +209,8 @@ export async function createPinAttendanceSessionAction(
         try {
             const supabaseClient = supabaseAdmin || getSupabase();
             
-            let insertData = {
-                id: newSession.id,
-                course_id: courseId,
-                teacher_id: teacherId,
-                start_time: now.toISOString(),
-                end_time: endTime.toISOString(),
-                created_at: now.toISOString(),
-                pin: pin, // Add PIN to database
-            };
+            // Use the newSession data directly since it's already properly formatted
+            let insertData = newSession;
 
             // Try to insert with teacher_name and pin
             let { error } = await supabaseClient
@@ -241,7 +237,19 @@ export async function createPinAttendanceSessionAction(
             throw new Error(`Failed to save session to database: ${supabaseError.message}`);
         }
 
-        return { success: true, session: newSession, pin };
+        // Create the response session object matching AttendanceSession type
+        const responseSession: AttendanceSession = {
+            id: newSession.id,
+            course_id: newSession.course_id,
+            teacher_id: newSession.teacher_id,
+            teacher_name: newSession.teacher_name,
+            start_time: newSession.start_time,
+            end_time: newSession.end_time,
+            created_at: newSession.created_at || now.toISOString(),
+            pin: newSession.pin,
+        };
+        
+        return { success: true, session: responseSession, pin };
 
     } catch (error: any) {
         console.error("Error creating PIN attendance session:", error);
@@ -267,8 +275,8 @@ export async function markStudentAttendanceWithPinAction(
         
         const activeSession = sessions.find((s: any) => {
             const session = s as AttendanceSession & { pin?: string };
-            const startTime = new Date(session.startTime);
-            const endTime = new Date(session.endTime);
+            const startTime = new Date(session.start_time);
+            const endTime = new Date(session.end_time);
             return session.pin === pin && now >= startTime && now <= endTime;
         });
 
@@ -287,9 +295,11 @@ export async function markStudentAttendanceWithPinAction(
 
         // Check for existing attendance
         const records = await getSessionAttendanceRecords();
-        const existingRecord = records.find((r: SessionAttendanceRecord) =>
-            r.sessionId === activeSession.id && r.studentId === student.id
-        );
+        const existingRecord = records.find((r: any) => {
+            const sessionId = r.session_id || r.sessionId;
+            const studentId = r.student_id || r.studentId;
+            return sessionId === activeSession.id && studentId === student.id;
+        });
 
         if (existingRecord) {
             return {
@@ -301,8 +311,8 @@ export async function markStudentAttendanceWithPinAction(
         // Record the attendance
         const newRecord: SessionAttendanceRecord = {
             id: randomUUID(),
-            sessionId: activeSession.id,
-            studentId: student.id,
+            session_id: activeSession.id,
+            student_id: student.id,
             timestamp: now.toISOString(),
         };
 

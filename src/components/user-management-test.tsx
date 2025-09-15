@@ -19,7 +19,7 @@ export default function UserManagementTest() {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<TestResult[]>([]);
 
-  const updateResult = (test: string, status: 'success' | 'error', message: string) => {
+  const updateResult = (test: string, status: 'pending' | 'success' | 'error', message: string) => {
     setResults(prev => {
       const newResults = prev.filter(r => r.test !== test);
       return [...newResults, { test, status, message }];
