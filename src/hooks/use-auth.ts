@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from '@/routing';
 
 interface UserWithRole {
   id: string;

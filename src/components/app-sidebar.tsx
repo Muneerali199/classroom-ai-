@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import { Home, User, Users, BarChart3 } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/routing';
 
 export default function AppSidebar() {
   const t = useTranslations('DashboardNav');
