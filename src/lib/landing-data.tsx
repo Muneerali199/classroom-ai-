@@ -66,42 +66,42 @@ export interface ArchitectureHighlight {
 
 export const features: Feature[] = [
   {
-    icon: React.createElement(Shield, { className: "w-8 h-8" }),
+    icon: <Shield className="w-8 h-8" />,
     title: 'Controlled Authentication',
     description:
       'Dean-managed account creation with no public signup. Secure role-based access control ensuring institutional data privacy.',
     color: 'from-blue-500 to-cyan-500',
   },
   {
-    icon: React.createElement(BookOpen, { className: "w-8 h-8" }),
+    icon: <BookOpen className="w-8 h-8" />,
     title: 'Curriculum Management',
     description:
       'Comprehensive tools to create, update, and track curriculum activities with real-time progress monitoring.',
     color: 'from-purple-500 to-pink-500',
   },
   {
-    icon: React.createElement(Users, { className: "w-8 h-8" }),
+    icon: <Users className="w-8 h-8" />,
     title: 'Smart Attendance',
     description:
       'Effortlessly mark attendance in seconds with our intuitive interface. Ditch the paper and save valuable time.',
     color: 'from-green-500 to-emerald-500',
   },
   {
-    icon: React.createElement(BarChart3, { className: "w-8 h-8" }),
+    icon: <BarChart3 className="w-8 h-8" />,
     title: 'AI-Powered Insights',
     description:
       'Automatically generate attendance summaries to identify trends and support students who need it most.',
     color: 'from-orange-500 to-red-500',
   },
   {
-    icon: React.createElement(Smartphone, { className: "w-8 h-8" }),
+    icon: <Smartphone className="w-8 h-8" />,
     title: 'Mobile First',
     description:
       'Fully responsive design ensures a seamless experience on any device, from desktops to smartphones.',
     color: 'from-indigo-500 to-blue-500',
   },
   {
-    icon: React.createElement(Zap, { className: "w-8 h-8" }),
+    icon: <Zap className="w-8 h-8" />,
     title: 'Real-time Updates',
     description:
       'Track student attendance in real-time, with instant data synchronization across all devices.',
@@ -114,43 +114,43 @@ export const techStack: TechItem[] = [
     name: 'Next.js',
     category: 'Web Framework',
     color: 'bg-gray-900',
-    icon: React.createElement('img', { src: '/nextjs-logo.png', alt: 'Next.js', className: 'w-full h-full object-contain' }),
+    icon: <img src="/nextjs-logo.png" alt="Next.js" className="w-full h-full object-contain" />,
   },
   {
     name: 'React',
     category: 'UI Library',
     color: 'bg-blue-500',
-    icon: React.createElement('img', { src: '/react-logo.png', alt: 'React', className: 'w-full h-full object-contain' }),
+    icon: <img src="/react-logo.png" alt="React" className="w-full h-full object-contain" />,
   },
   {
     name: 'Supabase',
     category: 'Backend & Auth',
     color: 'bg-green-500',
-    icon: React.createElement('img', { src: '/supabase-logo.png', alt: 'Supabase', className: 'w-full h-full object-contain' }),
+    icon: <img src="/supabase-logo.png" alt="Supabase" className="w-full h-full object-contain" />,
   },
   {
     name: 'Genkit',
     category: 'AI Framework',
     color: 'bg-emerald-500',
-    icon: React.createElement('img', { src: '/genkit-logo.png', alt: 'Genkit', className: 'w-full h-full object-contain' }),
+    icon: <img src="/genkit-logo.png" alt="Genkit" className="w-full h-full object-contain" />,
   },
   {
     name: 'TypeScript',
     category: 'Language',
     color: 'bg-blue-600',
-    icon: React.createElement('img', { src: '/typescript-logo.png', alt: 'TypeScript', className: 'w-full h-full object-contain' }),
+    icon: <img src="/typescript-logo.png" alt="TypeScript" className="w-full h-full object-contain" />,
   },
   {
     name: 'Tailwind CSS',
     category: 'Styling',
     color: 'bg-cyan-500',
-    icon: React.createElement('img', { src: '/tailwind-logo.png', alt: 'Tailwind CSS', className: 'w-full h-full object-contain' }),
+    icon: <img src="/tailwind-logo.png" alt="Tailwind CSS" className="w-full h-full object-contain" />,
   },
   {
     name: 'ShadCN UI',
     category: 'Component Library',
     color: 'bg-indigo-600',
-    icon: React.createElement('img', { src: '/shadcn-logo.png', alt: 'ShadCN UI', className: 'w-full h-full object-contain' }),
+    icon: <img src="/shadcn-logo.png" alt="ShadCN UI" className="w-full h-full object-contain" />,
   },
 ];
 

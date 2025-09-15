@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/routing';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
