@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Lightbulb, Loader2 } from 'lucide-react';
-import { generateWeeklyReportAction, WeeklyReportInput } from '@/app/actions';
+import { generateWeeklyReportAction } from '@/app/actions';
+import { WeeklyReportInput } from '@/ai/flows/weekly-attendance-report';
 
 interface AttendanceAnalyticsClientProps {
   students: Student[];
