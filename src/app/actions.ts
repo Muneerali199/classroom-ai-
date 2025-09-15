@@ -2,16 +2,9 @@
 
 import {
   generateAttendanceSummary,
-  type AttendanceSummaryInput,
-} from '@/ai/flows/attendance-summary-generation';
-import {
   recognizeStudentsForAttendance,
-  type RecognizeStudentsInput,
-} from '@/ai/flows/face-recognition-attendance';
-import { 
-    generateWeeklyReport, 
-    type WeeklyReportInput 
-} from '@/ai/flows/weekly-attendance-report';
+  generateWeeklyReport,
+} from '@/ai/ai-wrapper';
 import { supabase, getSupabase, supabaseAdmin } from '@/lib/supabase';
 import { getStudents, getAttendanceSessions, getSessionAttendanceRecords } from '@/lib/data';
 import placeholderImagesData from '@/lib/placeholder-images.json';
@@ -40,7 +33,7 @@ async function convertImageUrlToDataUri(url: string) {
 
 
 export async function getAttendanceSummaryAction(
-  input: AttendanceSummaryInput
+  input: { studentName: string; attendanceRecords: Array<{ date: string; status: string }> }
 ) {
   try {
     const { summary } = await generateAttendanceSummary(input);
@@ -67,7 +60,7 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
           })
         );
 
-        const input: RecognizeStudentsInput = {
+        const input = {
             classroomPhotoUri,
             students: studentReferencePhotos.filter((s: { photoUri: string }) => s.photoUri), // Filter out students with no image
         };
@@ -79,8 +72,7 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
     }
 }
 
-export { type WeeklyReportInput };
-export async function generateWeeklyReportAction(input: WeeklyReportInput) {
+export async function generateWeeklyReportAction(input: { attendanceRecords: Array<{ studentName: string; date: string; status: string }> }) {
     try {
         const { report } = await generateWeeklyReport(input);
         return { success: true, report };
