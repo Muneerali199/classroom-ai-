@@ -6,10 +6,8 @@ import {
   BarChart3,
   Smartphone,
   Zap,
-  Database,
   Cloud,
   CheckCircle,
-  Star,
 } from 'lucide-react';
 
 export interface Feature {

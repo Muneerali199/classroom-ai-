@@ -58,7 +58,7 @@ export default function AboutSection() {
                 Our Mission
               </h3>
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                We're building secure educational technology by providing institutions
+                We&apos;re building secure educational technology by providing institutions
                 with controlled access management, dean-supervised user creation, and
                 role-based permissions ensuring complete data privacy and institutional
                 oversight of attendance and student management systems.

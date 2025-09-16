@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TeacherService } from '@/lib/teacher-service';
 import { CalendarCheck, Clock, UserCheck, Users, Calendar } from 'lucide-react';
-import type { Teacher, AttendanceStatus } from '@/lib/types';
+import type { Teacher } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 
@@ -96,8 +96,8 @@ export default function TeacherAttendanceManager({
         });
         onAttendanceMarked?.();
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to submit attendance');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to submit attendance');
       toast({
         title: 'Error',
         description: 'Failed to submit teacher attendance',

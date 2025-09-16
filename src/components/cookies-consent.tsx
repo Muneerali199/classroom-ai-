@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { X, Cookie, Shield, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { setCookieConsent, hasCookieConsent, getCookiePreferences } from '@/lib/cookies';
+import { setCookieConsent, hasCookieConsent } from '@/lib/cookies';
 import { Link as I18nLink } from '@/routing';
 
 export default function CookiesConsent() {

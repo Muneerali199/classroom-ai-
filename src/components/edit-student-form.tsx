@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AuthService } from '@/lib/auth';
 import { Loader2, Save, X, Edit } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -96,8 +95,8 @@ export default function EditStudentForm({ student, onSuccess }: EditStudentFormP
           variant: 'destructive',
         });
       }
-    } catch (err: any) {
-      const errorMessage = err.message || 'An unexpected error occurred';
+    } catch (err: unknown) {
+      const errorMessage = (err as Error).message || 'An unexpected error occurred';
       setError(errorMessage);
       toast({
         title: 'Error',

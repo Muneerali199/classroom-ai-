@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AuthService } from '@/lib/auth';
-import { Loader2, Trash2, Users, AlertTriangle, Eye, Calendar } from 'lucide-react';
+import { Loader2, Trash2, Users, AlertTriangle, Calendar } from 'lucide-react';
 import type { Student } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import EditStudentForm from './edit-student-form';
@@ -45,8 +45,8 @@ export default function StudentListManager({ students, onStudentDeleted, onStude
           variant: 'destructive',
         });
       }
-    } catch (err: any) {
-      const errorMessage = err.message || 'An unexpected error occurred';
+    } catch (err: unknown) {
+      const errorMessage = (err as Error).message || 'An unexpected error occurred';
       setError(errorMessage);
       toast({
         title: 'Error',

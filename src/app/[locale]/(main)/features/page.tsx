@@ -9,7 +9,7 @@ import TechStackSection from '@/components/landing/TechStackSection';
 import { benefits, architectureHighlights } from '@/lib/landing-data';
 
 export default function FeaturesPage() {
-  const scrollToSection = (id: string) => {
+  const scrollToSection = () => {
     // Dummy function for navigation component
   };
 

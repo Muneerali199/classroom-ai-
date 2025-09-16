@@ -27,7 +27,6 @@ export class TeacherService {
         .select('*')
 
       if (attendanceError) {
-        console.warn('Failed to fetch teacher attendance:', attendanceError.message)
       }
 
       // Group attendance by teacher_id
@@ -42,7 +41,7 @@ export class TeacherService {
         })
       })
 
-      return teachersData?.map((teacher: any) => ({
+      return teachersData?.map((teacher: { id: string; name: string; email?: string; teacher_id?: string; subject?: string; department?: any; phone_number?: string; address?: string; date_of_birth?: string; hire_date?: string; employment_status?: string; emergency_contact_name?: string; emergency_contact_phone?: string; qualifications?: string; notes?: string; photo_url?: string; created_at?: string; updated_at?: string; created_by?: string; auth_user_id?: string }) => ({
         id: teacher.id,
         name: teacher.name,
         email: teacher.email,
@@ -53,7 +52,7 @@ export class TeacherService {
         address: teacher.address,
         date_of_birth: teacher.date_of_birth,
         hire_date: teacher.hire_date,
-        employment_status: teacher.employment_status,
+        employment_status: teacher.employment_status as 'Full-time' | 'Part-time' | 'Contract' | 'Substitute' | undefined,
         emergency_contact_name: teacher.emergency_contact_name,
         emergency_contact_phone: teacher.emergency_contact_phone,
         qualifications: teacher.qualifications,
@@ -66,9 +65,8 @@ export class TeacherService {
         attendance: attendanceMap.get(teacher.id) || [],
       })) || []
       
-    } catch (error: any) {
-      console.error('Error fetching teachers:', error)
-      return []
+    } catch {
+      return [];
     }
   }
 
@@ -90,7 +88,7 @@ export class TeacherService {
       }
 
       // Remove attendance from updates as it's handled separately
-      const { attendance, ...teacherUpdates } = updates
+      const { ...teacherUpdates } = updates
 
       // Update the teacher record
       const { error: updateError } = await supabase
@@ -106,8 +104,8 @@ export class TeacherService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -139,8 +137,8 @@ export class TeacherService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -198,8 +196,8 @@ export class TeacherService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -237,8 +235,8 @@ export class TeacherService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 }

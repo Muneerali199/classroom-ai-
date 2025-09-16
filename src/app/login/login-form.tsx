@@ -58,8 +58,8 @@ export default function LoginForm() {
       } else {
         setError(result.error || 'Failed to sign in. Please check your credentials.');
       }
-    } catch (error: any) {
-      setError(error.message || 'An unexpected error occurred. Please try again.');
+    } catch (error: unknown) {
+      setError((error as Error).message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -83,8 +83,8 @@ export default function LoginForm() {
       } else {
         setError(result.error || 'Failed to send reset email');
       }
-    } catch (error: any) {
-      setError(error.message || 'Failed to send reset email');
+    } catch (error: unknown) {
+      setError((error as Error).message || 'Failed to send reset email');
     } finally {
       setIsResettingPassword(false);
     }
@@ -188,7 +188,7 @@ export default function LoginForm() {
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
           <h3 className="text-sm font-medium mb-2">Reset Password</h3>
           <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
           <div className="flex gap-2">
             <Button

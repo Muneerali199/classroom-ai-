@@ -81,8 +81,8 @@ export function getCookiePreferences(): CookiePreferences {
     if (stored) {
       return { ...defaultPreferences, ...JSON.parse(stored) };
     }
-  } catch (error) {
-    console.error('Error parsing cookie preferences:', error);
+  } catch {
+    // Suppress error in production
   }
 
   return defaultPreferences;
@@ -227,8 +227,8 @@ export function getConsentDetails(): CookieConsent | null {
         timestamp: parseInt(timestamp),
       };
     }
-  } catch (error) {
-    console.error('Error getting consent details:', error);
+  } catch {
+    // Suppress error in production
   }
 
   return null;
@@ -245,7 +245,7 @@ export function resetCookiePreferences(): void {
 
   // Clear all cookies
   const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
+  for (const cookie of cookies) {
     const eqPos = cookie.indexOf('=');
     const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
     deleteCookie(name);
@@ -266,6 +266,6 @@ export function isConsentValid(): boolean {
 // Extend Window interface for gtag
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
+    gtag?: (...args: unknown[]) => void;
   }
 }

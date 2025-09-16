@@ -65,7 +65,7 @@ export default function AttendanceSummaryGenerator({
       <CardHeader>
         <CardTitle>AI Attendance Summary</CardTitle>
         <CardDescription>
-          Generate a personalized summary of a student's attendance record.
+          Generate a personalized summary of a student&apos;s attendance record.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

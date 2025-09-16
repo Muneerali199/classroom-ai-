@@ -58,7 +58,6 @@ export default function EnhancedStudentForm({ onSuccess }: EnhancedStudentFormPr
   const {
     register,
     handleSubmit,
-    control,
     setValue,
     watch,
     reset,
@@ -93,8 +92,8 @@ export default function EnhancedStudentForm({ onSuccess }: EnhancedStudentFormPr
       } else {
         setError(result.error || 'Failed to create student account');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }

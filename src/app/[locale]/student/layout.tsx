@@ -50,7 +50,7 @@ function StudentSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Link href="#">
+                <Link href="/student/students">
                   <BookOpen />
                   My Courses
                 </Link>

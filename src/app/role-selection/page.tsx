@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase, getSupabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,7 @@ import { Loader2 } from 'lucide-react';
 function RoleSelectionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const uid = searchParams.get('uid');
+  searchParams.get('uid');
   const [role, setRole] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,8 +34,8 @@ function RoleSelectionContent() {
       if (error) throw error;
 
       router.push('/dashboard');
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      setError((error as Error).message);
     } finally {
       setIsLoading(false);
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -19,7 +19,7 @@ interface StudentIdCardProps {
   schoolLogo?: string;
 }
 
-const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }: StudentIdCardProps) => {
+const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCardProps) => {
   return (
     <div className="w-[350px] h-[220px] bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-4 text-white shadow-lg relative overflow-hidden">
       {/* Background pattern */}
@@ -62,10 +62,7 @@ const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }:
 };
 
 export default function StudentIdGenerator({ students }: StudentIdGeneratorProps) {
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
   const generatePDF = async (student: Student) => {
     setIsGenerating(true);
@@ -114,7 +111,6 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
       root.unmount();
       document.body.removeChild(tempContainer);
     } catch (error) {
-      console.error('Error generating PDF:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -177,7 +173,6 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
 
       pdf.save('All_Student_ID_Cards.pdf');
     } catch (error) {
-      console.error('Error generating all PDFs:', error);
     } finally {
       setIsGenerating(false);
     }

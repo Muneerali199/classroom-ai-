@@ -24,8 +24,7 @@ async function convertImageUrlToDataUri(url: string) {
     const buffer = Buffer.from(arrayBuffer);
     const mimeType = response.headers.get('content-type') || 'image/jpeg';
     return `data:${mimeType};base64,${buffer.toString('base64')}`;
-  } catch (error) {
-    console.error(`Error converting image URL to data URI for ${url}:`, error);
+  } catch {
     // Return a placeholder or handle the error as appropriate
     return '';
   }
@@ -33,13 +32,12 @@ async function convertImageUrlToDataUri(url: string) {
 
 
 export async function getAttendanceSummaryAction(
-  input: { studentName: string; attendanceRecords: Array<{ date: string; status: string }> }
+  input: { studentName: string; attendanceRecords: Array<{ date: string; status: 'Present' | 'Absent' | 'Late' | 'Excused' }> }
 ) {
   try {
     const { summary } = await generateAttendanceSummary(input);
     return { success: true, summary };
-  } catch (error) {
-    console.error(error);
+  } catch {
     return { success: false, error: 'Failed to generate summary.' };
   }
 }
@@ -66,21 +64,20 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
         };
         const { presentStudents } = await recognizeStudentsForAttendance(input);
         return { success: true, presentStudents };
-    } catch (error) {
-        console.error('Error in recognizeStudentsAction:', error);
+    } catch {
         return { success: false, error: 'Failed to recognize students from the photo.' };
     }
 }
 
-export async function generateWeeklyReportAction(input: { attendanceRecords: Array<{ studentName: string; date: string; status: string }> }) {
+export async function generateWeeklyReportAction(input: { attendanceRecords: Array<{ studentName: string; date: string; status: 'Present' | 'Absent' | 'Late' | 'Excused' }> }) {
     try {
         const { report } = await generateWeeklyReport(input);
         return { success: true, report };
-    } catch (error) {
-        console.error('Error in generateWeeklyReportAction:', error);
+    } catch {
         return { success: false, error: 'Failed to generate weekly report.' };
     }
 }
+
 
 
 export async function signUpWithEmailAndPassword(
@@ -111,8 +108,8 @@ export async function signUpWithEmailAndPassword(
     }
 
     return { success: true, uid: data.user?.id };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
   }
 }
 
@@ -137,8 +134,8 @@ export async function updateProfileAction(data: { uid: string, firstName: string
         }
 
         return { success: true };
-    } catch (error: any) {
-        return { success: false, error: error.message };
+    } catch (error: unknown) {
+        return { success: false, error: (error as Error).message };
     }
 }
 
@@ -151,7 +148,7 @@ export async function getSessionAttendanceAction(sessionId: string): Promise<{
 }> {
     try {
         const records = await getSessionAttendanceRecords();
-        const sessionRecords = records.filter((r: any) => r.session_id === sessionId || r.sessionId === sessionId);
+        const sessionRecords = records.filter((r) => (r as any).session_id === sessionId || (r as any).sessionId === sessionId);
         const students = await getStudents();
 
         const studentRecords = sessionRecords.map((record: any) => {
@@ -164,8 +161,7 @@ export async function getSessionAttendanceAction(sessionId: string): Promise<{
         });
 
         return { success: true, records: studentRecords };
-    } catch (error) {
-        console.error('Error getting session attendance:', error);
+    } catch {
         return { success: false, error: 'Failed to get session attendance records.' };
     }
 }
@@ -202,10 +198,10 @@ export async function createPinAttendanceSessionAction(
             const supabaseClient = supabaseAdmin || getSupabase();
             
             // Use the newSession data directly since it's already properly formatted
-            let insertData = newSession;
+            const insertData = newSession;
 
             // Try to insert with teacher_name and pin
-            let { error } = await supabaseClient
+            const { error } = await supabaseClient
                 .from('attendance_sessions')
                 .insert({
                     ...insertData,
@@ -214,7 +210,6 @@ export async function createPinAttendanceSessionAction(
 
             // If error is due to missing column, try without teacher_name
             if (error && error.code === '42703') {
-                console.warn('teacher_name column not found, inserting without it. Please run migration 003.');
                 const { error: fallbackError } = await supabaseClient
                     .from('attendance_sessions')
                     .insert(insertData);
@@ -225,8 +220,8 @@ export async function createPinAttendanceSessionAction(
             } else if (error) {
                 throw new Error(`Failed to save session to database: ${error.message}`);
             }
-        } catch (supabaseError: any) {
-            throw new Error(`Failed to save session to database: ${supabaseError.message}`);
+        } catch (supabaseError: unknown) {
+            throw new Error(`Failed to save session to database: ${(supabaseError as Error).message}`);
         }
 
         // Create the response session object matching AttendanceSession type
@@ -243,9 +238,8 @@ export async function createPinAttendanceSessionAction(
         
         return { success: true, session: responseSession, pin };
 
-    } catch (error: any) {
-        console.error("Error creating PIN attendance session:", error);
-        return { success: false, error: error.message || "Failed to create a new session." };
+    } catch (error: unknown) {
+        return { success: false, error: (error as Error).message || "Failed to create a new session." };
     }
 }
 
@@ -323,8 +317,8 @@ export async function markStudentAttendanceWithPinAction(
             if (error) {
                 throw new Error(`Failed to save attendance record: ${error.message}`);
             }
-        } catch (supabaseError: any) {
-            throw new Error(`Failed to save attendance record: ${supabaseError.message}`);
+        } catch (supabaseError: unknown) {
+            throw new Error(`Failed to save attendance record: ${(supabaseError as Error).message}`);
         }
 
         return {
@@ -332,8 +326,7 @@ export async function markStudentAttendanceWithPinAction(
             message: `Attendance marked successfully for ${student?.name || 'Unknown Student'}!`
         };
 
-    } catch (error) {
-        console.error('Error marking attendance with PIN:', error);
+    } catch {
         return {
             success: false,
             message: "Failed to mark attendance. Please try again."

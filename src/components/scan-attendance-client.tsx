@@ -27,7 +27,6 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
   useEffect(() => {
     const getCameraPermission = async () => {
       if (!navigator.mediaDevices?.getUserMedia) {
-        console.error('Camera not supported by this browser.');
         setHasCameraPermission(false);
         setError('Camera not supported by your browser.');
         return;
@@ -38,8 +37,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
           videoRef.current.srcObject = stream;
         }
         setHasCameraPermission(true);
-      } catch (err) {
-        console.error('Error accessing camera:', err);
+      } catch {
         setHasCameraPermission(false);
         setError('Camera access was denied. Please enable camera permissions in your browser settings.');
       }
@@ -49,11 +47,12 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
 
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
+        const videoRefCurrent = videoRef.current;
+        const stream = videoRefCurrent.srcObject as MediaStream;
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
+  }, [videoRef]);
 
   const handleScan = () => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -106,7 +105,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
       <CardHeader>
         <CardTitle>AI-Powered Attendance Scan</CardTitle>
         <CardDescription>
-          Use your device's camera to scan the classroom and automatically mark attendance.
+          Use your device&apos;s camera to scan the classroom and automatically mark attendance.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -192,7 +191,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
               <Users className="h-4 w-4" />
               <AlertTitle>How to get the best results</AlertTitle>
               <AlertDescription>
-                Ensure good lighting and that students' faces are clearly visible. The AI is powerful but not perfect.
+                Ensure good lighting and that students&apos; faces are clearly visible. The AI is powerful but not perfect.
               </AlertDescription>
           </Alert>
       </CardFooter>

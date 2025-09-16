@@ -50,7 +50,6 @@ const deanCreateUserSchema = z.object({
   path: ["confirmPassword"],
 });
 
-type CreateUserFormInputs = z.infer<typeof createUserSchema>;
 type DeanCreateUserFormInputs = z.infer<typeof deanCreateUserSchema>;
 
 interface UserManagementProps {
@@ -69,7 +68,6 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
   const {
     register,
     handleSubmit,
-    control,
     setValue,
     watch,
     reset,
@@ -102,8 +100,8 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
       } else {
         setError(result.error || 'Failed to create user account');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -188,7 +186,7 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
                   <Label>Role</Label>
                   <RadioGroup
                     value={watchedRole}
-                    onValueChange={(value) => setValue('role', value as any)}
+                    onValueChange={(value) => setValue('role', value as 'teacher' | 'student' | 'dean')}
                     className="mt-2"
                   >
                     {allowedRoles.map((role) => (

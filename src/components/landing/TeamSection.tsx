@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -135,7 +134,7 @@ export default function TeamSection() {
                 { Icon: Github, href: member.social.github, label: "GitHub" },
                 { Icon: Linkedin, href: member.social.linkedin, label: "LinkedIn" },
                 { Icon: Mail, href: `mailto:${member.social.email}`, label: "Email" },
-              ].map(({ Icon, href, label }, socialIndex) => (
+              ].map(({ Icon, href }, socialIndex) => (
                 <motion.a
                   key={socialIndex}
                   href={href}

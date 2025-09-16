@@ -67,8 +67,7 @@ export default function DashboardClient({
         title: 'Attendance Updated',
         description: 'Attendance record has been saved successfully.',
       });
-    } catch (error) {
-      console.error('Error updating attendance:', error);
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to save attendance. Please try again.',
@@ -88,13 +87,13 @@ export default function DashboardClient({
           return {
             student_id: student.id,
             date: todayStr,
-            status: isPresent ? 'Present' : 'Absent',
+            status: isPresent ? 'Present' as const : 'Absent' as const,
           };
         });
 
         const { error } = await supabase
           .from('attendance')
-          .upsert(attendanceRecords as any);
+          .upsert(attendanceRecords);
 
         if (error) {
           throw new Error(`Failed to save attendance: ${error.message}`);
@@ -124,8 +123,7 @@ export default function DashboardClient({
         title: 'Attendance Updated',
         description: 'Facial recognition attendance has been recorded.',
       });
-    } catch (error) {
-      console.error('Error updating attendance:', error);
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to save attendance. Please try again.',
@@ -138,7 +136,7 @@ export default function DashboardClient({
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-headline tracking-tight">
-          Hello, {user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || 'Teacher'}!
+          Hello, {(user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || 'Teacher') as string}!
         </h1>
         <p className="text-muted-foreground">
           Welcome back. Mark student attendance and generate AI-powered summaries.

@@ -40,11 +40,10 @@ export default function EmailValidationInput({
 
     setIsChecking(true);
     try {
-      const exists = await AuthService.checkEmailExists(email);
+      const exists = await AuthService.checkEmailExists();
       setEmailExists(exists);
       onValidationChange?.(true, exists);
-    } catch (error) {
-      console.error('Error checking email:', error);
+    } catch {
       setEmailExists(false);
       onValidationChange?.(isValidEmail(email), false);
     } finally {
@@ -76,7 +75,7 @@ export default function EmailValidationInput({
         clearTimeout(checkTimer);
       }
     };
-  }, [value]);
+  }, [value, checkEmailExists, checkTimer, onValidationChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);

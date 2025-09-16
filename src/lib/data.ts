@@ -132,10 +132,7 @@ export async function getStudents(): Promise<Student[]> {
       attendance: attendanceMap.get(student.id) || [],
     })) || [];
     
-  } catch (error: any) {
-    console.error('Error fetching students:', error);
-    // Return empty array if database is not accessible to avoid mock data
-    console.warn('Database not accessible, returning empty student list');
+  } catch {
     return [];
   }
 }
@@ -162,8 +159,7 @@ export async function getAttendanceSessions(): Promise<AttendanceSession[]> {
       endTime: session.end_time,
       createdAt: session.created_at,
     })) || [];
-  } catch (error: any) {
-    console.error('Error fetching attendance sessions:', error);
+  } catch (error: unknown) {
     return [];
   }
 }
@@ -187,45 +183,68 @@ export async function getSessionAttendanceRecords(): Promise<SessionAttendanceRe
       studentId: record.student_id,
       timestamp: record.timestamp,
     })) || [];
-  } catch (error: any) {
-    console.error('Error fetching session attendance records:', error);
+  } catch (error: unknown) {
     return [];
   }
 }
 
-// Fetch teachers from user metadata (since we use Supabase auth for user management)
+// Fetch teachers from the teachers table
 export async function getTeachers(): Promise<Teacher[]> {
-  if (!supabaseAdmin) {
-    throw new Error('Supabase admin client not initialized');
-  }
-
   try {
-    // Get all users with teacher role from auth.users
-    const { data: users, error } = await supabaseAdmin.auth.admin.listUsers();
-    
-    if (error) {
-      throw new Error(`Failed to fetch users: ${error.message}`);
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data: teachersData, error: teachersError } = await supabase
+      .from('teachers')
+      .select('*');
+
+    if (teachersError) {
+      throw new Error(`Failed to fetch teachers: ${teachersError.message}`);
     }
 
-    // Filter users with teacher role and map to Teacher interface
-    const teachers: Teacher[] = users.users
-      .filter(user => user.user_metadata?.role === 'teacher')
-      .map(user => ({
-        id: user.id,
-        name: user.user_metadata?.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Unknown Teacher',
-        email: user.email,
-        subject: user.user_metadata?.course || 'General',
-        attendance: [], // Initialize empty attendance array
-      }));
+    const { data: attendanceData, error: attendanceError } = await supabase
+      .from('teacher_attendance')
+      .select('*');
 
-    return teachers;
-  } catch (error) {
-    console.error('Error fetching teachers:', error);
-    // Return fallback teachers if database fetch fails
-    return [
-      { id: 'teacher1', name: 'Dr. Smith', email: 'smith@school.edu', subject: 'Mathematics', attendance: [] },
-      { id: 'teacher2', name: 'Prof. Johnson', email: 'johnson@school.edu', subject: 'Science', attendance: [] },
-      { id: 'teacher3', name: 'Ms. Davis', email: 'davis@school.edu', subject: 'English', attendance: [] },
-    ];
+    if (attendanceError) {
+      // We can still return teachers without attendance data
+    }
+
+    const attendanceMap = new Map<string, { date: string; status: AttendanceStatus }[]>();
+    attendanceData?.forEach((record: { teacher_id: string; date: string; status: string }) => {
+      if (!attendanceMap.has(record.teacher_id)) {
+        attendanceMap.set(record.teacher_id, []);
+      }
+      attendanceMap.get(record.teacher_id)!.push({
+        date: record.date,
+        status: record.status as AttendanceStatus,
+      });
+    });
+
+    return teachersData?.map((teacher: any) => ({
+      id: teacher.id,
+      name: teacher.name,
+      email: teacher.email,
+      teacher_id: teacher.teacher_id,
+      department: teacher.department,
+      subject: teacher.subject,
+      phone_number: teacher.phone_number,
+      address: teacher.address,
+      date_of_birth: teacher.date_of_birth,
+      hire_date: teacher.hire_date,
+      employment_status: teacher.employment_status,
+      emergency_contact_name: teacher.emergency_contact_name,
+      emergency_contact_phone: teacher.emergency_contact_phone,
+      qualifications: teacher.qualifications,
+      notes: teacher.notes,
+      photo_url: teacher.photo_url,
+      created_at: teacher.created_at,
+      updated_at: teacher.updated_at,
+      created_by: teacher.created_by,
+      auth_user_id: teacher.auth_user_id,
+      attendance: attendanceMap.get(teacher.id) || [],
+    })) || [];
+    
+  } catch {
+    return [];
   }
 }

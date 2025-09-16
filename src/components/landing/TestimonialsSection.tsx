@@ -91,7 +91,7 @@ export default function TestimonialsSection() {
               transition={{ duration: 0.6, delay: 0.5 }}
               viewport={{ once: true }}
             >
-              "{testimonial.quote}"
+              &quot;{testimonial.quote}&quot;
             </motion.blockquote>
 
             <motion.div

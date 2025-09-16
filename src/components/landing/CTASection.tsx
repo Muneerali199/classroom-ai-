@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Heart, Play, Shield, Zap, Users, Sparkles } from 'lucide-react';
+import { Heart, Play, Shield, Zap, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
@@ -67,7 +67,6 @@ export default function CTASection() {
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="inline-block p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border border-gray-300/30 dark:border-white/20"
           >
-            <Sparkles className="w-12 h-12 text-blue-500 dark:text-blue-400" />
           </motion.div>
         </motion.div>
 
@@ -90,7 +89,7 @@ export default function CTASection() {
           transition={{ duration: 0.8, delay: 0.8 }}
           viewport={{ once: true }}
         >
-          Contact your institution's dean to get secure access to EduTrack's
+          Contact your institution&apos;s dean to get secure access to EduTrack&apos;s
           comprehensive attendance and student management platform.
         </motion.p>
 
