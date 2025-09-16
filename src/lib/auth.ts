@@ -1,6 +1,7 @@
 import { getSupabase, getSupabaseAdmin } from './supabase'
 import { User } from '@supabase/supabase-js'
 import type { Student } from './types'
+import { logger } from './logger'
 
 export interface CreateUserData {
   email: string
@@ -154,6 +155,7 @@ export class AuthService {
 
       return user
     } catch (error: unknown) {
+      logger.error('Error getting current user:', error);
       return null
     }
   }
@@ -250,7 +252,7 @@ export class AuthService {
           }
         }
       } catch (funcError: unknown) {
-        // console.warn('Database function not available, using fallback method')
+        logger.warn('Database function not available, using fallback method:', funcError);
       }
 
       // Fallback: Use admin client directly

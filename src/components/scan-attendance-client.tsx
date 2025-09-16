@@ -23,6 +23,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
   const [scanResult, setScanResult] = useState<{ present: string[], absent: string[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const videoStreamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     const getCameraPermission = async () => {
@@ -33,6 +34,7 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
       }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        videoStreamRef.current = stream;
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -46,13 +48,12 @@ export default function ScanAttendanceClient({ students, onAttendanceUpdate }: S
     getCameraPermission();
 
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const videoRefCurrent = videoRef.current;
-        const stream = videoRefCurrent.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
+      if (videoStreamRef.current) {
+        videoStreamRef.current.getTracks().forEach(track => track.stop());
+        videoStreamRef.current = null;
       }
     };
-  }, [videoRef]);
+  }, []);
 
   const handleScan = () => {
     if (!videoRef.current || !canvasRef.current) return;

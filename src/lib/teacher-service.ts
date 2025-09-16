@@ -41,7 +41,7 @@ export class TeacherService {
         })
       })
 
-      return teachersData?.map((teacher: { id: string; name: string; email?: string; teacher_id?: string; subject?: string; department?: any; phone_number?: string; address?: string; date_of_birth?: string; hire_date?: string; employment_status?: string; emergency_contact_name?: string; emergency_contact_phone?: string; qualifications?: string; notes?: string; photo_url?: string; created_at?: string; updated_at?: string; created_by?: string; auth_user_id?: string }) => ({
+      return teachersData?.map((teacher: { id: string; name: string; email?: string; teacher_id?: string; subject?: string; department?: string; phone_number?: string; address?: string; date_of_birth?: string; hire_date?: string; employment_status?: string; emergency_contact_name?: string; emergency_contact_phone?: string; qualifications?: string; notes?: string; photo_url?: string; created_at?: string; updated_at?: string; created_by?: string; auth_user_id?: string }) => ({
         id: teacher.id,
         name: teacher.name,
         email: teacher.email,

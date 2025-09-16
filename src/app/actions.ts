@@ -11,8 +11,14 @@ import placeholderImagesData from '@/lib/placeholder-images.json';
 import { AttendanceSession, AttendanceSessionInsert, SessionAttendanceRecord, Student } from '@/lib/database.types';
 import { randomUUID } from 'crypto';
 
+// Define the type for placeholder images
+interface PlaceholderImage {
+  id: string;
+  url: string;
+}
+
 // Extract placeholderImages from the imported data
-const placeholderImages = placeholderImagesData.placeholderImages || placeholderImagesData || [];
+const placeholderImages: PlaceholderImage[] = placeholderImagesData.placeholderImages || placeholderImagesData || [];
 
 async function convertImageUrlToDataUri(url: string) {
   try {
@@ -148,11 +154,11 @@ export async function getSessionAttendanceAction(sessionId: string): Promise<{
 }> {
     try {
         const records = await getSessionAttendanceRecords();
-        const sessionRecords = records.filter((r) => (r as any).session_id === sessionId || (r as any).sessionId === sessionId);
+        const sessionRecords = records.filter((r) => r.sessionId === sessionId);
         const students = await getStudents();
 
-        const studentRecords = sessionRecords.map((record: any) => {
-            const studentId = record.student_id || record.studentId;
+        const studentRecords = sessionRecords.map((record) => {
+            const studentId = record.studentId;
             const student = students.find((s: Student) => s.id === studentId);
             return {
                 studentName: student?.name || 'Unknown Student',
@@ -259,10 +265,9 @@ export async function markStudentAttendanceWithPinAction(
         const sessions = await getAttendanceSessions();
         const now = new Date();
         
-        const activeSession = sessions.find((s: any) => {
-            const session = s as AttendanceSession & { pin?: string };
-            const startTime = new Date(session.start_time);
-            const endTime = new Date(session.end_time);
+        const activeSession = sessions.find((session) => {
+            const startTime = new Date(session.startTime);
+            const endTime = new Date(session.endTime);
             return session.pin === pin && now >= startTime && now <= endTime;
         });
 
@@ -281,9 +286,9 @@ export async function markStudentAttendanceWithPinAction(
 
         // Check for existing attendance
         const records = await getSessionAttendanceRecords();
-        const existingRecord = records.find((r: any) => {
-            const sessionId = r.session_id || r.sessionId;
-            const studentId = r.student_id || r.studentId;
+        const existingRecord = records.find((record) => {
+            const sessionId = record.sessionId;
+            const studentId = record.studentId;
             return sessionId === activeSession.id && studentId === student.id;
         });
 

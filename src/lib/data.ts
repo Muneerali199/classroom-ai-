@@ -1,5 +1,6 @@
 import type { Student, AttendanceSession, SessionAttendanceRecord, Teacher, AttendanceStatus } from '@/lib/types';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
+import { logger } from './logger';
 
 // Commented out static data as backup
 /*
@@ -111,7 +112,7 @@ export async function getStudents(): Promise<Student[]> {
       });
     });
 
-    return studentsData?.map((student: any) => ({
+    return studentsData?.map((student) => ({
       id: student.id,
       name: student.name,
       email: student.email,
@@ -132,7 +133,8 @@ export async function getStudents(): Promise<Student[]> {
       attendance: attendanceMap.get(student.id) || [],
     })) || [];
     
-  } catch {
+  } catch (error: unknown) {
+    logger.error('Error fetching students:', error);
     return [];
   }
 }
@@ -150,16 +152,18 @@ export async function getAttendanceSessions(): Promise<AttendanceSession[]> {
       throw new Error(`Failed to fetch attendance sessions: ${error.message}`);
     }
 
-    return data?.map((session: { id: string; course_id: string; teacher_id: string; teacher_name?: string; start_time: string; end_time: string; created_at: string }) => ({
-      id: session.id,
-      courseId: session.course_id,
-      teacherId: session.teacher_id,
-      teacherName: session.teacher_name,
-      startTime: session.start_time,
-      endTime: session.end_time,
-      createdAt: session.created_at,
+    return data?.map((session: { id: string; course_id: string; teacher_id: string; teacher_name?: string; start_time: string; end_time: string; created_at: string; pin?: string }) => ({
+        id: session.id,
+        courseId: session.course_id,
+        teacherId: session.teacher_id,
+        teacherName: session.teacher_name,
+        startTime: session.start_time,
+        endTime: session.end_time,
+        createdAt: session.created_at,
+        pin: session.pin,
     })) || [];
   } catch (error: unknown) {
+    logger.error('Error fetching attendance sessions:', error);
     return [];
   }
 }
@@ -184,6 +188,7 @@ export async function getSessionAttendanceRecords(): Promise<SessionAttendanceRe
       timestamp: record.timestamp,
     })) || [];
   } catch (error: unknown) {
+    logger.error('Error fetching session attendance records:', error);
     return [];
   }
 }
@@ -220,7 +225,7 @@ export async function getTeachers(): Promise<Teacher[]> {
       });
     });
 
-    return teachersData?.map((teacher: any) => ({
+    return teachersData?.map((teacher) => ({
       id: teacher.id,
       name: teacher.name,
       email: teacher.email,
@@ -244,7 +249,8 @@ export async function getTeachers(): Promise<Teacher[]> {
       attendance: attendanceMap.get(teacher.id) || [],
     })) || [];
     
-  } catch {
+  } catch (error: unknown) {
+    logger.error('Error fetching teachers:', error);
     return [];
   }
 }

@@ -8,6 +8,7 @@ import { Badge, CreditCard, Download, Eye, Users } from 'lucide-react';
 import type { Teacher } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { logger } from '@/lib/logger';
 
 interface TeacherIdGeneratorProps {
   teachers: Teacher[];
@@ -113,6 +114,7 @@ export default function TeacherIdGenerator({ teachers }: TeacherIdGeneratorProps
       root.unmount();
       document.body.removeChild(tempContainer);
     } catch (error) {
+      logger.error('Error generating PDF:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -175,6 +177,7 @@ export default function TeacherIdGenerator({ teachers }: TeacherIdGeneratorProps
 
       pdf.save('All_Faculty_ID_Cards.pdf');
     } catch (error) {
+      logger.error('Error generating all PDFs:', error);
     } finally {
       setIsGenerating(false);
     }
