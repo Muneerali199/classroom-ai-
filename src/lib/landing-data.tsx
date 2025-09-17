@@ -153,6 +153,7 @@ export const techStack: TechItem[] = [
   },
 ];
 
+// Real data should be populated by the institution
 export const team: TeamMember[] = [];
 
 export const testimonials: Testimonial[] = [];

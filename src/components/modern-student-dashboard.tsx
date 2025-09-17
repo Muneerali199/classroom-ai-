@@ -35,25 +35,9 @@ export default function ModernStudentDashboard() {
           if (student) {
             setStudentData(student);
           } else {
-            // Create mock student data for demo
-            const mockStudent: Student = {
-              id: user.id,
-              name: user.user_metadata?.displayName || user.email?.split('@')[0] || 'Student',
-              email: user.email || '',
-              student_id: `STU-${new Date().getFullYear()}-${Math.floor(Math.random() * 9999).toString().padStart(4, '0')}`,
-              grade_level: '10th Grade',
-              enrollment_date: new Date().toISOString().split('T')[0],
-              phone_number: '',
-              address: '',
-              emergency_contact_name: '',
-              emergency_contact_phone: '',
-              medical_info: '',
-              notes: '',
-              auth_user_id: user.id,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            };
-            setStudentData(mockStudent);
+            // Student not found - this should not happen in a properly managed system
+            console.warn('Student data not found for authenticated user:', user.id);
+            setStudentData(null);
           }
         }
       } catch (error) {
