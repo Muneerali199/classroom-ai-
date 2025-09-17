@@ -1,4 +1,5 @@
-import type { Student, AttendanceSession, SessionAttendanceRecord, Teacher, AttendanceStatus } from '@/lib/types';
+import type { Student, AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
+import type { Teacher, AttendanceStatus } from '@/lib/types';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
 import { logger } from './logger';
 
@@ -140,7 +141,7 @@ export async function getStudents(): Promise<Student[]> {
 }
 
 // Fetch attendance sessions from Supabase
-export async function getAttendanceSessions(): Promise<AttendanceSession[]> {
+export async function getAttendanceSessions(): Promise<any[]> {
   try {
     const supabase = supabaseAdmin || getSupabase();
 
@@ -152,7 +153,7 @@ export async function getAttendanceSessions(): Promise<AttendanceSession[]> {
       throw new Error(`Failed to fetch attendance sessions: ${error.message}`);
     }
 
-    return data?.map((session: { id: string; course_id: string; teacher_id: string; teacher_name?: string; start_time: string; end_time: string; created_at: string; pin?: string }) => ({
+    return data?.map((session) => ({
         id: session.id,
         courseId: session.course_id,
         teacherId: session.teacher_id,
@@ -169,7 +170,7 @@ export async function getAttendanceSessions(): Promise<AttendanceSession[]> {
 }
 
 // Fetch session attendance records from Supabase
-export async function getSessionAttendanceRecords(): Promise<SessionAttendanceRecord[]> {
+export async function getSessionAttendanceRecords(): Promise<any[]> {
   try {
     const supabase = supabaseAdmin || getSupabase();
 
@@ -251,6 +252,235 @@ export async function getTeachers(): Promise<Teacher[]> {
     
   } catch (error: unknown) {
     logger.error('Error fetching teachers:', error);
+    return [];
+  }
+}
+
+// Fetch subjects from the subjects table
+export async function getSubjects(): Promise<Subject[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('subjects')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      throw new Error(`Failed to fetch subjects: ${error.message}`);
+    }
+
+    return data?.map((subject) => ({
+      id: subject.id,
+      name: subject.name,
+      code: subject.code,
+      description: subject.description,
+      created_at: subject.created_at,
+      updated_at: subject.updated_at,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching subjects:', error);
+    return [];
+  }
+}
+
+// Fetch rooms from the rooms table
+export async function getRooms(): Promise<Room[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('rooms')
+      .select('*')
+      .order('room_number');
+
+    if (error) {
+      throw new Error(`Failed to fetch rooms: ${error.message}`);
+    }
+
+    return data?.map((room) => ({
+      id: room.id,
+      room_number: room.room_number,
+      capacity: room.capacity,
+      building: room.building,
+      floor: room.floor,
+      created_at: room.created_at,
+      updated_at: room.updated_at,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching rooms:', error);
+    return [];
+  }
+}
+
+// Fetch subject enrollments with student and subject details
+export async function getSubjectEnrollments(): Promise<(SubjectStudent & { subject: Subject; student: Student })[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('subject_students')
+      .select(`
+        id,
+        subject_id,
+        student_id,
+        created_at,
+        subjects (
+          id,
+          name,
+          code,
+          description
+        ),
+        students (
+          id,
+          name,
+          email,
+          student_id
+        )
+      `);
+
+    if (error) {
+      throw new Error(`Failed to fetch subject enrollments: ${error.message}`);
+    }
+
+    return data?.map((enrollment) => ({
+      id: enrollment.id,
+      subject_id: enrollment.subject_id,
+      student_id: enrollment.student_id,
+      created_at: enrollment.created_at,
+      subject: enrollment.subjects as Subject,
+      student: enrollment.students as Student,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching subject enrollments:', error);
+    return [];
+  }
+}
+
+// Fetch room enrollments with student and room details
+export async function getRoomEnrollments(): Promise<(RoomStudent & { room: Room; student: Student })[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('room_students')
+      .select(`
+        id,
+        room_id,
+        student_id,
+        created_at,
+        rooms (
+          id,
+          room_number,
+          capacity,
+          building,
+          floor
+        ),
+        students (
+          id,
+          name,
+          email,
+          student_id
+        )
+      `);
+
+    if (error) {
+      throw new Error(`Failed to fetch room enrollments: ${error.message}`);
+    }
+
+    return data?.map((enrollment) => ({
+      id: enrollment.id,
+      room_id: enrollment.room_id,
+      student_id: enrollment.student_id,
+      created_at: enrollment.created_at,
+      room: enrollment.rooms as Room,
+      student: enrollment.students as Student,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching room enrollments:', error);
+    return [];
+  }
+}
+
+// Fetch teacher subjects
+export async function getTeacherSubjects(teacherId: string): Promise<(TeacherSubject & { subject: Subject })[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('teacher_subjects')
+      .select(`
+        id,
+        teacher_id,
+        subject_id,
+        created_at,
+        subjects (
+          id,
+          name,
+          code,
+          description
+        )
+      `)
+      .eq('teacher_id', teacherId);
+
+    if (error) {
+      throw new Error(`Failed to fetch teacher subjects: ${error.message}`);
+    }
+
+    return data?.map((ts) => ({
+      id: ts.id,
+      teacher_id: ts.teacher_id,
+      subject_id: ts.subject_id,
+      created_at: ts.created_at,
+      subject: ts.subjects as Subject,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching teacher subjects:', error);
+    return [];
+  }
+}
+
+// Fetch teacher rooms
+export async function getTeacherRooms(teacherId: string): Promise<(TeacherRoom & { room: Room })[]> {
+  try {
+    const supabase = supabaseAdmin || getSupabase();
+
+    const { data, error } = await supabase
+      .from('teacher_rooms')
+      .select(`
+        id,
+        teacher_id,
+        room_id,
+        created_at,
+        rooms (
+          id,
+          room_number,
+          capacity,
+          building,
+          floor
+        )
+      `)
+      .eq('teacher_id', teacherId);
+
+    if (error) {
+      throw new Error(`Failed to fetch teacher rooms: ${error.message}`);
+    }
+
+    return data?.map((tr) => ({
+      id: tr.id,
+      teacher_id: tr.teacher_id,
+      room_id: tr.room_id,
+      created_at: tr.created_at,
+      room: tr.rooms as Room,
+    })) || [];
+
+  } catch (error: unknown) {
+    logger.error('Error fetching teacher rooms:', error);
     return [];
   }
 }

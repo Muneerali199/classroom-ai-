@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/use-auth';
 import type { Student } from '@/lib/types';
 import DashboardClient from '@/components/dashboard-client';
 import RealUserManagement from '@/components/real-user-management';
@@ -14,14 +15,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import RealPinSessionManager from '@/components/real-pin-session-manager';
+import SubjectManagement from '@/components/subject-management';
+import RoomManagement from '@/components/room-management';
+import EnrollmentManagement from '@/components/enrollment-management';
 
 interface ModernTeacherDashboardProps {
   initialStudents: Student[];
 }
 
-export default function ModernTeacherDashboard({ 
-  initialStudents 
+export default function ModernTeacherDashboard({
+  initialStudents
 }: ModernTeacherDashboardProps) {
+  const { user } = useAuth();
   const [students, setStudents] = useState<Student[]>(initialStudents);
 
   const handleStudentDeleted = (deletedStudentId: string) => {
@@ -166,26 +171,47 @@ export default function ModernTeacherDashboard({
           className="glass-card p-2"
         >
           <Tabs defaultValue="attendance" className="w-full">
-            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-2 bg-muted/30 rounded-2xl">
-              <TabsTrigger 
-                value="attendance" 
-                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto p-2 bg-muted/30 rounded-2xl">
+              <TabsTrigger
+                value="attendance"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
               >
-                <span className="hidden sm:inline">Attendance Management</span>
-                <span className="sm:hidden">Attendance</span>
+                <span className="hidden sm:inline">Attendance</span>
+                <span className="sm:hidden">Att.</span>
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
+                value="subjects"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Subjects</span>
+                <span className="sm:hidden">Sub.</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="rooms"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Rooms</span>
+                <span className="sm:hidden">Rooms</span>
+              </TabsTrigger>
+              <TabsTrigger
                 value="students"
-                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
               >
-                <span className="hidden sm:inline">Student Management</span>
-                <span className="sm:hidden">Students</span>
+                <span className="hidden sm:inline">Students</span>
+                <span className="sm:hidden">Stud.</span>
               </TabsTrigger>
-              <TabsTrigger 
-                value="tools"
-                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              <TabsTrigger
+                value="enrollments"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
               >
-                <span className="hidden sm:inline">Tools & Reports</span>
+                <span className="hidden sm:inline">Enrollments</span>
+                <span className="sm:hidden">Enroll.</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="tools"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Tools</span>
                 <span className="sm:hidden">Tools</span>
               </TabsTrigger>
             </TabsList>
@@ -227,7 +253,43 @@ export default function ModernTeacherDashboard({
                 </div>
               </motion.div>
             </TabsContent>
-        
+
+            <TabsContent value="subjects" className="mt-8 p-6 space-y-8">
+              {/* Subject Management Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-6"
+              >
+                <SubjectManagement teacherId={user?.id || ''} />
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent value="rooms" className="mt-8 p-6 space-y-8">
+              {/* Room Management Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-6"
+              >
+                <RoomManagement teacherId={user?.id || ''} />
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent value="enrollments" className="mt-8 p-6 space-y-8">
+              {/* Enrollment Management Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-6"
+              >
+                <EnrollmentManagement teacherId={user?.id || ''} />
+              </motion.div>
+            </TabsContent>
+
             <TabsContent value="students" className="mt-8 p-6 space-y-8">
               {/* Student Creation Section */}
               <motion.div
