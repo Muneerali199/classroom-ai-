@@ -52,8 +52,26 @@ export default function LoginForm() {
       
       if (result.success) {
         setSuccess('Sign in successful! Redirecting...');
+        
+        // Get user role and redirect accordingly
+        const user = await AuthService.getCurrentUser();
+        const role = user?.user_metadata?.role;
+        
+        let redirectPath = '/dashboard'; // default
+        switch (role) {
+          case 'dean':
+            redirectPath = '/dean/dashboard';
+            break;
+          case 'teacher':
+            redirectPath = '/dashboard';
+            break;
+          case 'student':
+            redirectPath = '/student/dashboard';
+            break;
+        }
+        
         setTimeout(() => {
-          router.push('/dashboard');
+          router.push(redirectPath);
         }, 1000);
       } else {
         setError(result.error || 'Failed to sign in. Please check your credentials.');

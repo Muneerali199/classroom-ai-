@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import type { Student } from '@/lib/types';
 import DashboardClient from '@/components/dashboard-client';
-import UserManagement from '@/components/user-management';
+import RealUserManagement from '@/components/real-user-management';
 import StudentIdGenerator from '@/components/student-id-generator';
 import EnhancedStudentForm from '@/components/enhanced-student-form';
 import StudentListManager from '@/components/student-list-manager';
@@ -12,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import RealPinSessionManager from '@/components/real-pin-session-manager';
 
 interface ModernTeacherDashboardProps {
   initialStudents: Student[];
@@ -53,178 +55,298 @@ export default function ModernTeacherDashboard({
   }).length;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold font-headline tracking-tight">
-            Teacher Dashboard
-          </h1>
-          <p className="text-muted-foreground">
-            Manage your classes, students, and attendance records
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-sm">
-            {totalStudents} Student{totalStudents !== 1 ? 's' : ''}
-          </Badge>
-          {recentlyAdded > 0 && (
-            <Badge variant="secondary" className="text-sm">
-              +{recentlyAdded} This Week
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {/* Quick Stats */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Students</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStudents}</div>
-            <p className="text-xs text-muted-foreground">
-              Active in your classes
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Complete Profiles</CardTitle>
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{studentsWithEmail}</div>
-            <p className="text-xs text-muted-foreground">
-              With email addresses
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Emergency Contacts</CardTitle>
-            <Settings className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{studentsWithEmergencyContact}</div>
-            <p className="text-xs text-muted-foreground">
-              Safety information on file
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Attendance Records</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {students.reduce((sum, s) => sum + s.attendance.length, 0)}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50/50 via-white to-purple-50/30 dark:from-slate-950/50 dark:via-background dark:to-purple-950/30">
+      <div className="container-modern section-padding space-y-8">
+        {/* Modern Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="glass-card p-6 lg:p-8"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <h1 className="text-responsive-xl font-bold font-headline tracking-tight gradient-text">
+                Teacher Dashboard
+              </h1>
+              <p className="text-muted-foreground text-responsive-sm max-w-2xl text-balance">
+                Manage your classes, students, and attendance records with our modern interface
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Total records tracked
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge variant="outline" className="px-4 py-2 rounded-xl text-sm font-medium">
+                <Users className="w-4 h-4 mr-2" />
+                {totalStudents} Student{totalStudents !== 1 ? 's' : ''}
+              </Badge>
+              {recentlyAdded > 0 && (
+                <Badge variant="secondary" className="px-4 py-2 rounded-xl text-sm font-medium bg-primary/10 text-primary border-primary/20">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  +{recentlyAdded} This Week
+                </Badge>
+              )}
+            </div>
+          </div>
+        </motion.div>
 
-      <Separator />
-
-      {/* Main Content Tabs */}
-      <Tabs defaultValue="attendance" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="attendance">Attendance Management</TabsTrigger>
-          <TabsTrigger value="students">Student Management</TabsTrigger>
-          <TabsTrigger value="tools">Tools & Reports</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="attendance" className="mt-6">
-          <DashboardClient initialStudents={students} />
-        </TabsContent>
-        
-        <TabsContent value="students" className="mt-6">
-          <div className="space-y-6">
-            {/* Student Creation Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <UserPlus className="h-5 w-5" />
-                Add New Students
-              </h2>
-              <div className="grid gap-6 lg:grid-cols-2">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Quick Registration</CardTitle>
-                    <CardDescription>
-                      Fast student account creation with basic information
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <UserManagement userRole="teacher" onSuccess={handleStudentCreated} />
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Detailed Registration</CardTitle>
-                    <CardDescription>
-                      Complete student profile with contact and medical information
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <EnhancedStudentForm onSuccess={handleStudentCreated} />
-                  </CardContent>
-                </Card>
+        {/* Modern Quick Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div className="card-floating p-6 group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
+                <Users className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-foreground">{totalStudents}</div>
+                <div className="text-xs text-muted-foreground font-medium">Total Students</div>
               </div>
             </div>
-            
-            {/* Student Management Section */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Current Students
-              </h2>
-              <StudentListManager 
-                students={students} 
-                onStudentDeleted={handleStudentDeleted}
-                onStudentUpdated={handleStudentUpdated}
-              />
-            </div>
+            <p className="text-sm text-muted-foreground">
+              Active in your classes
+            </p>
           </div>
-        </TabsContent>
-        
-        <TabsContent value="tools" className="mt-6">
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                ID Pass Generator
-              </h2>
-              <StudentIdGenerator students={students} />
+          
+          <div className="card-floating p-6 group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors duration-300">
+                <GraduationCap className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-foreground">{studentsWithEmail}</div>
+                <div className="text-xs text-muted-foreground font-medium">Complete Profiles</div>
+              </div>
             </div>
-            
-            {/* Additional tools can be added here */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Additional Tools</CardTitle>
-                <CardDescription>
-                  More features coming soon: Bulk import, Export reports, Grade management
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Additional tools and features will be available here</p>
+            <p className="text-sm text-muted-foreground">
+              With email addresses
+            </p>
+          </div>
+          
+          <div className="card-floating p-6 group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 transition-colors duration-300">
+                <Settings className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-foreground">{studentsWithEmergencyContact}</div>
+                <div className="text-xs text-muted-foreground font-medium">Emergency Contacts</div>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Safety information on file
+            </p>
+          </div>
+          
+          <div className="card-floating p-6 group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors duration-300">
+                <BarChart3 className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-foreground">
+                  {students.reduce((sum, s) => sum + s.attendance.length, 0)}
                 </div>
-              </CardContent>
-            </Card>
+                <div className="text-xs text-muted-foreground font-medium">Attendance Records</div>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Total records tracked
+            </p>
           </div>
-        </TabsContent>
-      </Tabs>
+        </motion.div>
+
+        {/* Modern Tabs Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="glass-card p-2"
+        >
+          <Tabs defaultValue="attendance" className="w-full">
+            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-2 bg-muted/30 rounded-2xl">
+              <TabsTrigger 
+                value="attendance" 
+                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Attendance Management</span>
+                <span className="sm:hidden">Attendance</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="students"
+                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Student Management</span>
+                <span className="sm:hidden">Students</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="tools"
+                className="rounded-xl px-6 py-3 text-sm font-medium data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300"
+              >
+                <span className="hidden sm:inline">Tools & Reports</span>
+                <span className="sm:hidden">Tools</span>
+              </TabsTrigger>
+            </TabsList>
+        
+            <TabsContent value="attendance" className="mt-8 p-6 space-y-8">
+              {/* PIN Session Manager */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-4"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <Settings className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">PIN Attendance Sessions</h2>
+                </div>
+                <div className="card-modern p-6">
+                  <RealPinSessionManager />
+                </div>
+              </motion.div>
+              
+              {/* Traditional Attendance Management */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-4"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                    <BarChart3 className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">Manual Attendance</h2>
+                </div>
+                <div className="card-modern p-6">
+                  <DashboardClient initialStudents={students} />
+                </div>
+              </motion.div>
+            </TabsContent>
+        
+            <TabsContent value="students" className="mt-8 p-6 space-y-8">
+              {/* Student Creation Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <UserPlus className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">Add New Students</h2>
+                </div>
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <div className="card-floating p-6 space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold text-foreground">Quick Registration</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Fast student account creation with basic information
+                      </p>
+                    </div>
+                    <div className="pt-4 border-t border-border/50">
+                      <RealUserManagement userRole="teacher" onSuccess={handleStudentCreated} />
+                    </div>
+                  </div>
+                  
+                  <div className="card-floating p-6 space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold text-foreground">Detailed Registration</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Complete student profile with contact and medical information
+                      </p>
+                    </div>
+                    <div className="pt-4 border-t border-border/50">
+                      <EnhancedStudentForm onSuccess={handleStudentCreated} />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Student Management Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">Current Students</h2>
+                </div>
+                <div className="card-modern p-6">
+                  <StudentListManager 
+                    students={students} 
+                    onStudentDeleted={handleStudentDeleted}
+                    onStudentUpdated={handleStudentUpdated}
+                  />
+                </div>
+              </motion.div>
+            </TabsContent>
+        
+            <TabsContent value="tools" className="mt-8 p-6 space-y-8">
+              {/* ID Generator Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                    <CreditCard className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">ID Pass Generator</h2>
+                </div>
+                <div className="card-modern p-6">
+                  <StudentIdGenerator students={students} />
+                </div>
+              </motion.div>
+              
+              {/* Additional Tools Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                    <Settings className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground">Additional Tools</h2>
+                </div>
+                <div className="card-floating p-8">
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 flex items-center justify-center">
+                      <Settings className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold text-foreground">More Features Coming Soon</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Bulk import, Export reports, Grade management, and more powerful tools will be available here
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-2 pt-4">
+                      <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Bulk Import</span>
+                      <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-medium">Export Reports</span>
+                      <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-medium">Grade Management</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+      </div>
     </div>
   );
 }

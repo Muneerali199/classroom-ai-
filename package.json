@@ -1,6 +1,6 @@
 {
   "name": "nextn",
-  "version": "0.1.0",
+  "version": "1.30",
   "private": true,
   "scripts": {
     "dev": "node scripts/find-free-port.js",

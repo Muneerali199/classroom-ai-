@@ -5,14 +5,18 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { PT_Sans } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 
-const ptSans = PT_Sans({
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-pt-sans',
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 });
 
 export const metadata: Metadata = {
@@ -35,15 +39,20 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${ptSans.variable} font-body antialiased`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </head>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased scrollbar-modern`}>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-                {children}
+            <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+              {children}
+            </div>
             <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>
