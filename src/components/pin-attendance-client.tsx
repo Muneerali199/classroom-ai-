@@ -11,7 +11,7 @@ import { Label } from './ui/label';
 import { CheckCircle, XCircle, Hash, Loader2 } from 'lucide-react';
 
 export default function PinAttendanceClient() {
-    const { user } = useAuth();
+    useAuth();
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
     const [pin, setPin] = useState('');

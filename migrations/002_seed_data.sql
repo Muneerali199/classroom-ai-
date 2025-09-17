@@ -2,12 +2,12 @@
 
 -- Insert students
 INSERT INTO students (id, name) VALUES
-('s1', 'Michael Johnson'),
-('s2', 'Emily Davis'),
-('s3', 'Christopher Miller'),
-('s4', 'Jessica Wilson'),
-('s5', 'David Martinez'),
-('s6', 'Muneer')
+('s1', 'Aarav Sharma'),
+('s2', 'Diya Patel'),
+('s3', 'Reyansh Kumar'),
+('s4', 'Anika Singh'),
+('s5', 'Vivaan Gupta'),
+('s6', 'Ishaan Ali')
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert attendance records for s1

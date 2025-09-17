@@ -1,6 +1,7 @@
 import { getSupabase, getSupabaseAdmin } from './supabase'
-import { AuthError, User } from '@supabase/supabase-js'
+import { User } from '@supabase/supabase-js'
 import type { Student } from './types'
+import { logger } from './logger'
 
 export interface CreateUserData {
   email: string
@@ -21,7 +22,7 @@ export interface AuthResponse {
 }
 
 export class AuthService {
-  static async checkEmailExists(email: string): Promise<boolean> {
+  static async checkEmailExists(): Promise<boolean> {
     // Note: We can't directly query auth.users table from client
     // Let the RPC function handle duplicate checking
     return false
@@ -52,14 +53,14 @@ export class AuthService {
         // Handle specific database errors
         if (error.message.includes('duplicate key value violates unique constraint')) {
           if (error.message.includes('users_email')) {
-            return { 
-              success: false, 
-              error: `A user with email "${data.email}" already exists. Please use a different email address.` 
+            return {
+              success: false,
+              error: `A user with email "${data.email}" already exists. Please use a different email address.`
             }
           }
-          return { 
-            success: false, 
-            error: 'This email address is already registered. Please use a different email address.' 
+          return {
+            success: false,
+            error: 'This email address is already registered. Please use a different email address.'
           }
         }
         
@@ -80,25 +81,25 @@ export class AuthService {
       if (!response.success) {
         // Handle specific application errors
         if (response.error && response.error.includes('duplicate')) {
-          return { 
-            success: false, 
-            error: `A user with email "${data.email}" already exists. Please use a different email address.` 
+          return {
+            success: false,
+            error: `A user with email "${data.email}" already exists. Please use a different email address.`
           }
         }
         return { success: false, error: response.error || 'Failed to create user account' }
       }
 
       return { success: true }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Handle unexpected errors
-      if (error.message && error.message.includes('duplicate key value violates unique constraint')) {
-        return { 
-          success: false, 
-          error: `A user with email "${data.email}" already exists. Please use a different email address.` 
+      if (error instanceof Error && error.message && error.message.includes('duplicate key value violates unique constraint')) {
+        return {
+          success: false,
+          error: `A user with email "${data.email}" already exists. Please use a different email address.`
         }
       }
       
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -120,8 +121,8 @@ export class AuthService {
       }
 
       return { success: true, user: authData.user }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -137,8 +138,8 @@ export class AuthService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -153,8 +154,8 @@ export class AuthService {
       }
 
       return user
-    } catch (error: any) {
-      console.error('Error getting current user:', error.message)
+    } catch (error: unknown) {
+      logger.error('Error getting current user:', error);
       return null
     }
   }
@@ -162,7 +163,7 @@ export class AuthService {
   static async updateProfile(updates: {
     displayName?: string
     role?: string
-    [key: string]: any
+    [key: string]: unknown
   }): Promise<AuthResponse> {
     try {
       const supabase = getSupabase()
@@ -179,8 +180,8 @@ export class AuthService {
       }
 
       return { success: true, user: data.user }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -197,8 +198,8 @@ export class AuthService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -215,8 +216,8 @@ export class AuthService {
       }
 
       return { success: true, user: data.user }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -250,8 +251,8 @@ export class AuthService {
             return { success: true }
           }
         }
-      } catch (funcError) {
-        console.warn('Database function not available, using fallback method')
+      } catch (funcError: unknown) {
+        logger.warn('Database function not available, using fallback method:', funcError);
       }
 
       // Fallback: Use admin client directly
@@ -285,14 +286,14 @@ export class AuthService {
         )
         
         if (authError) {
-          console.warn('Failed to delete auth user:', authError.message)
+          // console.warn('Failed to delete auth user:', authError.message)
           // Don't fail the operation if auth deletion fails
         }
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -308,7 +309,7 @@ export class AuthService {
       }
 
       // Remove attendance from updates as it's handled separately
-      const { attendance, ...studentUpdates } = updates
+      const { ...studentUpdates } = updates
 
       // Update the student record
       const { error: updateError } = await supabase
@@ -324,8 +325,8 @@ export class AuthService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
@@ -384,12 +385,12 @@ export class AuthService {
       }
 
       return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 
-  static async getStudentAuthId(studentEmail: string): Promise<{ success: boolean; userId?: string; error?: string }> {
+  static async getStudentAuthId(): Promise<{ success: boolean; userId?: string; error?: string }> {
     try {
       const supabase = getSupabase()
       
@@ -403,8 +404,8 @@ export class AuthService {
       // For now, we'll use a simpler approach - require the student's auth ID to be stored
       // This would need to be enhanced to properly link students table with auth.users
       return { success: false, error: 'Student auth ID lookup not yet implemented' }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An unexpected error occurred' }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message || 'An unexpected error occurred' }
     }
   }
 }

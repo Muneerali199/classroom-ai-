@@ -58,6 +58,7 @@ export interface AttendanceSession {
   startTime: string; // ISO 8601 string
   endTime: string;   // ISO 8601 string
   createdAt: string; // ISO 8601 string
+  pin?: string;      // PIN for attendance session
 }
 
 export interface SessionAttendanceRecord {

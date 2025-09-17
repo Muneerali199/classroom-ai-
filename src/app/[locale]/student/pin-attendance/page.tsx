@@ -1,5 +1,4 @@
-import PinAttendanceClient from "@/components/pin-attendance-client";
-import { Separator } from "@/components/ui/separator";
+import RealPinAttendanceStudent from "@/components/real-pin-attendance-student";
 
 export default function PinAttendancePage() {
     return (
@@ -12,8 +11,7 @@ export default function PinAttendancePage() {
                     Enter the PIN provided by your teacher to mark your attendance.
                 </p>
             </div>
-            <Separator />
-            <PinAttendanceClient />
+            <RealPinAttendanceStudent />
         </div>
     );
 }

@@ -10,7 +10,14 @@ interface UserWithRole {
   id: string;
   uid?: string;
   email?: string;
-  user_metadata?: any;
+  user_metadata?: {
+    [key: string]: unknown;
+    role?: string;
+    displayName?: string;
+    full_name?: string;
+    avatar_url?: string;
+    picture?: string;
+  };
   displayName?: string;
   photoURL?: string;
   role?: string;

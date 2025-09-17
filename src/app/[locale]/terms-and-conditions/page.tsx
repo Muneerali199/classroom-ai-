@@ -128,8 +128,8 @@ export default function TermsAndConditions() {
         >
           <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Agreement Overview</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            These Terms and Conditions ("Terms") govern your use of EduTrack, an educational management platform
-            provided by EduTrack Inc. ("we," "our," or "us"). By accessing or using our service, you agree to be bound
+            These Terms and Conditions (&quot;Terms&quot;) govern your use of EduTrack, an educational management platform
+            provided by EduTrack Inc. (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). By accessing or using our service, you agree to be bound
             by these Terms and our Privacy Policy.
           </p>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">

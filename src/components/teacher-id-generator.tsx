@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -8,6 +8,7 @@ import { Badge, CreditCard, Download, Eye, Users } from 'lucide-react';
 import type { Teacher } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { logger } from '@/lib/logger';
 
 interface TeacherIdGeneratorProps {
   teachers: Teacher[];
@@ -19,7 +20,7 @@ interface TeacherIdCardProps {
   schoolLogo?: string;
 }
 
-const TeacherIdCard = ({ teacher, schoolName = "Your Institution", schoolLogo }: TeacherIdCardProps) => {
+const TeacherIdCard = ({ teacher, schoolName = "Your Institution" }: TeacherIdCardProps) => {
   return (
     <div className="w-[350px] h-[220px] bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg p-4 text-white shadow-lg relative overflow-hidden">
       {/* Background pattern */}
@@ -64,10 +65,7 @@ const TeacherIdCard = ({ teacher, schoolName = "Your Institution", schoolLogo }:
 };
 
 export default function TeacherIdGenerator({ teachers }: TeacherIdGeneratorProps) {
-  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
   const generatePDF = async (teacher: Teacher) => {
     setIsGenerating(true);
@@ -116,7 +114,7 @@ export default function TeacherIdGenerator({ teachers }: TeacherIdGeneratorProps
       root.unmount();
       document.body.removeChild(tempContainer);
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      logger.error('Error generating PDF:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -179,7 +177,7 @@ export default function TeacherIdGenerator({ teachers }: TeacherIdGeneratorProps
 
       pdf.save('All_Faculty_ID_Cards.pdf');
     } catch (error) {
-      console.error('Error generating all PDFs:', error);
+      logger.error('Error generating all PDFs:', error);
     } finally {
       setIsGenerating(false);
     }

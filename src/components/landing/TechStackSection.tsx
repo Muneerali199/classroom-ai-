@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Cloud, Shield, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { techStack, architectureHighlights } from '@/lib/landing-data';
 

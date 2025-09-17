@@ -45,8 +45,8 @@ export default function TeacherListManager({ teachers, onTeacherDeleted, onTeach
           variant: 'destructive',
         });
       }
-    } catch (err: any) {
-      const errorMessage = err.message || 'An unexpected error occurred';
+    } catch (err: unknown) {
+      const errorMessage = (err as Error).message || 'An unexpected error occurred';
       setError(errorMessage);
       toast({
         title: 'Error',

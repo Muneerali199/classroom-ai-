@@ -66,8 +66,11 @@ export default function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="#">
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/dashboard/students')}
+              >
+                <Link href="/dashboard/students">
                   <Users />
                   {t('students')}
                 </Link>

@@ -81,7 +81,6 @@ export default function ProfileForm() {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
