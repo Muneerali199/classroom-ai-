@@ -10,11 +10,30 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail, Users, GraduationCap, UserCheck } from 'lucide-react';
+
+// Dean email domains - configure these as needed
+const DEAN_EMAIL_DOMAINS = ['dean.edu', 'admin.edu', 'principal.edu'];
+const DEAN_EMAILS = ['dean@school.edu', 'admin@school.edu', 'principal@school.edu'];
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address').min(1, 'Email is required'),
   password: z.string().min(1, 'Password is required'),
+  role: z.enum(['student', 'teacher', 'dean'], {
+    required_error: 'Please select your role',
+  }),
+}).refine((data) => {
+  // Dean role validation - must use specific dean email
+  if (data.role === 'dean') {
+    const isDeanEmail = DEAN_EMAILS.includes(data.email.toLowerCase()) || 
+                       DEAN_EMAIL_DOMAINS.some(domain => data.email.toLowerCase().endsWith(`@${domain}`));
+    return isDeanEmail;
+  }
+  return true;
+}, {
+  message: 'Dean access requires a valid dean email address',
+  path: ['email'],
 });
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
@@ -31,6 +50,7 @@ export default function LoginForm() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isValid },
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
@@ -38,6 +58,7 @@ export default function LoginForm() {
   });
 
   const emailValue = watch('email');
+  const selectedRole = watch('role');
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
@@ -51,14 +72,21 @@ export default function LoginForm() {
       });
       
       if (result.success) {
+        // Get user role from database and verify it matches selected role
+        const user = await AuthService.getCurrentUser();
+        const actualRole = user?.user_metadata?.role;
+        
+        // Verify that selected role matches actual user role
+        if (actualRole !== data.role) {
+          setError(`Access denied. Your account is registered as ${actualRole}, but you selected ${data.role}.`);
+          await AuthService.signOut(); // Sign out the user
+          return;
+        }
+        
         setSuccess('Sign in successful! Redirecting...');
         
-        // Get user role and redirect accordingly
-        const user = await AuthService.getCurrentUser();
-        const role = user?.user_metadata?.role;
-        
         let redirectPath = '/dashboard'; // default
-        switch (role) {
+        switch (actualRole) {
           case 'dean':
             redirectPath = '/dean/dashboard';
             break;
@@ -126,6 +154,55 @@ export default function LoginForm() {
             <AlertDescription className="text-sm text-green-700 dark:text-green-300">{success}</AlertDescription>
           </Alert>
         )}
+
+        {/* Role Selection */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            Select Your Role
+          </Label>
+          <Select onValueChange={(value) => setValue('role', value as 'student' | 'teacher' | 'dean')}>
+            <SelectTrigger className="w-full transition-all duration-200 focus:ring-2 focus:ring-blue-500">
+              <SelectValue placeholder="Choose your role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="student" className="cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="h-4 w-4 text-blue-500" />
+                  <span>Student</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="teacher" className="cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-green-500" />
+                  <span>Teacher</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="dean" className="cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <UserCheck className="h-4 w-4 text-purple-500" />
+                  <span>Dean</span>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.role && (
+            <p className="text-sm text-red-500 flex items-center gap-1">
+              <AlertCircle className="h-3 w-3" />
+              {errors.role.message}
+            </p>
+          )}
+          {selectedRole === 'dean' && (
+            <div className="mt-2 p-3 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+              <div className="flex items-center gap-2 text-purple-700 dark:text-purple-300">
+                <UserCheck className="h-4 w-4" />
+                <span className="text-sm font-medium">Dean Access</span>
+              </div>
+              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                Dean login requires a verified dean email address
+              </p>
+            </div>
+          )}
+        </div>
 
         <div className="space-y-2">
           <Label htmlFor="email" className="text-sm font-medium">

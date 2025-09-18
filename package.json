@@ -15,6 +15,7 @@
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --coverage --watchAll=false",
     "setup:supabase": "node scripts/setup-supabase.js",
+    "setup:dean": "node scripts/setup-dean-account.js",
     "db:check": "node scripts/setup-supabase.js"
   },
   "dependencies": {
