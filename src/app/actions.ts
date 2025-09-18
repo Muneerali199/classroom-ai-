@@ -7,18 +7,8 @@ import {
 } from '@/ai/ai-wrapper';
 import { supabase, getSupabase, supabaseAdmin } from '@/lib/supabase';
 import { getStudents, getAttendanceSessions, getSessionAttendanceRecords } from '@/lib/data';
-import placeholderImagesData from '@/lib/placeholder-images.json';
 import { AttendanceSession, AttendanceSessionInsert, SessionAttendanceRecord, Student } from '@/lib/database.types';
 import { randomUUID } from 'crypto';
-
-// Define the type for placeholder images
-interface PlaceholderImage {
-  id: string;
-  url: string;
-}
-
-// Extract placeholderImages from the imported data
-const placeholderImages: PlaceholderImage[] = placeholderImagesData.placeholderImages || placeholderImagesData || [];
 
 async function convertImageUrlToDataUri(url: string) {
   try {
@@ -53,9 +43,9 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
         const students = await getStudents();
         const studentReferencePhotos = await Promise.all(
           students.map(async (student: Student) => {
-            const studentImage = placeholderImages.find((img) => img.id === student.id);
-            const photoUri = studentImage
-              ? await convertImageUrlToDataUri(studentImage.url)
+            // Use student's actual photo_url from database if available
+            const photoUri = student.photo_url
+              ? await convertImageUrlToDataUri(student.photo_url)
               : '';
             return {
               name: student.name,
@@ -68,9 +58,15 @@ export async function recognizeStudentsAction(classroomPhotoUri: string) {
             classroomPhotoUri,
             students: studentReferencePhotos.filter((s: { photoUri: string }) => s.photoUri), // Filter out students with no image
         };
+        
+        if (input.students.length === 0) {
+            return { success: false, error: 'No student photos available for recognition. Please add student photos to enable this feature.' };
+        }
+        
         const { presentStudents } = await recognizeStudentsForAttendance(input);
         return { success: true, presentStudents };
-    } catch {
+    } catch (error) {
+        console.error('Face recognition error:', error);
         return { success: false, error: 'Failed to recognize students from the photo.' };
     }
 }

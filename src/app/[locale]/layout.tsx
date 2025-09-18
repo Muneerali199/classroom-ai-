@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,6 +55,7 @@ export default async function RootLayout({
               {children}
             </div>
             <Toaster />
+            <Analytics />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

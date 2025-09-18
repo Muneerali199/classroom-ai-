@@ -67,3 +67,50 @@ export interface SessionAttendanceRecord {
   studentId: string;
   timestamp: string; // ISO 8601 string
 }
+
+export interface Subject {
+  id: number;
+  name: string;
+  code?: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Room {
+  id: number;
+  room_number: string;
+  capacity?: number;
+  building?: string;
+  floor?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SubjectEnrollment {
+  id: number;
+  subject_id: number;
+  student_id: string;
+  created_at: string;
+}
+
+export interface RoomEnrollment {
+  id: number;
+  room_id: number;
+  student_id: string;
+  created_at: string;
+}
+
+export interface TeacherSubject {
+  id: number;
+  teacher_id: string;
+  subject_id: number;
+  created_at: string;
+}
+
+export interface TeacherRoom {
+  id: number;
+  teacher_id: string;
+  room_id: number;
+  created_at: string;
+}
