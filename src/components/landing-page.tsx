@@ -1,9 +1,8 @@
 
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import CookiesConsent from '@/components/cookies-consent';
 import Navigation from '@/components/landing/Navigation';
 import HeroSection from '@/components/landing/HeroSection';
 import AccessSection from '@/components/landing/AccessSection';
@@ -14,6 +13,7 @@ import TeamSection from '@/components/landing/TeamSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
+import { Logo } from '@/components/icons';
 
 export default function LandingPage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -30,78 +30,70 @@ export default function LandingPage() {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="min-h-screen text-gray-900 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 dark:text-white overflow-x-hidden transition-all duration-500"
+      className="min-h-screen text-gray-700 bg-gray-200 overflow-x-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
+      }}
     >
-      {/* Floating Elements */}
+      {/* Subtle floating elements with neumorphic style */}
       <motion.div
         animate={{
-          y: [-10, 10, -10],
+          y: [-8, 8, -8],
           transition: {
-            duration: 6,
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           },
         }}
-        className="fixed top-20 left-10 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-purple-400/20 dark:from-blue-500/30 dark:to-purple-500/30 rounded-full blur-xl pointer-events-none z-0"
+        className="fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0"
+        style={{
+          background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+          boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+        }}
+      />
+      <motion.div
+        animate={{
+          y: [-6, 12, -6],
+          transition: {
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3,
+          },
+        }}
+        className="fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0"
+        style={{
+          background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
+          boxShadow: '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
+        }}
       />
       <motion.div
         animate={{
           y: [-10, 10, -10],
           transition: {
-            duration: 6,
+            duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 2,
+            delay: 6,
           },
         }}
-        className="fixed top-40 right-20 w-16 h-16 bg-gradient-to-br from-pink-400/20 to-orange-400/20 dark:from-pink-500/30 dark:to-orange-500/30 rounded-full blur-xl pointer-events-none z-0"
-      />
-      <motion.div
-        animate={{
-          y: [-10, 10, -10],
-          transition: {
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4,
-          },
+        className="fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0"
+        style={{
+          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
+          boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
         }}
-        className="fixed bottom-40 left-20 w-24 h-24 bg-gradient-to-br from-green-400/20 to-blue-400/20 dark:from-green-500/30 dark:to-blue-500/30 rounded-full blur-xl pointer-events-none z-0"
       />
 
-      {/* Navigation */}
       <Navigation scrollToSection={scrollToSection} />
-
-      {/* Hero Section */}
       <HeroSection scrollToSection={scrollToSection} />
-
-      {/* Controlled Access Section */}
       <AccessSection />
-
-      {/* About Section */}
       <AboutSection />
-
-      {/* Features Section */}
       <FeaturesSection />
-
-      {/* Tech Stack Section */}
       <TechStackSection />
-
-      {/* Team Section */}
       <TeamSection />
-
-      {/* Testimonials Section */}
       <TestimonialsSection />
-
-      {/* CTA Section */}
       <CTASection />
-
-      {/* Footer */}
-      <Footer scrollToSection={scrollToSection} />
-
-      <CookiesConsent />
+      <Footer scrollToSectionAction={scrollToSection} />
     </motion.div>
   );
 }
-
-    
