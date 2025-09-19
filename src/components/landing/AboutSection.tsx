@@ -68,13 +68,8 @@ export default function AboutSection() {
               <h3 className="text-2xl font-bold text-gray-700 mb-4">
                 Our Mission
               </h3>
-<<<<<<< HEAD
-              <p className="text-lg text-gray-600 leading-relaxed">
-                We're building secure educational technology by providing institutions
-=======
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 We&apos;re building secure educational technology by providing institutions
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
                 with controlled access management, dean-supervised user creation, and
                 role-based permissions ensuring complete data privacy and institutional
                 oversight of attendance and student management systems.
