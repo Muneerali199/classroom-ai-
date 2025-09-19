@@ -13,7 +13,6 @@ import TeamSection from '@/components/landing/TeamSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
-import { Logo } from '@/components/icons';
 
 export default function LandingPage() {
   const scrollToSection = (id: string) => {
@@ -24,7 +23,7 @@ export default function LandingPage() {
     <motion.div
       initial="hidden"
       animate="visible"
-<<<<<<< HEAD
+
       className="min-h-screen text-gray-700 bg-gray-200 overflow-x-hidden"
       style={{
         background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
@@ -78,9 +77,8 @@ export default function LandingPage() {
           boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
         }}
       />
-=======
-      className="min-h-screen text-foreground bg-gradient-to-br from-white via-slate-50/50 to-purple-50/30 dark:from-background dark:via-slate-900/50 dark:to-purple-950/30 overflow-x-hidden transition-all duration-500 relative"
-    >
+
+  
       {/* Modern Floating Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
@@ -146,7 +144,7 @@ export default function LandingPage() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-primary/10 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-radial from-purple-500/10 to-transparent rounded-full blur-3xl" />
       </div>
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
+
 
       <Navigation scrollToSection={scrollToSection} />
       <HeroSection scrollToSection={scrollToSection} />
