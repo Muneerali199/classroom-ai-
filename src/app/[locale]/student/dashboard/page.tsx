@@ -1,6 +1,5 @@
 'use client';
 
-<<<<<<< HEAD
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,10 +8,10 @@ import { BookOpen, BarChart3, Calendar, Award, TrendingUp, User } from 'lucide-r
 const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
   const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
   const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
-  
+
   return {
-    background: pressed || inset ? 
-      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+    background: pressed || inset ?
+      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' :
       'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
     boxShadow: pressed || inset ?
       `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
@@ -31,16 +30,16 @@ export default function StudentDashboardPage() {
       change: "+2 this semester"
     },
     {
-      title: "Attendance", 
+      title: "Attendance",
       value: "94%",
       description: "Overall rate",
       icon: Calendar,
       change: "Excellent"
     },
     {
-      title: "Average Grade", 
+      title: "Average Grade",
       value: "A-",
-      description: "Current standing", 
+      description: "Current standing",
       icon: BarChart3,
       change: "+5% from last term"
     },
@@ -61,7 +60,7 @@ export default function StudentDashboardPage() {
   ];
 
   return (
-    <div 
+    <div
       className="min-h-screen p-4 sm:p-6 lg:p-8"
       style={{ background: 'linear-gradient(135deg, #e3e3e3 0%, #f7f7f7 50%, #e8e8e8 100%)' }}
     >
@@ -84,7 +83,7 @@ export default function StudentDashboardPage() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 
+              <h1
                 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 leading-tight"
                 style={{
                   background: 'linear-gradient(145deg, #666666, #888888)',
@@ -104,7 +103,7 @@ export default function StudentDashboardPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <div
                 className="p-3 rounded-xl"
@@ -154,7 +153,7 @@ export default function StudentDashboardPage() {
                   </div>
                 )}
               </div>
-              
+
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-gray-700">{stat.title}</h3>
                 <div
@@ -197,7 +196,7 @@ export default function StudentDashboardPage() {
               </div>
               <h2 className="text-2xl font-bold text-gray-700">Course Progress</h2>
             </div>
-            
+
             <div className="space-y-4">
               {recentCourses.map((course, index) => (
                 <motion.div
@@ -219,7 +218,7 @@ export default function StudentDashboardPage() {
                   <div className="w-full bg-gray-200 rounded-full h-2 mb-2"
                     style={getNeumorphicStyle(false, true, 'small')}
                   >
-                    <div 
+                    <div
                       className="h-2 rounded-full"
                       style={{
                         background: 'linear-gradient(90deg, #4a6fa5, #2c5282)',
@@ -253,7 +252,7 @@ export default function StudentDashboardPage() {
               </div>
               <h2 className="text-2xl font-bold text-gray-700">Recent Activities</h2>
             </div>
-            
+
             <div className="space-y-4">
               {[
                 { action: "Completed", item: "Math Assignment", time: "2 hours ago" },
@@ -303,7 +302,7 @@ export default function StudentDashboardPage() {
             </div>
             <h2 className="text-2xl font-bold text-gray-700">Upcoming Events</h2>
           </div>
-          
+
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[
               { title: "Math Exam", date: "Tomorrow", time: "10:00 AM", type: "exam" },
@@ -338,10 +337,3 @@ export default function StudentDashboardPage() {
     </div>
   );
 }
-=======
-import ModernStudentDashboard from '@/components/modern-student-dashboard';
-
-export default function StudentDashboardPage() {
-  return <ModernStudentDashboard />;
-}
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
