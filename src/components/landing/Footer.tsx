@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/icons';
 
 interface FooterProps {
-  scrollToSection: (id: string) => void;
+  scrollToSectionAction: (id: string) => void;
 }
 
-export default function Footer({ scrollToSection }: FooterProps) {
+export default function Footer({ scrollToSectionAction }: FooterProps) {
   const pathname = usePathname();
   const locale = pathname.split('/')[1];
 
@@ -54,19 +54,19 @@ export default function Footer({ scrollToSection }: FooterProps) {
             <h3 className="font-bold text-gray-900 dark:text-white mb-6">Company</h3>
             <div className="space-y-3">
               <button
-                onClick={() => scrollToSection('about')}
+                onClick={() => scrollToSectionAction('about')}
                 className="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
               >
                 About
               </button>
               <button
-                onClick={() => scrollToSection('team')}
+                onClick={() => scrollToSectionAction('team')}
                 className="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
               >
                 Team
               </button>
               <button
-                onClick={() => scrollToSection('contact')}
+                onClick={() => scrollToSectionAction('contact')}
                 className="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
               >
                 Contact
