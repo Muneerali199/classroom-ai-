@@ -1,16 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { motion } from 'framer-motion';
 import { AuthService } from '@/lib/auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
+import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail, Lock, ArrowRight } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address').min(1, 'Email is required'),
@@ -27,6 +24,9 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [buttonPressed, setButtonPressed] = useState<Record<string, boolean>>({});
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -38,6 +38,24 @@ export default function LoginForm() {
   });
 
   const emailValue = watch('email');
+
+  const handleButtonPress = (buttonId: string, isPressed: boolean) => {
+    setButtonPressed(prev => ({ ...prev, [buttonId]: isPressed }));
+  };
+
+  const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
+    const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
+    const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
+    
+    return {
+      background: pressed || inset ? 
+        'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+        'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+      boxShadow: pressed || inset ?
+        `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
+        `${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff`
+    };
+  };
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
@@ -92,138 +110,242 @@ export default function LoginForm() {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {error && (
-          <Alert variant="destructive" className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Authentication Failed</AlertTitle>
-            <AlertDescription className="text-sm">{error}</AlertDescription>
-          </Alert>
-        )}
-        
-        {success && (
-          <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertTitle className="text-green-800 dark:text-green-200">Success!</AlertTitle>
-            <AlertDescription className="text-sm text-green-700 dark:text-green-300">{success}</AlertDescription>
-          </Alert>
-        )}
-
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium">
-            Email Address
-          </Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email address"
-              className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register('email')}
-            />
+      {/* Alerts */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-red-100 border border-red-200"
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-semibold text-red-800 text-sm sm:text-base">Authentication Failed</p>
+              <p className="text-xs sm:text-sm text-red-700 mt-1">{error}</p>
+            </div>
           </div>
-          {errors.email && (
-            <p className="text-sm text-red-500 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.email.message}
-            </p>
-          )}
+        </motion.div>
+      )}
+      
+      {success && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-green-100 border border-green-200"
+        >
+          <div className="flex items-start gap-3">
+            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-semibold text-green-800 text-sm sm:text-base">Success!</p>
+              <p className="text-xs sm:text-sm text-green-700 mt-1">{success}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
+        {/* Email Field */}
+        <div className="space-y-2 sm:space-y-3">
+          <label className="block text-sm font-semibold text-gray-700 ml-1 sm:ml-2">
+            Email Address
+          </label>
+          <div className="relative">
+            <div
+              className="rounded-xl sm:rounded-2xl transition-all duration-300 overflow-hidden"
+              style={{
+                ...getNeumorphicStyle(false, true),
+                boxShadow: focusedField === 'email' ?
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(59, 130, 246, 0.1)' :
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+              }}
+            >
+              <div className="flex items-center p-1">
+                <div
+                  className="p-2 sm:p-3 rounded-lg sm:rounded-xl mr-2 sm:mr-3 ml-1 sm:ml-2"
+                  style={getNeumorphicStyle(false, false, 'small')}
+                >
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+                </div>
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1 bg-transparent border-none outline-none text-gray-700 placeholder-gray-500 py-3 sm:py-4 pr-3 sm:pr-4 text-sm sm:text-base"
+                  {...register('email')}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField(null)}
+                />
+              </div>
+            </div>
+            {errors.email && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 mt-2 sm:mt-3 ml-1 sm:ml-2"
+              >
+                <div
+                  className="p-1 sm:p-1.5 rounded-md sm:rounded-lg"
+                  style={getNeumorphicStyle(false, true, 'small')}
+                >
+                  <AlertCircle className="h-3 w-3 text-red-500" />
+                </div>
+                <p className="text-xs sm:text-sm text-red-600 font-medium">{errors.email.message}</p>
+              </motion.div>
+            )}
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-sm font-medium">
+        {/* Password Field */}
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex items-center justify-between ml-1 sm:ml-2">
+            <label className="block text-sm font-semibold text-gray-700">
               Password
-            </Label>
+            </label>
             <button
               type="button"
               onClick={() => setShowPasswordReset(true)}
-              className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 transition-colors font-medium hover:underline"
             >
               Forgot password?
             </button>
           </div>
           <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              className="pr-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register('password')}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors"
+            <div
+              className="rounded-xl sm:rounded-2xl transition-all duration-300 overflow-hidden"
+              style={{
+                ...getNeumorphicStyle(false, true),
+                boxShadow: focusedField === 'password' ?
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(59, 130, 246, 0.1)' :
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+              }}
             >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
+              <div className="flex items-center p-1">
+                <div
+                  className="p-2 sm:p-3 rounded-lg sm:rounded-xl mr-2 sm:mr-3 ml-1 sm:ml-2"
+                  style={getNeumorphicStyle(false, false, 'small')}
+                >
+                  <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="flex-1 bg-transparent border-none outline-none text-gray-700 placeholder-gray-500 py-3 sm:py-4 text-sm sm:text-base"
+                  {...register('password')}
+                  onFocus={() => setFocusedField('password')}
+                  onBlur={() => setFocusedField(null)}
+                />
+                <motion.button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="p-2 sm:p-3 rounded-lg sm:rounded-xl mr-1 sm:mr-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  style={getNeumorphicStyle(false, false, 'small')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" /> : <Eye className="h-4 w-4 sm:h-5 sm:w-5" />}
+                </motion.button>
+              </div>
+            </div>
+            {errors.password && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 mt-2 sm:mt-3 ml-1 sm:ml-2"
+              >
+                <div
+                  className="p-1 sm:p-1.5 rounded-md sm:rounded-lg"
+                  style={getNeumorphicStyle(false, true, 'small')}
+                >
+                  <AlertCircle className="h-3 w-3 text-red-500" />
+                </div>
+                <p className="text-xs sm:text-sm text-red-600 font-medium">{errors.password.message}</p>
+              </motion.div>
+            )}
           </div>
-          {errors.password && (
-            <p className="text-sm text-red-500 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.password.message}
-            </p>
-          )}
         </div>
 
-        <Button 
-          type="submit" 
-          className="w-full h-11 text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]" 
-          disabled={isLoading || !isValid}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing In...
-            </>
-          ) : (
-            'Sign In to Dashboard'
-          )}
-        </Button>
+        {/* Submit Button */}
+        <div className="pt-2 sm:pt-4">
+          <motion.button
+            type="submit" 
+            disabled={isLoading || !isValid}
+            className="w-full py-4 sm:py-5 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg text-gray-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 sm:gap-3 relative overflow-hidden"
+            style={getNeumorphicStyle(buttonPressed['submit'])}
+            onMouseDown={() => handleButtonPress('submit', true)}
+            onMouseUp={() => handleButtonPress('submit', false)}
+            onMouseLeave={() => handleButtonPress('submit', false)}
+            onTouchStart={() => handleButtonPress('submit', true)}
+            onTouchEnd={() => handleButtonPress('submit', false)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                <span className="text-sm sm:text-lg">Signing In...</span>
+              </>
+            ) : (
+              <>
+                <span className="text-sm sm:text-lg">Sign In to Dashboard</span>
+                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:translate-x-1" />
+              </>
+            )}
+          </motion.button>
+        </div>
       </form>
 
+      {/* Password Reset Modal */}
       {showPasswordReset && (
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
-          <h3 className="text-sm font-medium mb-2">Reset Password</h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-            Enter your email address and we'll send you a link to reset your password.
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-gray-200/50"
+          style={getNeumorphicStyle(false, true)}
+        >
+          <h3 className="text-base sm:text-lg font-bold text-gray-700 mb-2 sm:mb-3">Reset Your Password</h3>
+          <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+            Enter your email address and we'll send you a secure link to reset your password.
           </p>
-          <div className="flex gap-2">
-            <Button
+          <div className="flex flex-col sm:flex-row gap-3">
+            <motion.button
               type="button"
               onClick={handlePasswordReset}
               disabled={isResettingPassword || !emailValue}
-              size="sm"
-              className="flex-1"
+              className="flex-1 py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm font-semibold text-gray-700 transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
+              style={getNeumorphicStyle(buttonPressed['reset'])}
+              onMouseDown={() => handleButtonPress('reset', true)}
+              onMouseUp={() => handleButtonPress('reset', false)}
+              onMouseLeave={() => handleButtonPress('reset', false)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               {isResettingPassword ? (
                 <>
-                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                  Sending...
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Sending...</span>
                 </>
               ) : (
-                'Send Reset Link'
+                <>
+                  <Mail className="h-4 w-4" />
+                  <span>Send Reset Link</span>
+                </>
               )}
-            </Button>
-            <Button
+            </motion.button>
+            <motion.button
               type="button"
-              variant="outline"
               onClick={() => setShowPasswordReset(false)}
-              size="sm"
+              className="w-full sm:w-auto py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm font-semibold text-gray-600 transition-all duration-200"
+              style={getNeumorphicStyle(buttonPressed['cancel'])}
+              onMouseDown={() => handleButtonPress('cancel', true)}
+              onMouseUp={() => handleButtonPress('cancel', false)}
+              onMouseLeave={() => handleButtonPress('cancel', false)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               Cancel
-            </Button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       )}
-
-      <div className="text-center">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Secure login powered by EduTrack Authentication
-        </p>
-      </div>
     </div>
   );
 }
