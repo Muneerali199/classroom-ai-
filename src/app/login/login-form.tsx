@@ -7,20 +7,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion } from 'framer-motion';
 import { AuthService } from '@/lib/auth';
-<<<<<<< HEAD
-import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail, Lock, ArrowRight } from 'lucide-react';
-=======
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail, Users, GraduationCap, UserCheck } from 'lucide-react';
+import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle, Mail, Users, GraduationCap, UserCheck, ArrowRight, Lock } from 'lucide-react';
 
 // Dean email domains - configure these as needed
 const DEAN_EMAIL_DOMAINS = ['dean.edu', 'admin.edu', 'principal.edu'];
 const DEAN_EMAILS = ['dean@school.edu', 'admin@school.edu', 'principal@school.edu'];
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address').min(1, 'Email is required'),
@@ -164,7 +160,6 @@ export default function LoginForm() {
 
   return (
     <div className="space-y-6">
-<<<<<<< HEAD
       {/* Alerts */}
       {error && (
         <motion.div
@@ -199,71 +194,6 @@ export default function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
-        {/* Email Field */}
-        <div className="space-y-2 sm:space-y-3">
-          <label className="block text-sm font-semibold text-gray-700 ml-1 sm:ml-2">
-            Email Address
-          </label>
-          <div className="relative">
-            <div
-              className="rounded-xl sm:rounded-2xl transition-all duration-300 overflow-hidden"
-              style={{
-                ...getNeumorphicStyle(false, true),
-                boxShadow: focusedField === 'email' ?
-                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(59, 130, 246, 0.1)' :
-                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
-              }}
-            >
-              <div className="flex items-center p-1">
-                <div
-                  className="p-2 sm:p-3 rounded-lg sm:rounded-xl mr-2 sm:mr-3 ml-1 sm:ml-2"
-                  style={getNeumorphicStyle(false, false, 'small')}
-                >
-                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
-                </div>
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="flex-1 bg-transparent border-none outline-none text-gray-700 placeholder-gray-500 py-3 sm:py-4 pr-3 sm:pr-4 text-sm sm:text-base"
-                  {...register('email')}
-                  onFocus={() => setFocusedField('email')}
-                  onBlur={() => setFocusedField(null)}
-                />
-              </div>
-            </div>
-            {errors.email && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 mt-2 sm:mt-3 ml-1 sm:ml-2"
-              >
-                <div
-                  className="p-1 sm:p-1.5 rounded-md sm:rounded-lg"
-                  style={getNeumorphicStyle(false, true, 'small')}
-                >
-                  <AlertCircle className="h-3 w-3 text-red-500" />
-                </div>
-                <p className="text-xs sm:text-sm text-red-600 font-medium">{errors.email.message}</p>
-              </motion.div>
-            )}
-=======
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {error && (
-          <Alert variant="destructive" className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Authentication Failed</AlertTitle>
-            <AlertDescription className="text-sm">{error}</AlertDescription>
-          </Alert>
-        )}
-        
-        {success && (
-          <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertTitle className="text-green-800 dark:text-green-200">Success!</AlertTitle>
-            <AlertDescription className="text-sm text-green-700 dark:text-green-300">{success}</AlertDescription>
-          </Alert>
-        )}
-
         {/* Role Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-medium">
@@ -313,20 +243,53 @@ export default function LoginForm() {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium">
+        {/* Email Field */}
+        <div className="space-y-2 sm:space-y-3">
+          <label className="block text-sm font-semibold text-gray-700 ml-1 sm:ml-2">
             Email Address
-          </Label>
+          </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email address"
-              className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              {...register('email')}
-            />
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
+            <div
+              className="rounded-xl sm:rounded-2xl transition-all duration-300 overflow-hidden"
+              style={{
+                ...getNeumorphicStyle(false, true),
+                boxShadow: focusedField === 'email' ?
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(59, 130, 246, 0.1)' :
+                  'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+              }}
+            >
+              <div className="flex items-center p-1">
+                <div
+                  className="p-2 sm:p-3 rounded-lg sm:rounded-xl mr-2 sm:mr-3 ml-1 sm:ml-2"
+                  style={getNeumorphicStyle(false, false, 'small')}
+                >
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+                </div>
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1 bg-transparent border-none outline-none text-gray-700 placeholder-gray-500 py-3 sm:py-4 pr-3 sm:pr-4 text-sm sm:text-base"
+                  {...register('email')}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField(null)}
+                />
+              </div>
+            </div>
+            {errors.email && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 mt-2 sm:mt-3 ml-1 sm:ml-2"
+              >
+                <div
+                  className="p-1 sm:p-1.5 rounded-md sm:rounded-lg"
+                  style={getNeumorphicStyle(false, true, 'small')}
+                >
+                  <AlertCircle className="h-3 w-3 text-red-500" />
+                </div>
+                <p className="text-xs sm:text-sm text-red-600 font-medium">{errors.email.message}</p>
+              </motion.div>
+            )}
           </div>
         </div>
 
@@ -431,7 +394,6 @@ export default function LoginForm() {
 
       {/* Password Reset Modal */}
       {showPasswordReset && (
-<<<<<<< HEAD
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -441,12 +403,6 @@ export default function LoginForm() {
           <h3 className="text-base sm:text-lg font-bold text-gray-700 mb-2 sm:mb-3">Reset Your Password</h3>
           <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 leading-relaxed">
             Enter your email address and we'll send you a secure link to reset your password.
-=======
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
-          <h3 className="text-sm font-medium mb-2">Reset Password</h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-            Enter your email address and we&apos;ll send you a link to reset your password.
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <motion.button
@@ -492,3 +448,4 @@ export default function LoginForm() {
     </div>
   );
 }
+
