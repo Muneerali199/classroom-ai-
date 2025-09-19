@@ -61,10 +61,10 @@ interface UserManagementProps {
 const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
   const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
   const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
-  
+
   return {
-    background: pressed || inset ? 
-      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+    background: pressed || inset ?
+      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' :
       'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
     boxShadow: pressed || inset ?
       `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
@@ -79,7 +79,7 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const schema = userRole === 'dean' ? deanCreateUserSchema : createUserSchema;
-  
+
   const {
     register,
     handleSubmit,
@@ -122,12 +122,12 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
     }
   };
 
-  const allowedRoles = userRole === 'dean' 
-    ? ['teacher', 'student', 'dean'] 
+  const allowedRoles = userRole === 'dean'
+    ? ['teacher', 'student', 'dean']
     : ['student'];
 
   return (
-    <div 
+    <div
       className="rounded-2xl p-6"
       style={getNeumorphicStyle()}
     >
@@ -140,19 +140,19 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
         </div>
         <h3 className="text-xl font-bold text-gray-700">User Management</h3>
       </div>
-      
+
       <div className="space-y-4">
         <div
           className="p-3 rounded-xl mb-4"
           style={getNeumorphicStyle(false, true, 'small')}
         >
           <p className="text-sm text-gray-600">
-            {userRole === 'dean' 
+            {userRole === 'dean'
               ? 'Create accounts for teachers and students.'
               : 'Create accounts for students in your classes.'}
           </p>
         </div>
-        
+
         {success && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -183,7 +183,7 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button 
+              <Button
                 className="w-full border-none"
                 style={getNeumorphicStyle()}
               >
@@ -192,13 +192,13 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
               </Button>
             </motion.div>
           </DialogTrigger>
-          <DialogContent 
+          <DialogContent
             className="max-w-md p-0 border-none"
             style={getNeumorphicStyle(false, false, 'large')}
           >
             <div className="rounded-3xl p-6">
               <DialogHeader className="mb-6">
-                <DialogTitle 
+                <DialogTitle
                   className="text-xl font-bold"
                   style={{
                     background: 'linear-gradient(145deg, #666666, #888888)',
@@ -210,7 +210,7 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
                   Create New User Account
                 </DialogTitle>
               </DialogHeader>
-              
+
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
                   <Label htmlFor="displayName" className="text-gray-700 mb-2 block">Full Name</Label>
@@ -246,19 +246,14 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
                   <Label className="text-gray-700 mb-2 block">Role</Label>
                   <RadioGroup
                     value={watchedRole}
-<<<<<<< HEAD
-                    onValueChange={(value) => setValue('role', value as any)}
-                    className="mt-2 space-y-2"
-=======
                     onValueChange={(value) => setValue('role', value as 'teacher' | 'student' | 'dean')}
-                    className="mt-2"
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
+                    className="mt-2 space-y-2"
                   >
                     {allowedRoles.map((role) => (
                       <div key={role} className="flex items-center space-x-3">
-                        <RadioGroupItem 
-                          value={role} 
-                          id={role} 
+                        <RadioGroupItem
+                          value={role}
+                          id={role}
                           style={getNeumorphicStyle(false, true, 'small')}
                           className="border-none"
                         />
@@ -330,9 +325,9 @@ export default function UserManagement({ userRole, onSuccess }: UserManagementPr
                     whileTap={{ scale: 0.98 }}
                     className="flex-1"
                   >
-                    <Button 
-                      type="submit" 
-                      disabled={isLoading} 
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
                       className="w-full border-none"
                       style={getNeumorphicStyle()}
                     >
