@@ -8,11 +8,8 @@ import { Badge, CreditCard, Download, Eye, Users } from 'lucide-react';
 import type { Student } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-<<<<<<< HEAD
 import { motion } from 'framer-motion';
-=======
 import { logger } from '@/lib/logger';
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
 interface StudentIdGeneratorProps {
   students: Student[];
@@ -24,14 +21,13 @@ interface StudentIdCardProps {
   schoolLogo?: string;
 }
 
-<<<<<<< HEAD
 const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
   const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
   const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
-  
+
   return {
-    background: pressed || inset ? 
-      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+    background: pressed || inset ?
+      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' :
       'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
     boxShadow: pressed || inset ?
       `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
@@ -40,9 +36,6 @@ const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => 
 };
 
 const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }: StudentIdCardProps) => {
-=======
-const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCardProps) => {
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
   return (
     <div className="w-[350px] h-[220px] rounded-xl p-4 text-white shadow-lg relative overflow-hidden"
       style={{
@@ -55,12 +48,12 @@ const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCa
         <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
       </div>
-      
+
       {/* Header */}
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="text-xs font-medium opacity-90">{schoolName}</div>
-          <div 
+          <div
             className="px-2 py-1 rounded text-xs font-medium"
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
@@ -70,10 +63,10 @@ const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCa
             STUDENT
           </div>
         </div>
-        
+
         {/* Student Photo Placeholder */}
         <div className="flex items-start gap-3">
-          <div 
+          <div
             className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold"
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
@@ -82,7 +75,7 @@ const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCa
           >
             {student.name.charAt(0).toUpperCase()}
           </div>
-          
+
           {/* Student Info */}
           <div className="flex-1">
             <h3 className="font-bold text-lg leading-tight">{student.name}</h3>
@@ -90,7 +83,7 @@ const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCa
             <p className="text-xs opacity-75 mt-1">Valid: {new Date().getFullYear()}-{new Date().getFullYear() + 1}</p>
           </div>
         </div>
-        
+
         {/* Footer */}
         <div className="absolute bottom-4 left-4 right-4">
           <div className="flex items-center justify-between text-xs opacity-75">
@@ -119,7 +112,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
       // Render the card in the temporary container
       const { createRoot } = await import('react-dom/client');
       const root = createRoot(tempContainer);
-      
+
       await new Promise<void>((resolve) => {
         root.render(
           <div style={{ padding: '20px', backgroundColor: 'white' }}>
@@ -145,7 +138,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
 
       const imgData = canvas.toDataURL('image/png');
       pdf.addImage(imgData, 'PNG', 0, 0, 85.6, 53.98);
-      
+
       // Download the PDF
       pdf.save(`${student.name.replace(/\s+/g, '_')}_ID_Card.pdf`);
 
@@ -170,7 +163,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
 
       for (let i = 0; i < students.length; i++) {
         const student = students[i];
-        
+
         // Create temporary container for each card
         const tempContainer = document.createElement('div');
         tempContainer.style.position = 'absolute';
@@ -180,7 +173,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
 
         const { createRoot } = await import('react-dom/client');
         const root = createRoot(tempContainer);
-        
+
         await new Promise<void>((resolve) => {
           root.render(
             <div style={{ padding: '20px', backgroundColor: 'white' }}>
@@ -197,7 +190,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
         });
 
         if (i > 0) pdf.addPage();
-        
+
         const imgData = canvas.toDataURL('image/png');
         // Center the card on A4 page
         const cardWidth = 85.6;
@@ -206,7 +199,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
         const pageHeight = 297;
         const x = (pageWidth - cardWidth) / 2;
         const y = (pageHeight - cardHeight) / 2;
-        
+
         pdf.addImage(imgData, 'PNG', x, y, cardWidth, cardHeight);
 
         // Cleanup
@@ -223,7 +216,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
   };
 
   return (
-    <div 
+    <div
       className="rounded-2xl p-6"
       style={getNeumorphicStyle()}
     >
@@ -236,7 +229,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
         </div>
         <h3 className="text-xl font-bold text-gray-700">Student ID Pass Generator</h3>
       </div>
-      
+
       <div className="space-y-4">
         <div
           className="p-3 rounded-xl mb-4"
@@ -262,8 +255,8 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button 
-                  onClick={generateAllPDFs} 
+                <Button
+                  onClick={generateAllPDFs}
                   disabled={isGenerating}
                   className="flex items-center gap-2 border-none"
                   style={getNeumorphicStyle()}
@@ -278,8 +271,8 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
             <div className="space-y-3">
               <h4 className="font-medium text-gray-700">Individual Student Cards:</h4>
               {students.map((student) => (
-                <motion.div 
-                  key={student.id} 
+                <motion.div
+                  key={student.id}
                   className="flex items-center justify-between p-4 rounded-xl"
                   style={getNeumorphicStyle(false, true)}
                   whileHover={{ scale: 1.01 }}
@@ -295,8 +288,8 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             className="border-none"
                             style={getNeumorphicStyle()}
@@ -306,13 +299,13 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
                           </Button>
                         </motion.div>
                       </DialogTrigger>
-                      <DialogContent 
+                      <DialogContent
                         className="max-w-md p-0 border-none"
                         style={getNeumorphicStyle(false, false, 'large')}
                       >
                         <div className="rounded-3xl p-6">
                           <DialogHeader className="mb-6">
-                            <DialogTitle 
+                            <DialogTitle
                               className="text-xl font-bold"
                               style={{
                                 background: 'linear-gradient(145deg, #666666, #888888)',
@@ -334,8 +327,8 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         onClick={() => generatePDF(student)}
                         disabled={isGenerating}
                         className="border-none"
