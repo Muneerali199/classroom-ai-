@@ -42,134 +42,92 @@ function StudentSidebar() {
   ];
 
   return (
-    <Sidebar 
+    <Sidebar
       style={getNeumorphicStyle(false, false, 'large')}
       className="border-none"
     >
       <SidebarHeader className="p-4">
-        <motion.div 
-          className="flex items-center gap-3 p-4 rounded-xl"
-          style={getNeumorphicStyle(false, true)}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div 
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{
-              background: 'linear-gradient(135deg, #4a6fa5 0%, #2c5282 50%, #1e40af 100%)',
-              boxShadow: '4px 4px 8px #bebebe, -4px -4px 8px #ffffff'
-            }}
+          <motion.div
+            className="flex items-center gap-3 p-4 rounded-xl"
+            style={getNeumorphicStyle(false, true)}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <Logo className="w-7 h-7 text-white" />
-          </div>
-          <span 
-            className="text-xl font-bold"
-            style={{
-              background: 'linear-gradient(145deg, #666666, #888888)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
-            EduTrack
-          </span>
-        </motion.div>
-      </SidebarHeader>
-      <SidebarContent className="p-4">
-        <SidebarGroup>
-<<<<<<< HEAD
-          <SidebarMenu className="space-y-2">
-            {menuItems.map((item, index) => (
-              <SidebarMenuItem key={index}>
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.active}
-                    className="border-none transition-all duration-200"
-                    style={item.active ? getNeumorphicStyle(true) : getNeumorphicStyle()}
-                  >
-                    <Link 
-                      href={item.href} 
-                      className="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:text-gray-900"
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-medium">{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </motion.div>
-              </SidebarMenuItem>
-            ))}
-=======
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
-                <Link href="/student/dashboard">
-                  <Home />
-                  Dashboard
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/student/pin-attendance">
-                  <Hash />
-                  Mark Attendance
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/student/students">
-                  <BookOpen />
-                  My Courses
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <BarChart3 />
-                My Attendance
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/student/profile">
-                  <User />
-                  Profile
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
-          </SidebarMenu>
-        </SidebarGroup>
-        
-        {/* Student Status Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-8 p-4 rounded-xl"
-          style={getNeumorphicStyle(false, true)}
-        >
-          <div className="text-center">
-            <div 
-              className="inline-block px-3 py-1 rounded-lg mb-2"
-              style={getNeumorphicStyle(false, false, 'small')}
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(135deg, #4a6fa5 0%, #2c5282 50%, #1e40af 100%)',
+                boxShadow: '4px 4px 8px #bebebe, -4px -4px 8px #ffffff'
+              }}
             >
-              <span className="text-xs font-medium text-green-600">Active Student</span>
+              <Logo className="w-7 h-7 text-white" />
             </div>
-            <p className="text-sm text-gray-600">Welcome to your learning portal</p>
+            <span
+              className="text-xl font-bold"
+              style={{
+                background: 'linear-gradient(145deg, #666666, #888888)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              EduTrack
+            </span>
+          </motion.div>
+        </SidebarHeader>
+        <SidebarContent>
+        <SidebarGroup>
+        <SidebarMenu className="space-y-2">
+          {menuItems.map((item, index) => (
+            <SidebarMenuItem key={index}>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SidebarMenuButton
+                  asChild
+                  isActive={item.active}
+                  className="border-none transition-all duration-200"
+                  style={item.active ? getNeumorphicStyle(true) : getNeumorphicStyle()}
+                >
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:text-gray-900"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </motion.div>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      
+      {/* Student Status Badge */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="mt-8 p-4 rounded-xl"
+        style={getNeumorphicStyle(false, true)}
+      >
+        <div className="text-center">
+          <div
+            className="inline-block px-3 py-1 rounded-lg mb-2"
+            style={getNeumorphicStyle(false, false, 'small')}
+          >
+            <span className="text-xs font-medium text-green-600">Active Student</span>
           </div>
-        </motion.div>
+          <p className="text-sm text-gray-600">Welcome to your learning portal</p>
+        </div>
+      </motion.div>
       </SidebarContent>
-    </Sidebar>
+  </Sidebar>
   );
 }
 
