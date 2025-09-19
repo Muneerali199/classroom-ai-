@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { AuthService } from '@/lib/auth';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function EmailValidationInput({
     return emailRegex.test(email);
   };
 
-  const checkEmailExists = async (email: string) => {
+ const checkEmailExists = useCallback(async (email: string) => {
     if (!isValidEmail(email)) {
       setEmailExists(false);
       onValidationChange?.(false, false);
@@ -40,17 +40,16 @@ export default function EmailValidationInput({
 
     setIsChecking(true);
     try {
-      const exists = await AuthService.checkEmailExists(email);
+      const exists = await AuthService.checkEmailExists();
       setEmailExists(exists);
       onValidationChange?.(true, exists);
-    } catch (error) {
-      console.error('Error checking email:', error);
+    } catch {
       setEmailExists(false);
       onValidationChange?.(isValidEmail(email), false);
     } finally {
       setIsChecking(false);
     }
-  };
+  }, [onValidationChange]);
 
   useEffect(() => {
     // Clear previous timer
@@ -76,7 +75,7 @@ export default function EmailValidationInput({
         clearTimeout(checkTimer);
       }
     };
-  }, [value]);
+  }, [value, checkEmailExists, checkTimer, onValidationChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);

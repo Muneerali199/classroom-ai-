@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Play, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, Play, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Logo } from '@/components/icons';
 import { benefits } from '@/components/landing/data';

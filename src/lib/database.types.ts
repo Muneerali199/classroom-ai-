@@ -270,6 +270,201 @@ export interface Database {
           }
         ]
       }
+      subjects: {
+        Row: {
+          id: number
+          name: string
+          code?: string
+          description?: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          name: string
+          code?: string
+          description?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          name?: string
+          code?: string
+          description?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rooms: {
+        Row: {
+          id: number
+          room_number: string
+          capacity?: number
+          building?: string
+          floor?: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          room_number: string
+          capacity?: number
+          building?: string
+          floor?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          room_number?: string
+          capacity?: number
+          building?: string
+          floor?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subject_students: {
+        Row: {
+          id: number
+          subject_id: number
+          student_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          subject_id: number
+          student_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          subject_id?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subject_students_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subject_students_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      room_students: {
+        Row: {
+          id: number
+          room_id: number
+          student_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          room_id: number
+          student_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          room_id?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_students_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "room_students_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      teacher_subjects: {
+        Row: {
+          id: number
+          teacher_id: string
+          subject_id: number
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          teacher_id: string
+          subject_id: number
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          teacher_id?: string
+          subject_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_subjects_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subjects_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      teacher_rooms: {
+        Row: {
+          id: number
+          teacher_id: string
+          room_id: number
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          teacher_id: string
+          room_id: number
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          teacher_id?: string
+          room_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_rooms_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_rooms_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -321,8 +516,20 @@ export type Student = Database['public']['Tables']['students']['Row']
 export type AttendanceRecord = Database['public']['Tables']['attendance']['Row']
 export type AttendanceSession = Database['public']['Tables']['attendance_sessions']['Row']
 export type SessionAttendanceRecord = Database['public']['Tables']['session_attendance_records']['Row']
+export type Subject = Database['public']['Tables']['subjects']['Row']
+export type Room = Database['public']['Tables']['rooms']['Row']
+export type SubjectStudent = Database['public']['Tables']['subject_students']['Row']
+export type RoomStudent = Database['public']['Tables']['room_students']['Row']
+export type TeacherSubject = Database['public']['Tables']['teacher_subjects']['Row']
+export type TeacherRoom = Database['public']['Tables']['teacher_rooms']['Row']
 
 export type StudentInsert = Database['public']['Tables']['students']['Insert']
 export type AttendanceInsert = Database['public']['Tables']['attendance']['Insert']
 export type AttendanceSessionInsert = Database['public']['Tables']['attendance_sessions']['Insert']
 export type SessionAttendanceInsert = Database['public']['Tables']['session_attendance_records']['Insert']
+export type SubjectInsert = Database['public']['Tables']['subjects']['Insert']
+export type RoomInsert = Database['public']['Tables']['rooms']['Insert']
+export type SubjectStudentInsert = Database['public']['Tables']['subject_students']['Insert']
+export type RoomStudentInsert = Database['public']['Tables']['room_students']['Insert']
+export type TeacherSubjectInsert = Database['public']['Tables']['teacher_subjects']['Insert']
+export type TeacherRoomInsert = Database['public']['Tables']['teacher_rooms']['Insert']

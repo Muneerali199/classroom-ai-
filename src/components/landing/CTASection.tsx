@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Heart, Play, Shield, Zap, Users, Sparkles } from 'lucide-react';
+import { Heart, Play, Shield, Zap, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { createPageUrl } from '@/lib/utils';
 
@@ -89,7 +89,10 @@ export default function CTASection() {
               boxShadow: '12px 12px 24px #bebebe, -12px -12px 24px #ffffff'
             }}
           >
+<<<<<<< HEAD
             <Sparkles className="w-12 h-12 text-gray-600" />
+=======
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
           </motion.div>
         </motion.div>
 
@@ -114,11 +117,17 @@ export default function CTASection() {
           transition={{ duration: 0.8, delay: 0.8 }}
           viewport={{ once: true }}
         >
+<<<<<<< HEAD
           <p className="text-xl text-gray-600">
             Contact your institution's dean to get secure access to EduTrack's
             comprehensive attendance and student management platform.
           </p>
         </motion.div>
+=======
+          Contact your institution&apos;s dean to get secure access to EduTrack&apos;s
+          comprehensive attendance and student management platform.
+        </motion.p>
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center mb-12"

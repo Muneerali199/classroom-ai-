@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -8,7 +8,11 @@ import { Badge, CreditCard, Download, Eye, Users } from 'lucide-react';
 import type { Student } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+<<<<<<< HEAD
 import { motion } from 'framer-motion';
+=======
+import { logger } from '@/lib/logger';
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
 interface StudentIdGeneratorProps {
   students: Student[];
@@ -20,6 +24,7 @@ interface StudentIdCardProps {
   schoolLogo?: string;
 }
 
+<<<<<<< HEAD
 const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
   const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
   const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
@@ -35,6 +40,9 @@ const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => 
 };
 
 const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }: StudentIdCardProps) => {
+=======
+const StudentIdCard = ({ student, schoolName = "Your School Name" }: StudentIdCardProps) => {
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
   return (
     <div className="w-[350px] h-[220px] rounded-xl p-4 text-white shadow-lg relative overflow-hidden"
       style={{
@@ -96,10 +104,7 @@ const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }:
 };
 
 export default function StudentIdGenerator({ students }: StudentIdGeneratorProps) {
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
   const generatePDF = async (student: Student) => {
     setIsGenerating(true);
@@ -148,7 +153,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
       root.unmount();
       document.body.removeChild(tempContainer);
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      logger.error('Error generating PDF:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -211,7 +216,7 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
 
       pdf.save('All_Student_ID_Cards.pdf');
     } catch (error) {
-      console.error('Error generating all PDFs:', error);
+      logger.error('Error generating all PDFs:', error);
     } finally {
       setIsGenerating(false);
     }

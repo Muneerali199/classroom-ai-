@@ -129,7 +129,7 @@ export default function PrivacyPolicy() {
         >
           <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Introduction</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            EduTrack ("we," "our," or "us") is committed to protecting your privacy and ensuring the security of your personal information.
+            EduTrack (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is committed to protecting your privacy and ensuring the security of your personal information.
             This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational
             management platform.
           </p>

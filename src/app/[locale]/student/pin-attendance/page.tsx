@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client';
 
 import { motion } from 'framer-motion';
@@ -18,6 +19,9 @@ const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => 
       `${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff`
   };
 };
+=======
+import RealPinAttendanceStudent from "@/components/real-pin-attendance-student";
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
 export default function PinAttendancePage() {
     return (
@@ -168,6 +172,7 @@ export default function PinAttendancePage() {
                 </div>
               </motion.div>
             </div>
+<<<<<<< HEAD
 
             {/* PIN Attendance Client Component */}
             <motion.div
@@ -221,6 +226,9 @@ export default function PinAttendancePage() {
               </div>
             </motion.div>
           </div>
+=======
+            <RealPinAttendanceStudent />
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
         </div>
     );
 }

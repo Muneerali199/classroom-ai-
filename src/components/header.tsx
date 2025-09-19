@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/routing';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
@@ -35,6 +35,7 @@ export default function Header() {
     }
     return (name[0] || '').toUpperCase();
   }
+<<<<<<< HEAD
 
   const getFirstName = (name: string | null | undefined) => {
     if (!name) return 'Teacher';
@@ -55,6 +56,9 @@ export default function Header() {
     };
   };
 
+=======
+  
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
   return (
     <motion.header 
       initial={{ opacity: 0, y: -20 }}

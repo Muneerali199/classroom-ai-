@@ -10,9 +10,28 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['"PT Sans"', 'sans-serif'],
-        headline: ['"PT Sans"', 'sans-serif'],
-        code: ['monospace'],
+        sans: [
+          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+        ],
+        body: ['Inter', 'sans-serif'],
+        headline: ['Inter', 'sans-serif'],
+        mono: [
+          'JetBrains Mono',
+          'Monaco',
+          'Cascadia Code',
+          '"Roboto Mono"',
+          'Consolas',
+          '"Liberation Mono"',
+          '"Courier New"',
+          'monospace',
+        ],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -70,6 +89,32 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
+        '3xl': 'calc(var(--radius) + 12px)',
+      },
+      screens: {
+        'xs': '475px',
+        '3xl': '1920px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
+      },
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      boxShadow: {
+        'modern': 'var(--shadow-md)',
+        'modern-lg': 'var(--shadow-lg)',
+        'modern-xl': 'var(--shadow-xl)',
+        'glow': '0 0 20px rgba(var(--primary), 0.3)',
+        'glow-lg': '0 0 30px rgba(var(--primary), 0.4)',
       },
       keyframes: {
         'accordion-down': {

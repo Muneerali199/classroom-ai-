@@ -1,5 +1,6 @@
 'use client';
 
+<<<<<<< HEAD
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -337,3 +338,10 @@ export default function StudentDashboardPage() {
     </div>
   );
 }
+=======
+import ModernStudentDashboard from '@/components/modern-student-dashboard';
+
+export default function StudentDashboardPage() {
+  return <ModernStudentDashboard />;
+}
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f

@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Lightbulb, Loader2 } from 'lucide-react';
-import { generateWeeklyReportAction, WeeklyReportInput } from '@/app/actions';
+import { generateWeeklyReportAction } from '@/app/actions';
+import { WeeklyReportInput } from '@/ai/flows/weekly-attendance-report';
 
 interface AttendanceAnalyticsClientProps {
   students: Student[];
@@ -98,7 +99,7 @@ export default function AttendanceAnalyticsClient({ students }: AttendanceAnalyt
       <Card className="w-full bg-card/50 dark:bg-white/5 border dark:border-white/10 backdrop-blur-lg">
         <CardHeader>
           <CardTitle>AI Weekly Report</CardTitle>
-          <CardDescription>Generate an AI-powered summary of the week's attendance.</CardDescription>
+          <CardDescription>Generate an AI-powered summary of the week&apos;s attendance.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Button onClick={handleGenerateReport} disabled={isPending}>

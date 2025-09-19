@@ -78,6 +78,7 @@ function StudentSidebar() {
       </SidebarHeader>
       <SidebarContent className="p-4">
         <SidebarGroup>
+<<<<<<< HEAD
           <SidebarMenu className="space-y-2">
             {menuItems.map((item, index) => (
               <SidebarMenuItem key={index}>
@@ -105,6 +106,47 @@ function StudentSidebar() {
                 </motion.div>
               </SidebarMenuItem>
             ))}
+=======
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive>
+                <Link href="/student/dashboard">
+                  <Home />
+                  Dashboard
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/student/pin-attendance">
+                  <Hash />
+                  Mark Attendance
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/student/students">
+                  <BookOpen />
+                  My Courses
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <BarChart3 />
+                My Attendance
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/student/profile">
+                  <User />
+                  Profile
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
           </SidebarMenu>
         </SidebarGroup>
         

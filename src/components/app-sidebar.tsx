@@ -13,8 +13,12 @@ import { useTranslations } from 'next-intl';
 import { Home, User, Users, BarChart3 } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import Link from 'next/link';
+<<<<<<< HEAD
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
+=======
+import { usePathname } from '@/routing';
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
 
 export default function AppSidebar() {
   const t = useTranslations('DashboardNav');
@@ -102,9 +106,26 @@ export default function AppSidebar() {
             </SidebarMenuItem>
             
             <SidebarMenuItem>
+<<<<<<< HEAD
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+=======
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/dashboard/students')}
+              >
+                <Link href="/dashboard/students">
+                  <Users />
+                  {t('students')}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/dashboard/profile')}
+>>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
               >
                 <SidebarMenuButton
                   asChild
