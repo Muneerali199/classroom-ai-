@@ -8,6 +8,7 @@ import { Badge, CreditCard, Download, Eye, Users } from 'lucide-react';
 import type { Student } from '@/lib/types';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { motion } from 'framer-motion';
 
 interface StudentIdGeneratorProps {
   students: Student[];
@@ -19,9 +20,28 @@ interface StudentIdCardProps {
   schoolLogo?: string;
 }
 
+const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
+  const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
+  const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
+  
+  return {
+    background: pressed || inset ? 
+      'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+      'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+    boxShadow: pressed || inset ?
+      `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
+      `${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff`
+  };
+};
+
 const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }: StudentIdCardProps) => {
   return (
-    <div className="w-[350px] h-[220px] bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-4 text-white shadow-lg relative overflow-hidden">
+    <div className="w-[350px] h-[220px] rounded-xl p-4 text-white shadow-lg relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #4a6fa5 0%, #2c5282 50%, #1e40af 100%)',
+        boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+      }}
+    >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
@@ -32,12 +52,26 @@ const StudentIdCard = ({ student, schoolName = "Your School Name", schoolLogo }:
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="text-xs font-medium opacity-90">{schoolName}</div>
-          <Badge className="bg-white text-blue-800 text-xs">STUDENT</Badge>
+          <div 
+            className="px-2 py-1 rounded text-xs font-medium"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            STUDENT
+          </div>
         </div>
         
         {/* Student Photo Placeholder */}
         <div className="flex items-start gap-3">
-          <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center text-2xl font-bold">
+          <div 
+            className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
             {student.name.charAt(0).toUpperCase()}
           </div>
           
@@ -184,80 +218,135 @@ export default function StudentIdGenerator({ students }: StudentIdGeneratorProps
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5" />
-          Student ID Pass Generator
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+    <div 
+      className="rounded-2xl p-6"
+      style={getNeumorphicStyle()}
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div
+          className="p-3 rounded-xl"
+          style={getNeumorphicStyle(false, true, 'small')}
+        >
+          <CreditCard className="w-6 h-6 text-gray-600" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-700">Student ID Pass Generator</h3>
+      </div>
+      
+      <div className="space-y-4">
+        <div
+          className="p-3 rounded-xl mb-4"
+          style={getNeumorphicStyle(false, true, 'small')}
+        >
+          <p className="text-sm text-gray-600">
             Generate professional ID passes for your students. You can create individual cards or batch generate all at once.
           </p>
+        </div>
 
-          {students.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No students found. Add students first to generate ID passes.</p>
+        {students.length === 0 ? (
+          <div className="text-center py-8 text-gray-600">
+            <div className="p-4 rounded-xl inline-block mb-4" style={getNeumorphicStyle(false, true)}>
+              <Users className="h-12 w-12 mx-auto opacity-50" />
             </div>
-          ) : (
-            <div className="space-y-4">
-              {/* Batch Actions */}
-              <div className="flex gap-2">
+            <p>No students found. Add students first to generate ID passes.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {/* Batch Actions */}
+            <div className="flex gap-3">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <Button 
                   onClick={generateAllPDFs} 
                   disabled={isGenerating}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 border-none"
+                  style={getNeumorphicStyle()}
                 >
                   <Download className="h-4 w-4" />
                   {isGenerating ? 'Generating...' : `Download All (${students.length} cards)`}
                 </Button>
-              </div>
+              </motion.div>
+            </div>
 
-              {/* Individual Student Cards */}
-              <div className="grid gap-2">
-                <h4 className="font-medium">Individual Student Cards:</h4>
-                {students.map((student) => (
-                  <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{student.name}</p>
-                      <p className="text-sm text-muted-foreground">ID: {student.id}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm">
+            {/* Individual Student Cards */}
+            <div className="space-y-3">
+              <h4 className="font-medium text-gray-700">Individual Student Cards:</h4>
+              {students.map((student) => (
+                <motion.div 
+                  key={student.id} 
+                  className="flex items-center justify-between p-4 rounded-xl"
+                  style={getNeumorphicStyle(false, true)}
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <div>
+                    <p className="font-medium text-gray-700">{student.name}</p>
+                    <p className="text-sm text-gray-600">ID: {student.id}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="border-none"
+                            style={getNeumorphicStyle()}
+                          >
                             <Eye className="h-4 w-4 mr-1" />
                             Preview
                           </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-md">
-                          <DialogHeader>
-                            <DialogTitle>ID Card Preview - {student.name}</DialogTitle>
+                        </motion.div>
+                      </DialogTrigger>
+                      <DialogContent 
+                        className="max-w-md p-0 border-none"
+                        style={getNeumorphicStyle(false, false, 'large')}
+                      >
+                        <div className="rounded-3xl p-6">
+                          <DialogHeader className="mb-6">
+                            <DialogTitle 
+                              className="text-xl font-bold"
+                              style={{
+                                background: 'linear-gradient(145deg, #666666, #888888)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text'
+                              }}
+                            >
+                              ID Card Preview - {student.name}
+                            </DialogTitle>
                           </DialogHeader>
                           <div className="flex justify-center p-4">
                             <StudentIdCard student={student} />
                           </div>
-                        </DialogContent>
-                      </Dialog>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
                       <Button 
                         size="sm" 
                         onClick={() => generatePDF(student)}
                         disabled={isGenerating}
+                        className="border-none"
+                        style={getNeumorphicStyle()}
                       >
                         <Download className="h-4 w-4 mr-1" />
                         Download PDF
                       </Button>
-                    </div>
+                    </motion.div>
                   </div>
-                ))}
-              </div>
+                </motion.div>
+              ))}
             </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
