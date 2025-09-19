@@ -35,20 +35,14 @@ export default function Header() {
     }
     return (name[0] || '').toUpperCase();
   }
-<<<<<<< HEAD
-
-  const getFirstName = (name: string | null | undefined) => {
-    if (!name) return 'Teacher';
-    return name.split(' ')[0];
-  }
 
   const getNeumorphicStyle = (pressed = false, inset = false, size = 'normal') => {
     const shadowSize = size === 'large' ? '12px' : size === 'small' ? '4px' : '8px';
     const shadowBlur = size === 'large' ? '24px' : size === 'small' ? '8px' : '16px';
-    
+
     return {
-      background: pressed || inset ? 
-        'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
+      background: pressed || inset ?
+        'linear-gradient(145deg, #d0d0d0, #f0f0f0)' :
         'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
       boxShadow: pressed || inset ?
         `inset ${shadowSize} ${shadowSize} ${shadowBlur} #bebebe, inset -${shadowSize} -${shadowSize} ${shadowBlur} #ffffff` :
@@ -56,11 +50,8 @@ export default function Header() {
     };
   };
 
-=======
-  
->>>>>>> 199af3475761fe42d3e41253973aa62af258ba8f
   return (
-    <motion.header 
+    <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -80,8 +71,8 @@ export default function Header() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="relative h-10 w-10 rounded-full p-0"
                 style={getNeumorphicStyle()}
               >
@@ -94,38 +85,22 @@ export default function Header() {
               </Button>
             </motion.div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            className="w-56 rounded-2xl border-0 p-2" 
-            align="end" 
-            forceMount
-            style={getNeumorphicStyle(false, false, 'large')}
-          >
-            <DropdownMenuLabel className="font-normal p-4">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none text-gray-700">
-                  {user?.displayName ?? 'Teacher'}
-                </p>
-                <p className="text-xs leading-none text-gray-600">
-                  {user?.email ?? 'teacher@edutrack.com'}
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className="my-1 bg-gray-300" />
-            <DropdownMenuItem 
+          <DropdownMenuContent>
+            <DropdownMenuItem
               className="rounded-xl cursor-pointer px-3 py-2 my-1 text-gray-700 focus:text-gray-900 focus:bg-transparent"
               style={getNeumorphicStyle(false, true, 'small')}
               asChild
             >
               <Link href="/dashboard/profile" className="w-full">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="rounded-xl cursor-pointer px-3 py-2 my-1 text-gray-700 focus:text-gray-900 focus:bg-transparent"
               style={getNeumorphicStyle(false, true, 'small')}
             >
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator className="my-1 bg-gray-300" />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="rounded-xl cursor-pointer px-3 py-2 my-1 text-red-600 focus:text-red-800 focus:bg-transparent"
               style={getNeumorphicStyle(false, true, 'small')}
               onClick={handleLogout}
