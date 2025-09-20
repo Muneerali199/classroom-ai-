@@ -1,5 +1,5 @@
-import type { Student, AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
-import type { Teacher, AttendanceStatus } from '@/lib/types';
+import type { AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
+import type { Student, Teacher, AttendanceStatus } from '@/lib/types';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
 import { logger } from './logger';
 

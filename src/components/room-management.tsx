@@ -333,7 +333,7 @@ export default function RoomManagement({ teacherId }: RoomManagementProps) {
                             <AlertDialogHeader>
                               <AlertDialogTitle>Delete Room</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to delete room "{room.room_number}"? This action cannot be undone.
+                                Are you sure you want to delete room &quot;{room.room_number}&quot;? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

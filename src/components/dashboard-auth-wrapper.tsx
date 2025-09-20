@@ -3,7 +3,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { Skeleton } from './ui/skeleton';
 
-export default function DashboardAuthWrapper({ children }: { children: React.ReactNode }) {
+export default function DashboardAuthWrapper({ children, requiredRole }: { children: React.ReactNode; requiredRole?: string }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -23,5 +23,10 @@ export default function DashboardAuthWrapper({ children }: { children: React.Rea
     return null; // The useAuth hook handles redirection
   }
 
-  return <>{children}</>;
+	// If a specific role is required, ensure the user has it
+	if (requiredRole && user?.user_metadata?.role !== requiredRole) {
+		return null;
+	}
+
+	return <>{children}</>;
 }

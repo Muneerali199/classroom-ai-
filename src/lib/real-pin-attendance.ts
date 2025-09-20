@@ -47,16 +47,16 @@ export class RealPinAttendanceService {
         return { success: false, error: error.message };
       }
 
-      if (data?.success) {
+      if ((data as any)?.success) {
         return { 
           success: true, 
-          pin: data.pin,
+          pin: (data as any).pin,
           session: {
-            id: data.session_id,
+            id: (data as any).session_id,
             course_name: courseName,
             teacher_id: user.id,
             teacher_name: teacherName,
-            pin: data.pin,
+            pin: (data as any).pin,
             location,
             start_time: new Date().toISOString(),
             is_active: true
@@ -140,11 +140,11 @@ export class RealPinAttendanceService {
         return { success: false, error: error.message };
       }
 
-      if (data?.success) {
-        return { success: true, message: data.message };
+      if ((data as any)?.success) {
+        return { success: true, message: (data as any).message };
       }
 
-      return { success: false, error: data?.error || 'Failed to mark attendance' };
+      return { success: false, error: (data as any)?.error || 'Failed to mark attendance' };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
@@ -175,8 +175,8 @@ export class RealPinAttendanceService {
       return { 
         success: true, 
         session: {
-          ...data,
-          attendee_count: data.attendee_count?.[0]?.count || 0
+          ...(data as any),
+          attendee_count: (data as any).attendee_count?.[0]?.count || 0
         }
       };
     } catch (error) {
@@ -204,8 +204,8 @@ export class RealPinAttendanceService {
       }
 
       const sessions = data?.map(session => ({
-        ...session,
-        attendee_count: session.attendee_count?.[0]?.count || 0
+        ...(session as any),
+        attendee_count: (session as any).attendee_count?.[0]?.count || 0
       })) || [];
 
       return { success: true, sessions };

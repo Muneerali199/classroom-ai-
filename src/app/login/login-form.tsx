@@ -399,7 +399,7 @@ export default function LoginForm() {
         >
           <h3 className="text-base sm:text-lg font-bold text-gray-700 mb-2 sm:mb-3">Reset Your Password</h3>
           <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-            Enter your email address and we'll send you a secure link to reset your password.
+            Enter your email address and we&apos;ll send you a secure link to reset your password.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <motion.button

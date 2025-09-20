@@ -51,16 +51,16 @@ export class RealUserService {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to create user account' };
+      if (!(result as any) || !(result as any).success) {
+        return { success: false, error: (result as any)?.error || 'Failed to create user account' };
       }
 
       // If successful and we have additional data, update the record
-      if (data.additionalData && result.user_id) {
-        await RealUserService.updateUserProfile(result.user_id, data.role, data.additionalData);
+      if (data.additionalData && (result as any).user_id) {
+        await RealUserService.updateUserProfile((result as any).user_id, data.role, data.additionalData);
       }
 
-      return { success: true, user: { id: result.user_id } };
+      return { success: true, user: { id: (result as any).user_id } };
     } catch (error: unknown) {
       return { success: false, error: (error as Error).message || 'An unexpected error occurred' };
     }

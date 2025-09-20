@@ -99,7 +99,7 @@ export default function ModernStudentDashboard() {
           Welcome back, {studentData?.name || 'Student'}!
         </h1>
         <p className="text-muted-foreground">
-          Here's what's happening with your studies today.
+          Here&apos;s what&apos;s happening with your studies today.
         </p>
       </div>
 
@@ -152,7 +152,7 @@ export default function ModernStudentDashboard() {
           <CardContent>
             <div className="text-lg font-bold">{studentData?.student_id || 'STU-2025-0001'}</div>
             <p className="text-xs text-muted-foreground">
-              {studentData?.grade_level || '10th Grade'}
+              {studentData?.grade || '10th Grade'}
             </p>
           </CardContent>
         </Card>
@@ -172,7 +172,7 @@ export default function ModernStudentDashboard() {
             {/* Today's Schedule */}
             <Card>
               <CardHeader>
-                <CardTitle>Today's Classes</CardTitle>
+                <CardTitle>Today&apos;s Classes</CardTitle>
                 <CardDescription>Your schedule for today</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -353,11 +353,7 @@ export default function ModernStudentDashboard() {
                 </div>
                 <div>
                   <label className="text-sm font-medium">Grade Level</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.grade_level}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Enrollment Date</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.enrollment_date}</p>
+                  <p className="text-sm text-muted-foreground">{studentData?.grade}</p>
                 </div>
               </div>
             </CardContent>

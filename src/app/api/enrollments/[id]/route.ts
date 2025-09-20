@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  request: Request,
+  { params }: any
+): Promise<Response> {
   try {
     const supabase = getSupabaseAdmin();
     const enrollmentId = parseInt(params.id);

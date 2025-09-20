@@ -234,6 +234,77 @@ export interface Database {
         }
         Relationships: []
       }
+      ,
+      pin_attendance_sessions: {
+        Row: {
+          id: string
+          course_name: string
+          teacher_id: string
+          teacher_name: string
+          pin: string
+          location?: string
+          start_time: string
+          end_time?: string
+          is_active: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Insert: {
+          id: string
+          course_name: string
+          teacher_id: string
+          teacher_name: string
+          pin: string
+          location?: string
+          start_time?: string
+          end_time?: string
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          course_name?: string
+          teacher_id?: string
+          teacher_name?: string
+          pin?: string
+          location?: string
+          start_time?: string
+          end_time?: string
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ,
+      pin_attendance_records: {
+        Row: {
+          id: string
+          session_id: string
+          student_id: string
+          student_name: string
+          student_email?: string
+          marked_at: string
+        }
+        Insert: {
+          id: string
+          session_id: string
+          student_id: string
+          student_name: string
+          student_email?: string
+          marked_at?: string
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          student_id?: string
+          student_name?: string
+          student_email?: string
+          marked_at?: string
+        }
+        Relationships: []
+      }
       session_attendance_records: {
         Row: {
           id: string
@@ -480,10 +551,11 @@ export interface Database {
         }
         Returns: Json
       }
+      ,
       delete_student_account: {
         Args: {
           student_id: string
-          deleter_id: string
+          deleter_teacher_id: string
         }
         Returns: Json
       }
@@ -498,6 +570,75 @@ export interface Database {
         Args: {
           teacher_auth_id: string
           new_password: string
+        }
+        Returns: Json
+      }
+      ,
+      create_student_account: {
+        Args: {
+          student_email: string
+          student_password: string
+          student_name: string
+          student_id_code: string
+          grade_level: string
+          creator_teacher_id: string
+          additional_data?: Json
+        }
+        Returns: Json
+      }
+      ,
+      update_student_account: {
+        Args: {
+          student_id: string
+          updater_teacher_id: string
+          student_data: Json
+        }
+        Returns: Json
+      }
+      ,
+      block_student_account: {
+        Args: {
+          student_id: string
+          teacher_id: string
+          is_blocked: boolean
+        }
+        Returns: Json
+      }
+      ,
+      assign_student_to_subject: {
+        Args: {
+          student_id: string
+          subject_id: number
+          teacher_id: string
+        }
+        Returns: Json
+      }
+      ,
+      assign_room_to_subject: {
+        Args: {
+          room_id: number
+          subject_id: number
+          teacher_id: string
+        }
+        Returns: Json
+      }
+      ,
+      start_pin_session: {
+        Args: {
+          course_name: string
+          teacher_id: string
+          teacher_name: string
+          location?: string
+        }
+        Returns: Json
+      }
+      ,
+      mark_attendance_with_pin: {
+        Args: {
+          pin_code: string
+          student_id: string
+          student_name: string
+          student_email?: string
         }
         Returns: Json
       }

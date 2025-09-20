@@ -242,7 +242,7 @@ export class AuthService {
       try {
         const { data: result, error } = await supabase.rpc('delete_student_account', {
           student_id: studentId,
-          deleter_id: currentUser.id
+          deleter_teacher_id: currentUser.id
         })
 
         if (!error && result) {

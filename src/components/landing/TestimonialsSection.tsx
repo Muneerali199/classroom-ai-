@@ -60,7 +60,7 @@ export default function TestimonialsSection() {
               }}
             >
               <Quote className="w-10 h-10 text-gray-400 mb-4" />
-              <p className="text-gray-600 mb-6 italic">"{testimonial.quote}"</p>
+              <p className="text-gray-600 mb-6 italic">&quot;{testimonial.quote}&quot;</p>
               <div className="flex justify-between items-center">
                 <div>
                   <p className="font-bold text-gray-700">{testimonial.name}</p>
