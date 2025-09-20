@@ -1,6 +1,6 @@
 import type { AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
 import type { Student, Teacher, AttendanceStatus } from '@/lib/types';
-import { supabaseAdmin, getSupabase } from '@/lib/supabase';
+import { supabaseAdmin, supabase as supabaseClient } from '@/lib/supabase';
 import { logger } from './logger';
 
 // All data is now fetched from Supabase database - no static/mock data used
@@ -9,7 +9,10 @@ import { logger } from './logger';
 export async function getStudents(): Promise<Student[]> {
   try {
     // Use admin client to bypass RLS restrictions for server-side operations
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data: studentsData, error: studentsError } = await supabase
       .from('students')
@@ -69,7 +72,10 @@ export async function getStudents(): Promise<Student[]> {
 // Fetch attendance sessions from Supabase
 export async function getAttendanceSessions(): Promise<any[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('attendance_sessions')
@@ -98,7 +104,10 @@ export async function getAttendanceSessions(): Promise<any[]> {
 // Fetch session attendance records from Supabase
 export async function getSessionAttendanceRecords(): Promise<any[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('session_attendance_records')
@@ -123,7 +132,10 @@ export async function getSessionAttendanceRecords(): Promise<any[]> {
 // Fetch teachers from the teachers table
 export async function getTeachers(): Promise<Teacher[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data: teachersData, error: teachersError } = await supabase
       .from('teachers')
@@ -185,7 +197,10 @@ export async function getTeachers(): Promise<Teacher[]> {
 // Fetch subjects from the subjects table
 export async function getSubjects(): Promise<Subject[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('subjects')
@@ -214,7 +229,10 @@ export async function getSubjects(): Promise<Subject[]> {
 // Fetch rooms from the rooms table
 export async function getRooms(): Promise<Room[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('rooms')
@@ -244,7 +262,10 @@ export async function getRooms(): Promise<Room[]> {
 // Fetch subject enrollments with student and subject details
 export async function getSubjectEnrollments(): Promise<(SubjectStudent & { subject: Subject; student: Student })[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('subject_students')
@@ -289,7 +310,10 @@ export async function getSubjectEnrollments(): Promise<(SubjectStudent & { subje
 // Fetch room enrollments with student and room details
 export async function getRoomEnrollments(): Promise<(RoomStudent & { room: Room; student: Student })[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('room_students')
@@ -335,7 +359,10 @@ export async function getRoomEnrollments(): Promise<(RoomStudent & { room: Room;
 // Fetch teacher subjects
 export async function getTeacherSubjects(teacherId: string): Promise<(TeacherSubject & { subject: Subject })[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('teacher_subjects')
@@ -374,7 +401,10 @@ export async function getTeacherSubjects(teacherId: string): Promise<(TeacherSub
 // Fetch teacher rooms
 export async function getTeacherRooms(teacherId: string): Promise<(TeacherRoom & { room: Room })[]> {
   try {
-    const supabase = supabaseAdmin || getSupabase();
+    const supabase = supabaseAdmin || supabaseClient;
+    if (!supabase) {
+      return [];
+    }
 
     const { data, error } = await supabase
       .from('teacher_rooms')

@@ -1,0 +1,27 @@
+{
+	"version": 2,
+	"builds": [
+		{ "src": "next.config.js", "use": "@vercel/next" }
+	],
+	"env": {
+		"NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
+		"NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
+		"SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key"
+	},
+	"installCommand": "npm install",
+	"buildCommand": "next build",
+	"outputDirectory": ".next",
+	"rewrites": [
+		{ "source": "/", "destination": "/en" }
+	],
+	"headers": [
+		{
+			"source": "/(.*)",
+			"headers": [
+				{ "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+				{ "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+				{ "key": "X-Content-Type-Options", "value": "nosniff" }
+			]
+		}
+	]
+}
