@@ -25,68 +25,65 @@ export default function AppSidebar() {
     return `/${locale}${path}`;
   };
 
-  const isActive = (path: string) => {
-    // Check if the current pathname matches the link's path exactly
-    // or if it's the dashboard home and the path is a sub-path
-    return pathname === getRelativePath(path);
-  };
+  const isActive = (path: string) => pathname === getRelativePath(path);
 
   return (
-    <Sidebar>
+    <Sidebar className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-xl border-r border-gray-200 dark:border-gray-800">
+      {/* Header */}
       <SidebarHeader>
-        <div className="flex items-center gap-2 p-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <Logo className="w-6 h-6 text-white" />
+        <div className="flex items-center gap-3 p-4">
+          {/* Logo with gradient background */}
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md">
+            <Logo className="w-7 h-7 text-white" />
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+
+          {/* EduTrack gradient text */}
+          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent tracking-tight">
             EduTrack
           </span>
         </div>
       </SidebarHeader>
+
+      {/* Menu */}
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive('/dashboard')}>
-                <Link href="/dashboard">
-                  <Home />
-                  {t('dashboard')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive('/dashboard/attendance')}
-              >
-                <Link href="/dashboard/attendance">
-                  <BarChart3 />
-                  {t('attendance')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive('/dashboard/students')}
-              >
-                <Link href="/dashboard/students">
-                  <Users />
-                  {t('students')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive('/dashboard/profile')}
-              >
-                <Link href="/dashboard/profile">
-                  <User />
-                  {t('profile')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+          <SidebarMenu className="px-3 space-y-2">
+            {[
+              { href: '/dashboard', label: t('dashboard'), icon: <Home /> },
+              {
+                href: '/dashboard/attendance',
+                label: t('attendance'),
+                icon: <BarChart3 />,
+              },
+              {
+                href: '/dashboard/students',
+                label: t('students'),
+                icon: <Users />,
+              },
+              {
+                href: '/dashboard/profile',
+                label: t('profile'),
+                icon: <User />,
+              },
+            ].map(({ href, label, icon }) => (
+              <SidebarMenuItem key={href}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive(href)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all duration-200
+                    ${
+                      isActive(href)
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                        : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 text-gray-700 dark:text-gray-300'
+                    }`}
+                >
+                  <Link href={href} className="flex items-center gap-3">
+                    <span className="w-5 h-5">{icon}</span>
+                    {label}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
