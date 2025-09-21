@@ -85,285 +85,326 @@ export default function ModernStudentDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-screen text-gray-700" style={{
+        background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
+      }}>
+        <div className="neumorphic-card p-8 rounded-3xl">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-600 mx-auto"></div>
+          <p className="text-center mt-4 text-gray-600">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {studentData?.name || 'Student'}!
-        </h1>
-        <p className="text-muted-foreground">
-          Here&apos;s what&apos;s happening with your studies today.
-        </p>
-      </div>
+    <div className="min-h-screen text-gray-700" style={{
+      background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
+    }}>
+      {/* Subtle floating elements with neumorphic style */}
+      <div className="fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+          boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+        }}
+      />
+      <div className="fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
+          boxShadow: '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
+        }}
+      />
+      <div className="fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
+          boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
+        }}
+      />
 
-      {/* Quick Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Attendance Rate</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{attendancePercentage.toFixed(1)}%</div>
-            <Progress value={attendancePercentage} className="mt-2" />
-          </CardContent>
-        </Card>
+      <div className="space-y-6 p-6">
+        {/* Header */}
+        <div className="neumorphic-card p-6 rounded-3xl">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-700">
+            Welcome back, {studentData?.name || 'Student'}!
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Here&apos;s what&apos;s happening with your studies today.
+          </p>
+        </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Classes Today</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{upcomingClasses.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Next: {upcomingClasses[0]?.time}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Assignments</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {assignments.filter(a => a.status === 'pending').length}
+        {/* Quick Stats */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Attendance Rate</h3>
+              <TrendingUp className="h-4 w-4 text-gray-600" />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Due this week
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Student ID</CardTitle>
-            <User className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-lg font-bold">{studentData?.student_id || 'STU-2025-0001'}</div>
-            <p className="text-xs text-muted-foreground">
-              {studentData?.grade || '10th Grade'}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="dashboard" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
-          <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="assignments">Assignments</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="dashboard" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            {/* Today's Schedule */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Today&apos;s Classes</CardTitle>
-                <CardDescription>Your schedule for today</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {upcomingClasses.map((cls, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{cls.subject}</p>
-                      <p className="text-sm text-muted-foreground">{cls.teacher} • {cls.room}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">{cls.time}</p>
-                      <Badge variant="outline">
-                        <Clock className="w-3 h-3 mr-1" />
-                        Upcoming
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Recent Attendance */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Attendance</CardTitle>
-                <CardDescription>Your attendance for the past week</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {attendanceData.slice(0, 5).map((record, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{record.subject}</p>
-                      <p className="text-sm text-muted-foreground">{record.date}</p>
-                    </div>
-                    <Badge 
-                      variant={
-                        record.status === 'Present' ? 'default' :
-                        record.status === 'Late' ? 'secondary' : 'destructive'
-                      }
-                    >
-                      {record.status}
-                    </Badge>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            <div className="text-2xl font-bold text-gray-700">{attendancePercentage.toFixed(1)}%</div>
+            <div className="mt-2 neumorphic-sm-inset rounded-full h-2">
+              <div 
+                className="neumorphic-sm rounded-full h-2 transition-all duration-500" 
+                style={{ width: `${attendancePercentage}%` }}
+              />
+            </div>
           </div>
 
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks and shortcuts</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-3 md:grid-cols-3">
-                <Button variant="outline" className="h-20 flex-col">
-                  <QrCode className="h-6 w-6 mb-2" />
-                  Scan QR Code
-                </Button>
-                <Button variant="outline" className="h-20 flex-col">
-                  <Pin className="h-6 w-6 mb-2" />
-                  Enter PIN
-                </Button>
-                <Button variant="outline" className="h-20 flex-col">
-                  <User className="h-6 w-6 mb-2" />
-                  View Profile
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Classes Today</h3>
+              <Calendar className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">{upcomingClasses.length}</div>
+            <p className="text-xs text-gray-600">
+              Next: {upcomingClasses[0]?.time}
+            </p>
+          </div>
 
-        <TabsContent value="attendance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Attendance History</CardTitle>
-              <CardDescription>Complete record of your attendance</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {attendanceData.map((record, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{record.subject}</p>
-                      <p className="text-sm text-muted-foreground">{record.date}</p>
-                    </div>
-                    <Badge 
-                      variant={
-                        record.status === 'Present' ? 'default' :
-                        record.status === 'Late' ? 'secondary' : 'destructive'
-                      }
-                    >
-                      {record.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Pending Assignments</h3>
+              <BookOpen className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">
+              {assignments.filter(a => a.status === 'pending').length}
+            </div>
+            <p className="text-xs text-gray-600">
+              Due this week
+            </p>
+          </div>
 
-        <TabsContent value="schedule" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Schedule</CardTitle>
-              <CardDescription>Your complete class schedule</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {upcomingClasses.map((cls, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <div className="flex items-center justify-between">
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Student ID</h3>
+              <User className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-lg font-bold text-gray-700">{studentData?.student_id || 'STU-2025-0001'}</div>
+            <p className="text-xs text-gray-600">
+              {studentData?.grade || '10th Grade'}
+            </p>
+          </div>
+        </div>
+
+        <Tabs defaultValue="dashboard" className="space-y-4">
+          <div className="neumorphic-card p-2 rounded-2xl">
+            <TabsList className="neumorphic-sm-inset rounded-xl">
+              <TabsTrigger 
+                value="dashboard" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger 
+                value="attendance" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                Attendance
+              </TabsTrigger>
+              <TabsTrigger 
+                value="schedule" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                Schedule
+              </TabsTrigger>
+              <TabsTrigger 
+                value="assignments" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                Assignments
+              </TabsTrigger>
+              <TabsTrigger 
+                value="profile" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                Profile
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value="dashboard" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Today's Schedule */}
+              <div className="neumorphic-card p-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-gray-700">Today&apos;s Classes</h3>
+                  <p className="text-sm text-gray-600">Your schedule for today</p>
+                </div>
+                <div className="space-y-3">
+                  {upcomingClasses.map((cls, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
                       <div>
-                        <h3 className="font-medium">{cls.subject}</h3>
-                        <p className="text-sm text-muted-foreground">{cls.teacher}</p>
+                        <p className="font-medium text-gray-700">{cls.subject}</p>
+                        <p className="text-sm text-gray-600">{cls.teacher} • {cls.room}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">{cls.time}</p>
-                        <p className="text-sm text-muted-foreground">{cls.room}</p>
+                        <p className="text-sm font-medium text-gray-700">{cls.time}</p>
+                        <div className="neumorphic-sm px-2 py-1 rounded-full text-xs text-gray-600 mt-1">
+                          <Clock className="w-3 h-3 mr-1 inline" />
+                          Upcoming
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Attendance */}
+              <div className="neumorphic-card p-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-gray-700">Recent Attendance</h3>
+                  <p className="text-sm text-gray-600">Your attendance for the past week</p>
+                </div>
+                <div className="space-y-3">
+                  {attendanceData.slice(0, 5).map((record, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-700">{record.subject}</p>
+                        <p className="text-sm text-gray-600">{record.date}</p>
+                      </div>
+                      <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium ${
+                        record.status === 'Present' ? 'text-green-700' :
+                        record.status === 'Late' ? 'text-yellow-700' : 'text-red-700'
+                      }`}>
+                        {record.status}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Quick Actions</h3>
+                <p className="text-sm text-gray-600">Common tasks and shortcuts</p>
+              </div>
+              <div className="grid gap-3 md:grid-cols-3">
+                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
+                  <QrCode className="h-6 w-6 mb-2 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">Scan QR Code</span>
+                </button>
+                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
+                  <Pin className="h-6 w-6 mb-2 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">Enter PIN</span>
+                </button>
+                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
+                  <User className="h-6 w-6 mb-2 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">View Profile</span>
+                </button>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="attendance" className="space-y-4">
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Attendance History</h3>
+                <p className="text-sm text-gray-600">Complete record of your attendance</p>
+              </div>
+              <div className="space-y-3">
+                {attendanceData.map((record, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-700">{record.subject}</p>
+                      <p className="text-sm text-gray-600">{record.date}</p>
+                    </div>
+                    <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium ${
+                      record.status === 'Present' ? 'text-green-700' :
+                      record.status === 'Late' ? 'text-yellow-700' : 'text-red-700'
+                    }`}>
+                      {record.status}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="schedule" className="space-y-4">
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Weekly Schedule</h3>
+                <p className="text-sm text-gray-600">Your complete class schedule</p>
+              </div>
+              <div className="space-y-4">
+                {upcomingClasses.map((cls, index) => (
+                  <div key={index} className="p-4 neumorphic-sm-inset rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium text-gray-700">{cls.subject}</h3>
+                        <p className="text-sm text-gray-600">{cls.teacher}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium text-gray-700">{cls.time}</p>
+                        <p className="text-sm text-gray-600">{cls.room}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </div>
+          </TabsContent>
 
-        <TabsContent value="assignments" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Assignments</CardTitle>
-              <CardDescription>Track your homework and projects</CardDescription>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="assignments" className="space-y-4">
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Assignments</h3>
+                <p className="text-sm text-gray-600">Track your homework and projects</p>
+              </div>
               <div className="space-y-3">
                 {assignments.map((assignment, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
                     <div>
-                      <p className="font-medium">{assignment.title}</p>
-                      <p className="text-sm text-muted-foreground">{assignment.subject}</p>
+                      <p className="font-medium text-gray-700">{assignment.title}</p>
+                      <p className="text-sm text-gray-600">{assignment.subject}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">Due: {assignment.dueDate}</p>
-                      <Badge 
-                        variant={assignment.status === 'submitted' ? 'default' : 'secondary'}
-                      >
+                      <p className="text-sm font-medium text-gray-700">Due: {assignment.dueDate}</p>
+                      <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium mt-1 ${
+                        assignment.status === 'submitted' ? 'text-green-700' : 'text-yellow-700'
+                      }`}>
                         {assignment.status}
-                      </Badge>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </div>
+          </TabsContent>
 
-        <TabsContent value="profile" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Student Profile</CardTitle>
-              <CardDescription>Your personal information</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium">Name</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.name}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Student ID</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.student_id}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Email</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.email}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Grade Level</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.grade}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Enrollment Date</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.created_at ? new Date(studentData.created_at).toLocaleDateString() : 'N/A'}</p>
+          <TabsContent value="profile" className="space-y-4">
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Student Profile</h3>
+                <p className="text-sm text-gray-600">Your personal information</p>
+              </div>
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="neumorphic-sm-inset p-4 rounded-lg">
+                    <label className="text-sm font-medium text-gray-700">Name</label>
+                    <p className="text-sm text-gray-600 mt-1">{studentData?.name}</p>
+                  </div>
+                  <div className="neumorphic-sm-inset p-4 rounded-lg">
+                    <label className="text-sm font-medium text-gray-700">Student ID</label>
+                    <p className="text-sm text-gray-600 mt-1">{studentData?.student_id}</p>
+                  </div>
+                  <div className="neumorphic-sm-inset p-4 rounded-lg">
+                    <label className="text-sm font-medium text-gray-700">Email</label>
+                    <p className="text-sm text-gray-600 mt-1">{studentData?.email}</p>
+                  </div>
+                  <div className="neumorphic-sm-inset p-4 rounded-lg">
+                    <label className="text-sm font-medium text-gray-700">Grade Level</label>
+                    <p className="text-sm text-gray-600 mt-1">{studentData?.grade}</p>
+                  </div>
+                  <div className="neumorphic-sm-inset p-4 rounded-lg md:col-span-2">
+                    <label className="text-sm font-medium text-gray-700">Enrollment Date</label>
+                    <p className="text-sm text-gray-600 mt-1">{studentData?.created_at ? new Date(studentData.created_at).toLocaleDateString() : 'N/A'}</p>
+                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

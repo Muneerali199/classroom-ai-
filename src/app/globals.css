@@ -239,6 +239,69 @@ body {
   .shadow-modern-xl {
     box-shadow: var(--shadow-xl);
   }
+  
+  /* Neumorphic design utilities */
+  .neumorphic {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+  }
+  
+  .neumorphic-inset {
+    background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
+    box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
+  }
+  
+  .neumorphic-sm {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  }
+  
+  .neumorphic-sm-inset {
+    background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  }
+  
+  .neumorphic-lg {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 12px 12px 24px #bebebe, -12px -12px 24px #ffffff;
+  }
+  
+  .neumorphic-lg-inset {
+    background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
+    box-shadow: inset 12px 12px 24px #bebebe, inset -12px -12px 24px #ffffff;
+  }
+  
+  .neumorphic-button {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+    transition: all 0.2s ease;
+  }
+  
+  .neumorphic-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+  }
+  
+  .neumorphic-button:active {
+    transform: translateY(0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  }
+  
+  .neumorphic-card {
+    background: linear-gradient(145deg, #ebebeb, #d5d5d5);
+    box-shadow: 8px 8px 16px #c4c4c4, -8px -8px 16px #ffffff;
+  }
+  
+  .neumorphic-input {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    border: none;
+  }
+  
+  .neumorphic-input:focus {
+    box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
+    outline: none;
+  }
 }
 
 @keyframes fadeIn {
