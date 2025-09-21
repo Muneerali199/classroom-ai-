@@ -136,19 +136,41 @@ export default function EnhancedDeanDashboard({ initialTeachers }: EnhancedDeanD
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
+    <div className="min-h-screen text-gray-700" style={{
+      background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
+    }}>
+      {/* Subtle floating elements with neumorphic style */}
+      <div className="fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+          boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+        }}
+      />
+      <div className="fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
+          boxShadow: '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
+        }}
+      />
+      <div className="fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse"
+        style={{
+          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
+          boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
+        }}
+      />
+
       <div className="container mx-auto p-6 space-y-8">
         {/* Header */}
-        <div className="space-y-2">
+        <div className="neumorphic-card p-6 rounded-3xl">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-              <UserCheck className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 neumorphic rounded-xl flex items-center justify-center">
+              <UserCheck className="h-6 w-6 text-gray-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-700">
                 Dean Dashboard
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-gray-600">
                 Comprehensive school management and teacher administration
               </p>
             </div>
@@ -157,79 +179,85 @@ export default function EnhancedDeanDashboard({ initialTeachers }: EnhancedDeanD
 
         {/* Quick Stats Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium opacity-90">Total Teachers</CardTitle>
-              <Users className="h-4 w-4 opacity-90" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalTeachers}</div>
-              <p className="text-xs opacity-90">
-                Active teaching staff
-              </p>
-            </CardContent>
-          </Card>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Total Teachers</h3>
+              <Users className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">{stats.totalTeachers}</div>
+            <p className="text-xs text-gray-600">
+              Active teaching staff
+            </p>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-green-500 to-green-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium opacity-90">Full-Time</CardTitle>
-              <Briefcase className="h-4 w-4 opacity-90" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.teachersByStatus.fullTime}</div>
-              <p className="text-xs opacity-90">
-                Full-time employees
-              </p>
-            </CardContent>
-          </Card>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Full-Time</h3>
+              <Briefcase className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">{stats.teachersByStatus.fullTime}</div>
+            <p className="text-xs text-gray-600">
+              Full-time employees
+            </p>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-500 to-orange-500 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium opacity-90">Part-Time</CardTitle>
-              <Clock className="h-4 w-4 opacity-90" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.teachersByStatus.partTime}</div>
-              <p className="text-xs opacity-90">
-                Part-time staff
-              </p>
-            </CardContent>
-          </Card>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Part-Time</h3>
+              <Clock className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">{stats.teachersByStatus.partTime}</div>
+            <p className="text-xs text-gray-600">
+              Part-time staff
+            </p>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium opacity-90">Departments</CardTitle>
-              <Building className="h-4 w-4 opacity-90" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{Object.keys(stats.departmentBreakdown).length}</div>
-              <p className="text-xs opacity-90">
-                Active departments
-              </p>
-            </CardContent>
-          </Card>
+          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium text-gray-700">Departments</h3>
+              <Building className="h-4 w-4 text-gray-600" />
+            </div>
+            <div className="text-2xl font-bold text-gray-700">{Object.keys(stats.departmentBreakdown).length}</div>
+            <p className="text-xs text-gray-600">
+              Active departments
+            </p>
+          </div>
         </div>
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="teachers" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Teachers
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="reports" className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
-              Reports
-            </TabsTrigger>
-          </TabsList>
+          <div className="neumorphic-card p-2 rounded-2xl">
+            <TabsList className="neumorphic-sm-inset rounded-xl grid w-full grid-cols-4">
+              <TabsTrigger 
+                value="overview" 
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                <BarChart3 className="h-4 w-4" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="teachers" 
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                <Users className="h-4 w-4" />
+                Teachers
+              </TabsTrigger>
+              <TabsTrigger 
+                value="analytics" 
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                <TrendingUp className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger 
+                value="reports" 
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                <Activity className="h-4 w-4" />
+                Reports
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
