@@ -18,12 +18,17 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        neumorphic: "neumorphic-button text-gray-700 hover:scale-105 transition-all duration-300",
+        neumorphicSm: "neumorphic-sm text-gray-700 hover:neumorphic transition-all duration-300",
+        neumorphicInset: "neumorphic-sm-inset text-gray-600 hover:neumorphic-sm transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8 text-base",
         icon: "h-10 w-10",
+        neumorphic: "h-12 px-6 py-3 rounded-xl",
+        neumorphicSm: "h-10 px-4 py-2 rounded-lg",
       },
     },
     defaultVariants: {

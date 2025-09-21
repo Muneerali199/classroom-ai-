@@ -302,6 +302,195 @@ body {
     box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
     outline: none;
   }
+
+  /* Dark mode neumorphic utilities */
+  .dark .neumorphic {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 8px 8px 16px #0f0f0f, inset -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-sm {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-sm-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-lg {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 12px 12px 24px #0f0f0f, -12px -12px 24px #3a3a3a;
+  }
+  
+  .dark .neumorphic-lg-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 12px 12px 24px #0f0f0f, inset -12px -12px 24px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button:hover {
+    box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button:active {
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-card {
+    background: linear-gradient(145deg, #252525, #1f1f1f);
+    box-shadow: 8px 8px 16px #0a0a0a, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-input {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+    color: #e0e0e0;
+  }
+  
+  .dark .neumorphic-input:focus {
+    box-shadow: inset 6px 6px 12px #0f0f0f, inset -6px -6px 12px #3a3a3a;
+  }
+
+  /* Enhanced neumorphic components */
+  .neumorphic-tab {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+    transition: all 0.3s ease;
+  }
+  
+  .neumorphic-tab:hover {
+    transform: translateY(-1px);
+    box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+  }
+  
+  .neumorphic-tab.active {
+    background: linear-gradient(145deg, #e0e0e0, #c0c0c0);
+    box-shadow: inset 2px 2px 4px #bebebe, inset -2px -2px 4px #ffffff;
+  }
+  
+  .dark .neumorphic-tab {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-tab:hover {
+    box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+  }
+  
+  .dark .neumorphic-tab.active {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 2px 2px 4px #0f0f0f, inset -2px -2px 4px #3a3a3a;
+  }
+
+  .neumorphic-badge {
+    background: linear-gradient(145deg, #f5f5f5, #e5e5e5);
+    box-shadow: 2px 2px 4px #d0d0d0, -2px -2px 4px #ffffff;
+    color: #666;
+  }
+  
+  .dark .neumorphic-badge {
+    background: linear-gradient(145deg, #2f2f2f, #1f1f1f);
+    box-shadow: 2px 2px 4px #0a0a0a, -2px -2px 4px #4a4a4a;
+    color: #ccc;
+  }
+
+  .neumorphic-icon {
+    background: linear-gradient(145deg, #f8f8f8, #e8e8e8);
+    box-shadow: 3px 3px 6px #d5d5d5, -3px -3px 6px #ffffff;
+  }
+  
+  .dark .neumorphic-icon {
+    background: linear-gradient(145deg, #2c2c2c, #1c1c1c);
+    box-shadow: 3px 3px 6px #0c0c0c, -3px -3px 6px #4c4c4c;
+  }
+
+  .neumorphic-floating {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .dark .neumorphic-floating {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 10px 10px 20px #0f0f0f, -10px -10px 20px #3a3a3a;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Responsive neumorphic utilities */
+  @media (max-width: 640px) {
+    .neumorphic {
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+    }
+    
+    .neumorphic-sm {
+      box-shadow: 2px 2px 4px #bebebe, -2px -2px 4px #ffffff;
+    }
+    
+    .neumorphic-lg {
+      box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+    }
+    
+    .dark .neumorphic {
+      box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+    }
+    
+    .dark .neumorphic-sm {
+      box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #3a3a3a;
+    }
+    
+    .dark .neumorphic-lg {
+      box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+    }
+  }
+
+  /* Accessibility improvements for neumorphic design */
+  @media (prefers-reduced-motion: reduce) {
+    .neumorphic-floating {
+      animation: none;
+    }
+    
+    .neumorphic-button:hover {
+      transform: none;
+    }
+    
+    .neumorphic-tab:hover {
+      transform: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .neumorphic {
+      box-shadow: 2px 2px 4px #000, -2px -2px 4px #fff;
+    }
+    
+    .neumorphic-sm {
+      box-shadow: 1px 1px 2px #000, -1px -1px 2px #fff;
+    }
+    
+    .dark .neumorphic {
+      box-shadow: 2px 2px 4px #000, -2px -2px 4px #fff;
+    }
+    
+    .dark .neumorphic-sm {
+      box-shadow: 1px 1px 2px #000, -1px -1px 2px #fff;
+    }
+  }
 }
 
 @keyframes fadeIn {

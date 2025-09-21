@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { updateProfileAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, FileText, Settings, Bell } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -147,127 +147,208 @@ export default function ProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-4xl">
        {error && (
-        <Alert variant="destructive">
-          <AlertTitle>{t('updateFailed')}</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <div className="neumorphic-card p-4 border-l-4 border-red-500">
+          <Alert variant="destructive" className="bg-transparent border-0 p-0">
+            <AlertTitle className="text-red-700">{t('updateFailed')}</AlertTitle>
+            <AlertDescription className="text-red-600">{error}</AlertDescription>
+          </Alert>
+        </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-            <Label htmlFor="firstName">{t('firstName')}</Label>
-            <Input
-            id="firstName"
-            {...register('firstName')}
-            />
-            {errors.firstName && (
-            <p className="text-sm text-destructive">{errors.firstName.message}</p>
-            )}
+      
+      {/* Personal Information Section */}
+      <div className="neumorphic-card p-6">
+        <h3 className="text-lg font-semibold text-gray-700 mb-6 flex items-center gap-2">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <User className="h-4 w-4" />
+          </div>
+          Personal Information
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-3">
+              <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">{t('firstName')}</Label>
+              <Input
+              id="firstName"
+              {...register('firstName')}
+              variant="neumorphic"
+              />
+              {errors.firstName && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.firstName.message}
+              </p>
+              )}
+          </div>
+           <div className="space-y-3">
+              <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">{t('lastName')}</Label>
+              <Input
+              id="lastName"
+              {...register('lastName')}
+              variant="neumorphic"
+              />
+              {errors.lastName && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.lastName.message}
+              </p>
+              )}
+          </div>
         </div>
-         <div className="space-y-2">
-            <Label htmlFor="lastName">{t('lastName')}</Label>
-            <Input
-            id="lastName"
-            {...register('lastName')}
-            />
-            {errors.lastName && (
-            <p className="text-sm text-destructive">{errors.lastName.message}</p>
-            )}
+        
+         <div className="space-y-3 mt-6">
+          <Label htmlFor="title" className="text-sm font-medium text-gray-700">{t('role')}</Label>
+          <Input
+            id="title"
+            placeholder={t('rolePlaceholder')}
+            {...register('title')}
+            variant="neumorphic"
+          />
+          {errors.title && (
+            <p className="text-sm text-red-600 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+              {errors.title.message}
+            </p>
+          )}
         </div>
-      </div>
-       <div className="space-y-2">
-        <Label htmlFor="title">{t('role')}</Label>
-        <Input
-          id="title"
-          placeholder={t('rolePlaceholder')}
-          {...register('title')}
-        />
-        {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">{t('email')}</Label>
-        <Input
-          id="email"
-          type="email"
-          {...register('email')}
-          disabled
-        />
-        <p className="text-xs text-muted-foreground">
+        
+        <div className="space-y-3 mt-6">
+          <Label htmlFor="email" className="text-sm font-medium text-gray-700">{t('email')}</Label>
+          <Input
+            id="email"
+            type="email"
+            {...register('email')}
+            disabled
+            className="neumorphic-sm-inset rounded-xl px-4 py-3 text-gray-500 bg-gray-100 dark:bg-gray-800"
+          />
+          <p className="text-xs text-gray-500 flex items-center gap-1">
+            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
             {t('emailCannotBeChanged')}
-        </p>
-      </div>
-
-       <div className="space-y-2">
-        <Label htmlFor="bio">{t('aboutMe')}</Label>
-        <Textarea
-          id="bio"
-          placeholder={t('bioPlaceholder')}
-          {...register('bio')}
-          className="min-h-[100px]"
-        />
-        {errors.bio && (
-          <p className="text-sm text-destructive">{errors.bio.message}</p>
-        )}
-      </div>
-
-       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-              <Label htmlFor="language">{t('language')}</Label>
-              <Select name="language" defaultValue={locale} onValueChange={onLanguageChange}>
-                <SelectTrigger id="language">
-                    <SelectValue placeholder={t('languagePlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                    {languages.map(lang => (
-                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-          </div>
-           <div className="space-y-2">
-              <Label htmlFor="timezone">{t('timezone')}</Label>
-              <Select name="timezone" defaultValue="America/New_York">
-                <SelectTrigger id="timezone">
-                    <SelectValue placeholder={t('timezonePlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                    {timezones.map(tz => (
-                        <SelectItem key={tz} value={tz}>{tz.replace('_', ' ')}</SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-          </div>
-      </div>
-
-      <div className="space-y-4">
-        <Label>{t('communicationPreferences')}</Label>
-        <div className="flex items-center space-x-2">
-          <Checkbox id="emailNotifications" defaultChecked />
-          <label
-            htmlFor="emailNotifications"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-           {t('emailNotifications')}
-          </label>
-        </div>
-         <div className="flex items-center space-x-2">
-          <Checkbox id="pushNotifications" />
-          <label
-            htmlFor="pushNotifications"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-           {t('pushNotifications')}
-          </label>
+          </p>
         </div>
       </div>
 
-      <Button type="submit" disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {t('saveChanges')}
-      </Button>
+      {/* Bio Section */}
+      <div className="neumorphic-card p-6">
+        <h3 className="text-lg font-semibold text-gray-700 mb-6 flex items-center gap-2">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <FileText className="h-4 w-4" />
+          </div>
+          About Me
+        </h3>
+        
+        <div className="space-y-3">
+          <Label htmlFor="bio" className="text-sm font-medium text-gray-700">{t('aboutMe')}</Label>
+          <Textarea
+            id="bio"
+            placeholder={t('bioPlaceholder')}
+            {...register('bio')}
+            variant="neumorphic"
+            className="min-h-[120px]"
+          />
+          {errors.bio && (
+            <p className="text-sm text-red-600 flex items-center gap-1">
+              <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+              {errors.bio.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Preferences Section */}
+      <div className="neumorphic-card p-6">
+        <h3 className="text-lg font-semibold text-gray-700 mb-6 flex items-center gap-2">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <Settings className="h-4 w-4" />
+          </div>
+          Preferences
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-3">
+                <Label htmlFor="language" className="text-sm font-medium text-gray-700">{t('language')}</Label>
+                <Select name="language" defaultValue={locale} onValueChange={onLanguageChange}>
+                  <SelectTrigger id="language" className="neumorphic-input rounded-xl px-4 py-3 text-gray-700">
+                      <SelectValue placeholder={t('languagePlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent className="neumorphic-card border-0">
+                      {languages.map(lang => (
+                          <SelectItem key={lang.value} value={lang.value} className="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">{lang.label}</SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+            </div>
+             <div className="space-y-3">
+                <Label htmlFor="timezone" className="text-sm font-medium text-gray-700">{t('timezone')}</Label>
+                <Select name="timezone" defaultValue="America/New_York">
+                  <SelectTrigger id="timezone" className="neumorphic-input rounded-xl px-4 py-3 text-gray-700">
+                      <SelectValue placeholder={t('timezonePlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent className="neumorphic-card border-0">
+                      {timezones.map(tz => (
+                          <SelectItem key={tz} value={tz} className="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">{tz.replace('_', ' ')}</SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+            </div>
+        </div>
+      </div>
+
+      {/* Communication Preferences */}
+      <div className="neumorphic-card p-6">
+        <h3 className="text-lg font-semibold text-gray-700 mb-6 flex items-center gap-2">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <Bell className="h-4 w-4" />
+          </div>
+          {t('communicationPreferences')}
+        </h3>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 neumorphic-sm-inset rounded-xl">
+            <div className="flex items-center space-x-3">
+              <Checkbox id="emailNotifications" defaultChecked className="neumorphic-sm rounded" />
+              <label
+                htmlFor="emailNotifications"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+               {t('emailNotifications')}
+              </label>
+            </div>
+            <div className="w-12 h-6 neumorphic-sm-inset rounded-full relative">
+              <div className="w-5 h-5 neumorphic-sm rounded-full absolute top-0.5 left-0.5 bg-green-500"></div>
+            </div>
+          </div>
+           <div className="flex items-center justify-between p-4 neumorphic-sm-inset rounded-xl">
+            <div className="flex items-center space-x-3">
+              <Checkbox id="pushNotifications" className="neumorphic-sm rounded" />
+              <label
+                htmlFor="pushNotifications"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+               {t('pushNotifications')}
+              </label>
+            </div>
+            <div className="w-12 h-6 neumorphic-sm-inset rounded-full relative">
+              <div className="w-5 h-5 neumorphic-sm rounded-full absolute top-0.5 right-0.5 bg-gray-400"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-end">
+        <Button 
+          type="submit" 
+          disabled={isPending}
+          variant="neumorphic"
+          size="neumorphic"
+          className="disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {t('saveChanges')}
+        </Button>
+      </div>
     </form>
   );
 }
