@@ -83,25 +83,23 @@ export class TeacherStudentService {
         medical_notes: data.medicalNotes || ''
       };
 
-      const { data: result, error } = await supabase.rpc('create_student_account', {
-        student_email: data.email.toLowerCase().trim(),
-        student_password: data.password,
-        student_name: data.name,
-        student_id_code: data.studentId,
-        grade_level: data.gradeLevel,
-        creator_teacher_id: verification.teacherId,
-        additional_data: additionalData
+      const { data: result, error } = await supabase.rpc('create_user_account', {
+        user_email: data.email.toLowerCase().trim(),
+        user_password: data.password,
+        user_display_name: data.name,
+        user_role: 'student',
+        creator_id: verification.teacherId!
       });
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to create student account' };
+      if (!result || typeof result !== 'object' || !('success' in result) || !result.success) {
+        return { success: false, error: (result as any)?.error || 'Failed to create student account' };
       }
 
-      return { success: true, data: { studentId: result.student_id } };
+      return { success: true, data: { studentId: (result as any).student_id } };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
@@ -119,15 +117,15 @@ export class TeacherStudentService {
       
       const { data: result, error } = await supabase.rpc('delete_student_account', {
         student_id: studentId,
-        deleter_teacher_id: verification.teacherId
+        deleter_id: verification.teacherId!
       });
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to delete student account' };
+      if (!result || typeof result !== 'object' || !('success' in result) || !result.success) {
+        return { success: false, error: (result as any)?.error || 'Failed to delete student account' };
       }
 
       return { success: true };
@@ -146,54 +144,30 @@ export class TeacherStudentService {
 
       const supabase = getSupabase();
       
-      const { data: result, error } = await supabase.rpc('update_student_account', {
-        student_id: studentId,
-        updater_teacher_id: verification.teacherId,
-        student_data: updates
-      });
+      // Update student record directly
+      const { data: result, error } = await supabase
+        .from('students')
+        .update(updates)
+        .eq('id', studentId)
+        .select();
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to update student account' };
+      if (!result || result.length === 0) {
+        return { success: false, error: 'Student not found or update failed' };
       }
 
-      return { success: true };
+      return { success: true, data: result[0] };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
   }
 
-  // Block/unblock student account
+  // Block/unblock student account - Not implemented in current database schema
   static async blockStudent(studentId: string, isBlocked: boolean): Promise<ServiceResponse> {
-    try {
-      const verification = await this.verifyTeacherAccess();
-      if (!verification.success) {
-        return { success: false, error: verification.error };
-      }
-
-      const supabase = getSupabase();
-      
-      const { data: result, error } = await supabase.rpc('block_student_account', {
-        student_id: studentId,
-        teacher_id: verification.teacherId,
-        is_blocked: isBlocked
-      });
-
-      if (error) {
-        return { success: false, error: error.message };
-      }
-
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || `Failed to ${isBlocked ? 'block' : 'unblock'} student` };
-      }
-
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: (error as Error).message };
-    }
+    return { success: false, error: 'Block/unblock functionality not implemented in current database schema' };
   }
 
   // Assign student to subject
@@ -206,21 +180,24 @@ export class TeacherStudentService {
 
       const supabase = getSupabase();
       
-      const { data: result, error } = await supabase.rpc('assign_student_to_subject', {
-        student_id: studentId,
-        subject_id: subjectId,
-        teacher_id: verification.teacherId
-      });
+      // Insert into subject_students table directly
+      const { data: result, error } = await supabase
+        .from('subject_students')
+        .insert({
+          student_id: studentId,
+          subject_id: subjectId
+        })
+        .select();
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to assign student to subject' };
+      if (!result || result.length === 0) {
+        return { success: false, error: 'Failed to assign student to subject' };
       }
 
-      return { success: true };
+      return { success: true, data: result[0] };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
@@ -236,21 +213,24 @@ export class TeacherStudentService {
 
       const supabase = getSupabase();
       
-      const { data: result, error } = await supabase.rpc('assign_room_to_subject', {
-        room_id: roomId,
-        subject_id: subjectId,
-        teacher_id: verification.teacherId
-      });
+      // Insert into teacher_rooms table directly
+      const { data: result, error } = await supabase
+        .from('teacher_rooms')
+        .insert({
+          room_id: roomId,
+          teacher_id: verification.teacherId!
+        })
+        .select();
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (!result || !result.success) {
-        return { success: false, error: result?.error || 'Failed to assign room to subject' };
+      if (!result || result.length === 0) {
+        return { success: false, error: 'Failed to assign room to teacher' };
       }
 
-      return { success: true };
+      return { success: true, data: result[0] };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
