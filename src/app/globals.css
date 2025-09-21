@@ -240,45 +240,64 @@ body {
     box-shadow: var(--shadow-xl);
   }
   
-  /* Neumorphic design utilities */
+  /* Enhanced Neumorphic Design System */
+  
+  /* Base neumorphic styles */
   .neumorphic {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+    border-radius: 20px;
+    transition: all 0.3s ease;
   }
   
   .neumorphic-inset {
     background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
     box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
+    border-radius: 20px;
+    transition: all 0.3s ease;
   }
   
+  /* Size variants */
   .neumorphic-sm {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+    border-radius: 12px;
+    transition: all 0.3s ease;
   }
   
   .neumorphic-sm-inset {
     background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
     box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    border-radius: 12px;
+    transition: all 0.3s ease;
   }
   
   .neumorphic-lg {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     box-shadow: 12px 12px 24px #bebebe, -12px -12px 24px #ffffff;
+    border-radius: 24px;
+    transition: all 0.3s ease;
   }
   
   .neumorphic-lg-inset {
     background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
     box-shadow: inset 12px 12px 24px #bebebe, inset -12px -12px 24px #ffffff;
+    border-radius: 24px;
+    transition: all 0.3s ease;
   }
   
+  /* Interactive elements */
   .neumorphic-button {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+    border-radius: 16px;
+    border: none;
     transition: all 0.2s ease;
+    cursor: pointer;
   }
   
   .neumorphic-button:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
   }
   
@@ -287,20 +306,298 @@ body {
     box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
   }
   
+  .neumorphic-button:focus {
+    outline: none;
+    box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff, 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Card components */
   .neumorphic-card {
     background: linear-gradient(145deg, #ebebeb, #d5d5d5);
     box-shadow: 8px 8px 16px #c4c4c4, -8px -8px 16px #ffffff;
+    border-radius: 20px;
+    transition: all 0.3s ease;
   }
   
+  .neumorphic-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 12px 12px 24px #c0c0c0, -12px -12px 24px #ffffff;
+  }
+  
+  /* Form elements */
   .neumorphic-input {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
     border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
   }
   
   .neumorphic-input:focus {
-    box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
+    box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff, 0 0 0 3px rgba(59, 130, 246, 0.1);
     outline: none;
+  }
+  
+  .neumorphic-textarea {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    resize: vertical;
+  }
+  
+  .neumorphic-textarea:focus {
+    box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff, 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+  }
+  
+  .neumorphic-select {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .neumorphic-select:focus {
+    box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff, 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+  }
+  
+  /* Toggle and switch elements */
+  .neumorphic-toggle {
+    background: linear-gradient(145deg, #d0d0d0, #f0f0f0);
+    box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .neumorphic-toggle.active {
+    background: linear-gradient(145deg, #4ade80, #22c55e);
+    box-shadow: inset 4px 4px 8px #16a34a, inset -4px -4px 8px #4ade80;
+  }
+  
+  /* Badge and chip elements */
+  .neumorphic-badge {
+    background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+    box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .neumorphic-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  }
+  
+  /* Responsive neumorphic adjustments */
+  @media (max-width: 640px) {
+    .neumorphic {
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      border-radius: 16px;
+    }
+    
+    .neumorphic-sm {
+      box-shadow: 2px 2px 4px #bebebe, -2px -2px 4px #ffffff;
+      border-radius: 8px;
+    }
+    
+    .neumorphic-lg {
+      box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+      border-radius: 20px;
+    }
+    
+    .neumorphic-button {
+      box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      border-radius: 12px;
+    }
+    
+    .neumorphic-card {
+      box-shadow: 6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff;
+      border-radius: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .neumorphic {
+      box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+      border-radius: 12px;
+    }
+    
+    .neumorphic-sm {
+      box-shadow: 2px 2px 4px #bebebe, -2px -2px 4px #ffffff;
+      border-radius: 6px;
+    }
+    
+    .neumorphic-lg {
+      box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+      border-radius: 16px;
+    }
+    
+    .neumorphic-button {
+      box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+      border-radius: 10px;
+    }
+    
+    .neumorphic-card {
+      box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff;
+      border-radius: 12px;
+    }
+  }
+  
+  /* Dark mode neumorphic styles */
+  .dark .neumorphic {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 8px 8px 16px #0f0f0f, inset -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-sm {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-sm-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-lg {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 12px 12px 24px #0f0f0f, -12px -12px 24px #3a3a3a;
+  }
+  
+  .dark .neumorphic-lg-inset {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 12px 12px 24px #0f0f0f, inset -12px -12px 24px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button:hover {
+    box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-button:active {
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-card {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+  }
+  
+  .dark .neumorphic-card:hover {
+    box-shadow: 12px 12px 24px #0f0f0f, -12px -12px 24px #3a3a3a;
+  }
+  
+  .dark .neumorphic-input {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-input:focus {
+    box-shadow: inset 6px 6px 12px #0f0f0f, inset -6px -6px 12px #3a3a3a, 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .dark .neumorphic-textarea {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-textarea:focus {
+    box-shadow: inset 6px 6px 12px #0f0f0f, inset -6px -6px 12px #3a3a3a, 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .dark .neumorphic-select {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-select:focus {
+    box-shadow: inset 6px 6px 12px #0f0f0f, inset -6px -6px 12px #3a3a3a, 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .dark .neumorphic-toggle {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #3a3a3a;
+  }
+  
+  .dark .neumorphic-toggle.active {
+    background: linear-gradient(145deg, #16a34a, #22c55e);
+    box-shadow: inset 4px 4px 8px #15803d, inset -4px -4px 8px #4ade80;
+  }
+  
+  .dark .neumorphic-badge {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    box-shadow: 3px 3px 6px #0f0f0f, -3px -3px 6px #3a3a3a;
+  }
+  
+  .dark .neumorphic-badge:hover {
+    box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+  }
+  
+  /* Responsive dark mode neumorphic adjustments */
+  @media (max-width: 640px) {
+    .dark .neumorphic {
+      box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+      border-radius: 16px;
+    }
+    
+    .dark .neumorphic-sm {
+      box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #3a3a3a;
+      border-radius: 8px;
+    }
+    
+    .dark .neumorphic-lg {
+      box-shadow: 8px 8px 16px #0f0f0f, -8px -8px 16px #3a3a3a;
+      border-radius: 20px;
+    }
+    
+    .dark .neumorphic-button {
+      box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+      border-radius: 12px;
+    }
+    
+    .dark .neumorphic-card {
+      box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+      border-radius: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .dark .neumorphic {
+      box-shadow: 3px 3px 6px #0f0f0f, -3px -3px 6px #3a3a3a;
+      border-radius: 12px;
+    }
+    
+    .dark .neumorphic-sm {
+      box-shadow: 2px 2px 4px #0f0f0f, -2px -2px 4px #3a3a3a;
+      border-radius: 6px;
+    }
+    
+    .dark .neumorphic-lg {
+      box-shadow: 6px 6px 12px #0f0f0f, -6px -6px 12px #3a3a3a;
+      border-radius: 16px;
+    }
+    
+    .dark .neumorphic-button {
+      box-shadow: 3px 3px 6px #0f0f0f, -3px -3px 6px #3a3a3a;
+      border-radius: 10px;
+    }
+    
+    .dark .neumorphic-card {
+      box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+      border-radius: 12px;
+    }
   }
 }
 
