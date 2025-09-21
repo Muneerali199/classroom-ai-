@@ -115,145 +115,184 @@ export default function ModernTeacherDashboard({
           </div>
         </motion.div>
 
-        {/* Modern Quick Stats */}
+        {/* Enhanced Quick Stats with Better Visual Hierarchy */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+          className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         >
-          <div className="neumorphic-card p-6 group hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
-                <Users className="h-6 w-6" />
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-700">{totalStudents}</div>
-                <div className="text-xs text-gray-500 font-medium">Total Students</div>
-              </div>
+          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
+              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
             </div>
-            <p className="text-sm text-gray-600">
-              Active in your classes
-            </p>
-          </div>
-          
-          <div className="neumorphic-card p-6 group hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
-                <GraduationCap className="h-6 w-6" />
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-700">{studentsWithEmail}</div>
-                <div className="text-xs text-gray-500 font-medium">Complete Profiles</div>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              With email addresses
-            </p>
-          </div>
-          
-          <div className="neumorphic-card p-6 group hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
-                <Settings className="h-6 w-6" />
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-700">{studentsWithEmergencyContact}</div>
-                <div className="text-xs text-gray-500 font-medium">Emergency Contacts</div>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              Safety information on file
-            </p>
-          </div>
-          
-          <div className="neumorphic-card p-6 group hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
-                <BarChart3 className="h-6 w-6" />
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-700">
-                  {students.reduce((sum, s) => sum + s.attendance.length, 0)}
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                  <Users className="h-7 w-7" />
                 </div>
-                <div className="text-xs text-gray-500 font-medium">Attendance Records</div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-gray-700 mb-1">{totalStudents}</div>
+                  <div className="text-sm text-gray-500 font-medium">Total Students</div>
+                </div>
+              </div>
+              <div className="neumorphic-sm-inset p-3 rounded-xl">
+                <p className="text-sm text-gray-600 font-medium">
+                  Active in your classes
+                </p>
               </div>
             </div>
-            <p className="text-sm text-gray-600">
-              Total records tracked
-            </p>
+          </div>
+          
+          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
+              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                  <GraduationCap className="h-7 w-7" />
+                </div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-gray-700 mb-1">{studentsWithEmail}</div>
+                  <div className="text-sm text-gray-500 font-medium">Complete Profiles</div>
+                </div>
+              </div>
+              <div className="neumorphic-sm-inset p-3 rounded-xl">
+                <p className="text-sm text-gray-600 font-medium">
+                  With email addresses
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
+              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                  <Settings className="h-7 w-7" />
+                </div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-gray-700 mb-1">{studentsWithEmergencyContact}</div>
+                  <div className="text-sm text-gray-500 font-medium">Emergency Contacts</div>
+                </div>
+              </div>
+              <div className="neumorphic-sm-inset p-3 rounded-xl">
+                <p className="text-sm text-gray-600 font-medium">
+                  Safety information on file
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
+              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                  <BarChart3 className="h-7 w-7" />
+                </div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-gray-700 mb-1">
+                    {students.reduce((sum, s) => sum + s.attendance.length, 0)}
+                  </div>
+                  <div className="text-sm text-gray-500 font-medium">Attendance Records</div>
+                </div>
+              </div>
+              <div className="neumorphic-sm-inset p-3 rounded-xl">
+                <p className="text-sm text-gray-600 font-medium">
+                  Total records tracked
+                </p>
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Modern Tabs Section */}
+        {/* Enhanced Tabs Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="neumorphic-card p-2"
+          className="neumorphic-card p-6"
         >
           <Tabs defaultValue="attendance" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto p-2 neumorphic-sm-inset rounded-2xl">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto p-3 neumorphic-sm-inset rounded-2xl gap-2">
               <TabsTrigger
                 value="attendance"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <BarChart3 className="h-4 w-4" />
                 <span className="hidden sm:inline">Attendance</span>
                 <span className="sm:hidden">Att.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="subjects"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <GraduationCap className="h-4 w-4" />
                 <span className="hidden sm:inline">Subjects</span>
                 <span className="sm:hidden">Sub.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="rooms"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <Settings className="h-4 w-4" />
                 <span className="hidden sm:inline">Rooms</span>
                 <span className="sm:hidden">Rooms</span>
               </TabsTrigger>
               <TabsTrigger
                 value="students"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">Students</span>
                 <span className="sm:hidden">Stud.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="enrollments"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <UserPlus className="h-4 w-4" />
                 <span className="hidden sm:inline">Enrollments</span>
                 <span className="sm:hidden">Enroll.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tools"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
+                <CreditCard className="h-4 w-4" />
                 <span className="hidden sm:inline">Tools</span>
                 <span className="sm:hidden">Tools</span>
               </TabsTrigger>
             </TabsList>
         
-            <TabsContent value="attendance" className="mt-8 p-6 space-y-8">
+            <TabsContent value="attendance" className="mt-8 space-y-8">
               {/* PIN Session Manager */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="space-y-4"
+                className="space-y-6"
               >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
-                    <Settings className="h-5 w-5" />
+                <div className="neumorphic-sm-inset p-6 rounded-2xl">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="p-3 neumorphic-sm rounded-xl text-gray-600">
+                      <Settings className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-700">PIN Attendance Sessions</h2>
+                      <p className="text-sm text-gray-600">Create and manage attendance sessions with PIN codes</p>
+                    </div>
                   </div>
-                  <h2 className="text-xl font-semibold text-gray-700">PIN Attendance Sessions</h2>
-                </div>
-                <div className="neumorphic-card p-6">
-                  <RealPinSessionManager />
+                  <div className="neumorphic-card p-8">
+                    <RealPinSessionManager />
+                  </div>
                 </div>
               </motion.div>
               
@@ -262,16 +301,21 @@ export default function ModernTeacherDashboard({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="space-y-4"
+                className="space-y-6"
               >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
-                    <BarChart3 className="h-5 w-5" />
+                <div className="neumorphic-sm-inset p-6 rounded-2xl">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="p-3 neumorphic-sm rounded-xl text-gray-600">
+                      <BarChart3 className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-700">Manual Attendance</h2>
+                      <p className="text-sm text-gray-600">Track attendance manually and view detailed reports</p>
+                    </div>
                   </div>
-                  <h2 className="text-xl font-semibold text-gray-700">Manual Attendance</h2>
-                </div>
-                <div className="neumorphic-card p-6">
-                  <DashboardClient initialStudents={students} />
+                  <div className="neumorphic-card p-8">
+                    <DashboardClient initialStudents={students} />
+                  </div>
                 </div>
               </motion.div>
             </TabsContent>
