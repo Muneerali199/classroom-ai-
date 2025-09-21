@@ -152,7 +152,7 @@ export default function ModernStudentDashboard() {
           <CardContent>
             <div className="text-lg font-bold">{studentData?.student_id || 'STU-2025-0001'}</div>
             <p className="text-xs text-muted-foreground">
-              {studentData?.grade_level || '10th Grade'}
+              {studentData?.grade || '10th Grade'}
             </p>
           </CardContent>
         </Card>
@@ -353,11 +353,11 @@ export default function ModernStudentDashboard() {
                 </div>
                 <div>
                   <label className="text-sm font-medium">Grade Level</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.grade_level}</p>
+                  <p className="text-sm text-muted-foreground">{studentData?.grade}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Enrollment Date</label>
-                  <p className="text-sm text-muted-foreground">{studentData?.enrollment_date}</p>
+                  <p className="text-sm text-muted-foreground">{studentData?.created_at ? new Date(studentData.created_at).toLocaleDateString() : 'N/A'}</p>
                 </div>
               </div>
             </CardContent>

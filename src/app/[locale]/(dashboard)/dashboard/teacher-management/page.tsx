@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function TeacherManagementPage() {
   return (
-    <DashboardAuthWrapper requiredRole="teacher">
+    <DashboardAuthWrapper>
       <div className="container mx-auto py-6">
         <TeacherStudentManagement />
       </div>
