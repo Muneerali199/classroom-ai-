@@ -35,30 +35,41 @@ export class RealPinAttendanceService {
 
       const teacherName = user.user_metadata?.displayName || user.email?.split('@')[0] || 'Teacher';
       
-      // Call the database function to start a session
-      const { data, error } = await supabase.rpc('start_pin_session', {
-        course_name: courseName,
-        teacher_id: user.id,
-        teacher_name: teacherName,
-        location: location
-      });
+      // Generate a 6-digit PIN and unique ID
+      const pin = Math.floor(100000 + Math.random() * 900000).toString();
+      const sessionId = crypto.randomUUID();
+      
+      // Insert session directly into attendance_sessions table
+      const { data, error } = await supabase
+        .from('attendance_sessions')
+        .insert({
+          id: sessionId,
+          course_id: courseName, // Using courseName as course_id for now
+          teacher_id: user.id,
+          teacher_name: teacherName,
+          start_time: new Date().toISOString(),
+          end_time: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
+          pin: pin
+        })
+        .select()
+        .single();
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      if (data?.success) {
+      if (data) {
         return { 
           success: true, 
-          pin: data.pin,
+          pin: pin,
           session: {
-            id: data.session_id,
+            id: data.id,
             course_name: courseName,
             teacher_id: user.id,
             teacher_name: teacherName,
-            pin: data.pin,
-            location,
-            start_time: new Date().toISOString(),
+            pin: pin,
+            location: location,
+            start_time: data.start_time,
             is_active: true
           }
         };
@@ -75,11 +86,9 @@ export class RealPinAttendanceService {
       const supabase = getSupabase();
       
       const { error } = await supabase
-        .from('pin_attendance_sessions')
+        .from('attendance_sessions')
         .update({ 
-          is_active: false, 
-          end_time: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          end_time: new Date().toISOString()
         })
         .eq('id', sessionId);
 
@@ -99,13 +108,11 @@ export class RealPinAttendanceService {
       const newPin = Math.floor(1000 + Math.random() * 9000).toString();
       
       const { error } = await supabase
-        .from('pin_attendance_sessions')
+        .from('attendance_sessions')
         .update({ 
-          pin: newPin,
-          updated_at: new Date().toISOString()
+          pin: newPin
         })
-        .eq('id', sessionId)
-        .eq('is_active', true);
+        .eq('id', sessionId);
 
       if (error) {
         return { success: false, error: error.message };
@@ -128,23 +135,48 @@ export class RealPinAttendanceService {
 
       const studentName = user.user_metadata?.displayName || user.email?.split('@')[0] || 'Student';
       
-      // Call the database function to mark attendance
-      const { data, error } = await supabase.rpc('mark_attendance_with_pin', {
-        pin_code: pin,
-        student_id: user.id,
-        student_name: studentName,
-        student_email: user.email
-      });
+      // Find the active session with the given PIN
+      const { data: session, error: sessionError } = await supabase
+        .from('attendance_sessions')
+        .select('*')
+        .eq('pin', pin)
+        .single();
 
-      if (error) {
-        return { success: false, error: error.message };
+      if (sessionError || !session) {
+        return { success: false, error: 'Invalid PIN or session not found' };
       }
 
-      if (data?.success) {
-        return { success: true, message: data.message };
+      // Check if student is already marked for this session
+      const { data: existingRecord, error: checkError } = await supabase
+        .from('session_attendance_records')
+        .select('*')
+        .eq('session_id', session.id)
+        .eq('student_id', user.id)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        return { success: false, error: 'Failed to check existing attendance' };
       }
 
-      return { success: false, error: data?.error || 'Failed to mark attendance' };
+      if (existingRecord) {
+        return { success: false, error: 'You have already marked attendance for this session' };
+      }
+
+      // Mark attendance
+      const { error: insertError } = await supabase
+        .from('session_attendance_records')
+        .insert({
+          id: crypto.randomUUID(),
+          session_id: session.id,
+          student_id: user.id,
+          timestamp: new Date().toISOString()
+        });
+
+      if (insertError) {
+        return { success: false, error: 'Failed to mark attendance' };
+      }
+
+      return { success: true, message: 'Attendance marked successfully' };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }
@@ -155,13 +187,12 @@ export class RealPinAttendanceService {
       const supabase = getSupabase();
       
       const { data, error } = await supabase
-        .from('pin_attendance_sessions')
+        .from('attendance_sessions')
         .select(`
           *,
-          attendee_count:pin_attendance_records(count)
+          attendee_count:session_attendance_records(count)
         `)
         .eq('teacher_id', teacherId)
-        .eq('is_active', true)
         .single();
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
@@ -175,7 +206,14 @@ export class RealPinAttendanceService {
       return { 
         success: true, 
         session: {
-          ...data,
+          id: data.id,
+          course_name: data.course_id, // Using course_id as course_name
+          teacher_id: data.teacher_id,
+          teacher_name: data.teacher_name,
+          pin: data.pin || '',
+          start_time: data.start_time,
+          end_time: data.end_time,
+          is_active: true, // Assuming active if we found it
           attendee_count: data.attendee_count?.[0]?.count || 0
         }
       };
@@ -189,13 +227,12 @@ export class RealPinAttendanceService {
       const supabase = getSupabase();
       
       const { data, error } = await supabase
-        .from('pin_attendance_sessions')
+        .from('attendance_sessions')
         .select(`
           *,
-          attendee_count:pin_attendance_records(count)
+          attendee_count:session_attendance_records(count)
         `)
         .eq('teacher_id', teacherId)
-        .eq('is_active', false)
         .order('start_time', { ascending: false })
         .limit(10);
 
@@ -204,7 +241,14 @@ export class RealPinAttendanceService {
       }
 
       const sessions = data?.map(session => ({
-        ...session,
+        id: session.id,
+        course_name: session.course_id, // Using course_id as course_name
+        teacher_id: session.teacher_id,
+        teacher_name: session.teacher_name,
+        pin: session.pin || '',
+        start_time: session.start_time,
+        end_time: session.end_time,
+        is_active: false, // History sessions are inactive
         attendee_count: session.attendee_count?.[0]?.count || 0
       })) || [];
 
@@ -219,16 +263,25 @@ export class RealPinAttendanceService {
       const supabase = getSupabase();
       
       const { data, error } = await supabase
-        .from('pin_attendance_records')
+        .from('session_attendance_records')
         .select('*')
         .eq('session_id', sessionId)
-        .order('marked_at', { ascending: false });
+        .order('timestamp', { ascending: false });
 
       if (error) {
         return { success: false, error: error.message };
       }
 
-      return { success: true, attendees: data || [] };
+      const attendees = data?.map(record => ({
+        id: record.id,
+        session_id: record.session_id,
+        student_id: record.student_id,
+        student_name: 'Student', // Default name since we don't have it in the record
+        student_email: '', // Default email since we don't have it in the record
+        marked_at: record.timestamp
+      })) || [];
+
+      return { success: true, attendees };
     } catch (error) {
       return { success: false, error: (error as Error).message };
     }

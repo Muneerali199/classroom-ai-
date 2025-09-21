@@ -1,5 +1,5 @@
-import type { Student, AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
-import type { Teacher, AttendanceStatus } from '@/lib/types';
+import type { Student as DatabaseStudent, AttendanceSession, SessionAttendanceRecord, Subject, Room, SubjectStudent, RoomStudent, TeacherSubject, TeacherRoom } from '@/lib/database.types';
+import type { Teacher, AttendanceStatus, Student } from '@/lib/types';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
 import { logger } from './logger';
 
@@ -39,7 +39,7 @@ export async function getStudents(): Promise<Student[]> {
       });
     });
 
-    return studentsData?.map((student) => ({
+    return studentsData?.map((student: DatabaseStudent) => ({
       id: student.id,
       name: student.name,
       email: student.email,

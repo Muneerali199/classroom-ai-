@@ -3,11 +3,12 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = getSupabaseAdmin();
-    const enrollmentId = parseInt(context.params.id);
+    const { id } = await context.params;
+    const enrollmentId = parseInt(id);
 
     if (isNaN(enrollmentId)) {
       return NextResponse.json(

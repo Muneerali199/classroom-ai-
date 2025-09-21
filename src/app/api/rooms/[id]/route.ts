@@ -3,13 +3,14 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = getSupabaseAdmin();
     const body = await request.json();
     const { room_number, capacity, building, floor } = body;
-    const roomId = parseInt(params.id);
+    const { id } = await context.params;
+    const roomId = parseInt(id);
 
     if (isNaN(roomId)) {
       return NextResponse.json(
@@ -65,11 +66,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = getSupabaseAdmin();
-    const roomId = parseInt(params.id);
+    const { id } = await context.params;
+    const roomId = parseInt(id);
 
     if (isNaN(roomId)) {
       return NextResponse.json(
