@@ -171,7 +171,7 @@ export default function RealPinAttendanceStudent() {
                             <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium">
                                 4
                             </div>
-                            <p>You'll get confirmation that your attendance was recorded</p>
+                            <p>You&apos;ll get confirmation that your attendance was recorded</p>
                         </div>
                     </div>
                 </CardContent>

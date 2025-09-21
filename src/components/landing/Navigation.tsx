@@ -1,108 +1,152 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import { Logo } from '@/components/icons';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Button } from '@/components/ui/button';
 
 interface NavigationProps {
   scrollToSection: (id: string) => void;
 }
 
 export default function Navigation({ scrollToSection }: NavigationProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleMenuClick = (section: string) => {
-    scrollToSection(section);
-    setIsMenuOpen(false);
-  };
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'features', label: 'Features' },
+    { id: 'team', label: 'Team' },
+  ];
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="fixed top-0 w-full z-50 bg-white/20 dark:bg-black/20 backdrop-blur-lg border-b border-gray-200/20 dark:border-white/10 transition-all duration-300"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Logo className="w-6 h-6 text-white" />
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="fixed top-0 left-0 right-0 z-50 p-4"
+      >
+        <div 
+          className="max-w-7xl mx-auto flex justify-between items-center p-3 rounded-2xl"
+          style={{
+            background: 'linear-gradient(145deg, #efefef, #d9d9d9)',
+            boxShadow: '8px 8px 16px #c8c8c8, -8px -8px 16px #ffffff'
+          }}
+        >
+          <motion.div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => scrollToSection('home')}
+            whileHover={{ scale: 1.05 }}
+          >
+            <div className="p-2 rounded-lg" style={{
+              background: 'linear-gradient(145deg, #e0e0e0, #c8c8c8)',
+              boxShadow: '4px 4px 8px #b8b8b8, -4px -4px 8px #f8f8f8'
+            }}>
+              <Logo className="w-6 h-6 text-gray-700" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
-              EduTrack
-            </span>
-          </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            {['home', 'about', 'features', 'tech-stack', 'team'].map(
-              (item) => (
-                <button
-                  key={item}
-                  onClick={() => handleMenuClick(item)}
-                  className="capitalize hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium relative group"
-                >
-                  {item.replace('-', ' ')}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
-                </button>
-              )
-            )}
-            <ThemeToggle />
-            <Button variant="ghost" asChild className="hover:bg-blue-50 dark:hover:bg-blue-900/20">
-              <Link href="/login">Login</Link>
-            </Button>
+            <span className="font-bold text-lg text-gray-700">EduTrack</span>
+          </motion.div>
+          <div className="hidden md:flex items-center gap-4">
+            {navItems.map(item => (
+              <motion.button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="px-4 py-2 rounded-lg font-medium text-gray-600"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {item.label}
+              </motion.button>
+            ))}
+            <motion.button
+                onClick={() => window.location.href = '/login'}
+                className="px-4 py-2 rounded-lg font-semibold text-gray-700"
+                style={{
+                    background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+                    boxShadow: '6px 6px 12px #bebebe, -6px -6px 12px #ffffff'
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ 
+                    scale: 0.95,
+                    boxShadow: 'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+                }}
+              >
+                Login
+              </motion.button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <ThemeToggle />
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-gray-900/10 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-900/20 dark:hover:bg-white/20 transition-colors duration-200"
+          <div className="md:hidden">
+            <motion.button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-3 rounded-full"
+              style={{
+                background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+                boxShadow: '6px 6px 12px #bebebe, -6px -6px 12px #ffffff'
+              }}
+              whileTap={{ 
+                scale: 0.9,
+                boxShadow: 'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+              }}
             >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+              {isOpen ? <X className="w-5 h-5 text-gray-600"/> : <Menu className="w-5 h-5 text-gray-600"/>}
+            </motion.button>
           </div>
         </div>
-      </div>
-
+      </motion.nav>
+      
       {/* Mobile Menu */}
-      {isMenuOpen && (
+      {isOpen && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-white/40 dark:bg-black/40 backdrop-blur-lg border-t border-gray-200/20 dark:border-white/10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-40 bg-gray-200/80 backdrop-blur-sm md:hidden"
+            onClick={() => setIsOpen(false)}
         >
-          <div className="px-4 py-2 space-y-2">
-            {['home', 'about', 'features', 'tech-stack', 'team'].map(
-              (item) => (
-                <button
-                  key={item}
-                  onClick={() => handleMenuClick(item)}
-                  className="capitalize block w-full text-left py-3 px-4 rounded-lg hover:bg-gray-900/10 dark:hover:bg-white/10 transition-colors duration-200 font-medium"
-                >
-                  {item.replace('-', ' ')}
-                </button>
-              )
-            )}
-            <div className="border-t border-white/10 pt-2 flex flex-col gap-2">
-              <Button variant="ghost" asChild className="w-full justify-start hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                <Link href="/login">Login</Link>
-              </Button>
-            </div>
-          </div>
+            <motion.div
+                initial={{ y: '-100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '-100%' }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                className="fixed top-24 left-4 right-4 p-6 rounded-2xl"
+                style={{
+                    background: 'linear-gradient(145deg, #efefef, #d9d9d9)',
+                    boxShadow: '8px 8px 16px #c8c8c8, -8px -8px 16px #ffffff'
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex flex-col items-center gap-6">
+                    {navItems.map(item => (
+                        <motion.button
+                            key={item.id}
+                            onClick={() => {
+                                scrollToSection(item.id);
+                                setIsOpen(false);
+                            }}
+                            className="text-xl font-medium text-gray-700"
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            {item.label}
+                        </motion.button>
+                    ))}
+                    <motion.button
+                        onClick={() => window.location.href = '/login'}
+                        className="w-full mt-4 px-4 py-3 rounded-lg font-semibold text-gray-700"
+                        style={{
+                            background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
+                            boxShadow: '6px 6px 12px #bebebe, -6px -6px 12px #ffffff'
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ 
+                            scale: 0.95,
+                            boxShadow: 'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
+                        }}
+                    >
+                        Login
+                    </motion.button>
+                </div>
+            </motion.div>
         </motion.div>
       )}
-    </motion.nav>
+    </>
   );
 }
