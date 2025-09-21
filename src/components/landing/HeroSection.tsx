@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Play, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, Play, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Logo } from '@/components/icons';
 import { benefits } from '@/lib/landing-data'; // Updated import path
@@ -12,14 +12,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ scrollToSection }: HeroSectionProps) {
-  const [scrollYValue, setScrollYValue] = useState(0);
   const [buttonPressed, setButtonPressed] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    const handleScroll = () => setScrollYValue(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleButtonPress = (buttonId: string, isPressed: boolean) => {
     setButtonPressed(prev => ({ ...prev, [buttonId]: isPressed }));

@@ -306,7 +306,7 @@ export default function SubjectManagement({ teacherId }: SubjectManagementProps)
                             <AlertDialogHeader>
                               <AlertDialogTitle>Delete Subject</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to delete "{subject.name}"? This action cannot be undone.
+                                Are you sure you want to delete &ldquo;{subject.name}&rdquo;? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

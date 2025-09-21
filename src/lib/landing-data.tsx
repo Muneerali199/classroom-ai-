@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, Shield, Users, BarChart, BookOpen, Clock } from 'lucide-react';
+import { CheckCircle, Shield, Users, BarChart, BookOpen, Clock, Database, Code, Zap } from 'lucide-react';
 
 export const benefits = [
     { icon: CheckCircle, text: 'No credit card required' },
@@ -101,4 +101,22 @@ export const team = [
             email: 'sarah@example.com',
         },
     }
+];
+
+export const architectureHighlights = [
+    {
+        icon: Database,
+        title: 'Secure Database',
+        description: 'PostgreSQL with encrypted data storage and role-based access control.',
+    },
+    {
+        icon: Code,
+        title: 'Modern Framework',
+        description: 'Built with React and Next.js for optimal performance and scalability.',
+    },
+    {
+        icon: Zap,
+        title: 'Real-time Updates',
+        description: 'Live synchronization across all devices with instant data updates.',
+    },
 ];

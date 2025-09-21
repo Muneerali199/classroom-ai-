@@ -99,7 +99,7 @@ export default function ModernStudentDashboard() {
           Welcome back, {studentData?.name || 'Student'}!
         </h1>
         <p className="text-muted-foreground">
-          Here's what's happening with your studies today.
+          Here&apos;s what&apos;s happening with your studies today.
         </p>
       </div>
 
@@ -172,7 +172,7 @@ export default function ModernStudentDashboard() {
             {/* Today's Schedule */}
             <Card>
               <CardHeader>
-                <CardTitle>Today's Classes</CardTitle>
+                <CardTitle>Today&apos;s Classes</CardTitle>
                 <CardDescription>Your schedule for today</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">

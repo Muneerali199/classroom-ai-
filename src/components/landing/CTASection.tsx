@@ -113,7 +113,7 @@ export default function CTASection() {
           viewport={{ once: true }}
         >
           <p className="text-xl text-gray-600">
-            Contact your institution's dean to get secure access to EduTrack's
+            Contact your institution&apos;s dean to get secure access to EduTrack&apos;s
             comprehensive attendance and student management platform.
           </p>
         </motion.div>

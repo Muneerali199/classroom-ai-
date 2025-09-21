@@ -70,7 +70,7 @@ export default function TestimonialsSection() {
               >
                 <Quote className="w-6 h-6 text-gray-600" />
               </motion.div>
-              <p className="text-gray-600 mb-6 italic">"{testimonial.quote}"</p>
+              <p className="text-gray-600 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
               <div className="flex justify-between items-center">
                 <div>
                   <p className="font-bold text-gray-700">{testimonial.name}</p>
