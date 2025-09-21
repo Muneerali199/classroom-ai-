@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { updateProfileAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, Settings, Bell } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -147,127 +147,173 @@ export default function ProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-4xl">
        {error && (
-        <Alert variant="destructive">
-          <AlertTitle>{t('updateFailed')}</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <div className="neumorphic-concave p-4 rounded-2xl border-l-4 border-red-500">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <h3 className="font-semibold text-red-700 dark:text-red-400">{t('updateFailed')}</h3>
+          </div>
+          <p className="text-sm text-red-600 dark:text-red-300 mt-1">{error}</p>
+        </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-            <Label htmlFor="firstName">{t('firstName')}</Label>
+      
+      {/* Personal Information Section */}
+      <div className="neumorphic-card p-6 space-y-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <User className="h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold neumorphic-text">Personal Information</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="text-sm font-medium neumorphic-text">{t('firstName')}</Label>
             <Input
-            id="firstName"
-            {...register('firstName')}
+              id="firstName"
+              {...register('firstName')}
+              className="neumorphic-input rounded-xl px-4 py-3"
             />
             {errors.firstName && (
-            <p className="text-sm text-destructive">{errors.firstName.message}</p>
+              <p className="text-sm text-red-500">{errors.firstName.message}</p>
             )}
-        </div>
-         <div className="space-y-2">
-            <Label htmlFor="lastName">{t('lastName')}</Label>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="text-sm font-medium neumorphic-text">{t('lastName')}</Label>
             <Input
-            id="lastName"
-            {...register('lastName')}
+              id="lastName"
+              {...register('lastName')}
+              className="neumorphic-input rounded-xl px-4 py-3"
             />
             {errors.lastName && (
-            <p className="text-sm text-destructive">{errors.lastName.message}</p>
+              <p className="text-sm text-red-500">{errors.lastName.message}</p>
             )}
+          </div>
         </div>
-      </div>
-       <div className="space-y-2">
-        <Label htmlFor="title">{t('role')}</Label>
-        <Input
-          id="title"
-          placeholder={t('rolePlaceholder')}
-          {...register('title')}
-        />
-        {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">{t('email')}</Label>
-        <Input
-          id="email"
-          type="email"
-          {...register('email')}
-          disabled
-        />
-        <p className="text-xs text-muted-foreground">
+        
+        <div className="space-y-2">
+          <Label htmlFor="title" className="text-sm font-medium neumorphic-text">{t('role')}</Label>
+          <Input
+            id="title"
+            placeholder={t('rolePlaceholder')}
+            {...register('title')}
+            className="neumorphic-input rounded-xl px-4 py-3"
+          />
+          {errors.title && (
+            <p className="text-sm text-red-500">{errors.title.message}</p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-sm font-medium neumorphic-text">{t('email')}</Label>
+          <Input
+            id="email"
+            type="email"
+            {...register('email')}
+            disabled
+            className="neumorphic-input rounded-xl px-4 py-3 opacity-60"
+          />
+          <p className="text-xs text-gray-500">
             {t('emailCannotBeChanged')}
-        </p>
+          </p>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="bio" className="text-sm font-medium neumorphic-text">{t('aboutMe')}</Label>
+          <Textarea
+            id="bio"
+            placeholder={t('bioPlaceholder')}
+            {...register('bio')}
+            className="neumorphic-input rounded-xl px-4 py-3 min-h-[100px] resize-none"
+          />
+          {errors.bio && (
+            <p className="text-sm text-red-500">{errors.bio.message}</p>
+          )}
+        </div>
       </div>
 
-       <div className="space-y-2">
-        <Label htmlFor="bio">{t('aboutMe')}</Label>
-        <Textarea
-          id="bio"
-          placeholder={t('bioPlaceholder')}
-          {...register('bio')}
-          className="min-h-[100px]"
-        />
-        {errors.bio && (
-          <p className="text-sm text-destructive">{errors.bio.message}</p>
-        )}
-      </div>
-
-       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Preferences Section */}
+      <div className="neumorphic-card p-6 space-y-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <Settings className="h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold neumorphic-text">Preferences</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
-              <Label htmlFor="language">{t('language')}</Label>
-              <Select name="language" defaultValue={locale} onValueChange={onLanguageChange}>
-                <SelectTrigger id="language">
-                    <SelectValue placeholder={t('languagePlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                    {languages.map(lang => (
-                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+            <Label htmlFor="language" className="text-sm font-medium neumorphic-text">{t('language')}</Label>
+            <Select name="language" defaultValue={locale} onValueChange={onLanguageChange}>
+              <SelectTrigger id="language" className="neumorphic-input rounded-xl px-4 py-3">
+                <SelectValue placeholder={t('languagePlaceholder')} />
+              </SelectTrigger>
+              <SelectContent className="neumorphic-card rounded-xl">
+                {languages.map(lang => (
+                  <SelectItem key={lang.value} value={lang.value} className="rounded-lg">{lang.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-           <div className="space-y-2">
-              <Label htmlFor="timezone">{t('timezone')}</Label>
-              <Select name="timezone" defaultValue="America/New_York">
-                <SelectTrigger id="timezone">
-                    <SelectValue placeholder={t('timezonePlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                    {timezones.map(tz => (
-                        <SelectItem key={tz} value={tz}>{tz.replace('_', ' ')}</SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+          <div className="space-y-2">
+            <Label htmlFor="timezone" className="text-sm font-medium neumorphic-text">{t('timezone')}</Label>
+            <Select name="timezone" defaultValue="America/New_York">
+              <SelectTrigger id="timezone" className="neumorphic-input rounded-xl px-4 py-3">
+                <SelectValue placeholder={t('timezonePlaceholder')} />
+              </SelectTrigger>
+              <SelectContent className="neumorphic-card rounded-xl">
+                {timezones.map(tz => (
+                  <SelectItem key={tz} value={tz} className="rounded-lg">{tz.replace('_', ' ')}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-      </div>
-
-      <div className="space-y-4">
-        <Label>{t('communicationPreferences')}</Label>
-        <div className="flex items-center space-x-2">
-          <Checkbox id="emailNotifications" defaultChecked />
-          <label
-            htmlFor="emailNotifications"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-           {t('emailNotifications')}
-          </label>
-        </div>
-         <div className="flex items-center space-x-2">
-          <Checkbox id="pushNotifications" />
-          <label
-            htmlFor="pushNotifications"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-           {t('pushNotifications')}
-          </label>
         </div>
       </div>
 
-      <Button type="submit" disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {t('saveChanges')}
-      </Button>
+      {/* Notifications Section */}
+      <div className="neumorphic-card p-6 space-y-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+            <Bell className="h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold neumorphic-text">{t('communicationPreferences')}</h3>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3 p-4 neumorphic-sm-inset rounded-xl">
+            <Checkbox id="emailNotifications" defaultChecked className="neumorphic-sm rounded" />
+            <label
+              htmlFor="emailNotifications"
+              className="text-sm font-medium neumorphic-text cursor-pointer"
+            >
+              {t('emailNotifications')}
+            </label>
+          </div>
+          <div className="flex items-center space-x-3 p-4 neumorphic-sm-inset rounded-xl">
+            <Checkbox id="pushNotifications" className="neumorphic-sm rounded" />
+            <label
+              htmlFor="pushNotifications"
+              className="text-sm font-medium neumorphic-text cursor-pointer"
+            >
+              {t('pushNotifications')}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-end">
+        <Button 
+          type="submit" 
+          disabled={isPending}
+          className="neumorphic-button neumorphic-hover neumorphic-active px-8 py-3 rounded-xl font-medium"
+        >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {t('saveChanges')}
+        </Button>
+      </div>
     </form>
   );
 }

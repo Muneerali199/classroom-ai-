@@ -196,42 +196,42 @@ export default function ModernTeacherDashboard({
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto p-2 neumorphic-sm-inset rounded-2xl">
               <TabsTrigger
                 value="attendance"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Attendance</span>
                 <span className="sm:hidden">Att.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="subjects"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Subjects</span>
                 <span className="sm:hidden">Sub.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="rooms"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Rooms</span>
                 <span className="sm:hidden">Rooms</span>
               </TabsTrigger>
               <TabsTrigger
                 value="students"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Students</span>
                 <span className="sm:hidden">Stud.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="enrollments"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Enrollments</span>
                 <span className="sm:hidden">Enroll.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tools"
-                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-xl px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium neumorphic-text data-[state=active]:neumorphic-sm data-[state=active]:neumorphic-text data-[state=active]:font-semibold transition-all duration-300 hover:neumorphic-sm"
               >
                 <span className="hidden sm:inline">Tools</span>
                 <span className="sm:hidden">Tools</span>
