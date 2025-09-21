@@ -22,26 +22,30 @@ export default function FeaturesSection() {
         className="text-center mb-16"
       >
         <motion.h2
-          className="text-4xl sm:text-5xl font-bold mb-6"
+          className="text-4xl sm:text-5xl font-bold mb-6 text-gray-700"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <span className="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-            Powerful Features
-          </span>
+          Powerful Features
         </motion.h2>
-        <motion.p
-          className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+        <motion.div
+          className="max-w-3xl mx-auto p-6 rounded-3xl"
+          style={{
+            background: 'linear-gradient(145deg, #efefef, #d9d9d9)',
+            boxShadow: 'inset 6px 6px 12px #c8c8c8, inset -6px -6px 12px #ffffff'
+          }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          Comprehensive tools designed to streamline educational
-          management and enhance learning outcomes.
-        </motion.p>
+          <p className="text-xl text-gray-600">
+            Comprehensive tools designed to streamline educational
+            management and enhance learning outcomes.
+          </p>
+        </motion.div>
       </motion.div>
 
       <motion.div
@@ -54,26 +58,40 @@ export default function FeaturesSection() {
         {features.map((feature, index) => (
           <motion.div
             key={index}
-            className="group p-8 rounded-3xl bg-gradient-to-br from-gray-900/5 to-gray-900/10 dark:from-white/5 dark:to-white/10 backdrop-blur-sm border border-gray-300/20 dark:border-white/10 hover:border-gray-300/40 dark:hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+            className="group p-8 rounded-3xl transition-all duration-300"
+            style={{
+              background: 'linear-gradient(145deg, #efefef, #d9d9d9)',
+              boxShadow: '12px 12px 24px #c8c8c8, -12px -12px 24px #ffffff'
             }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: '16px 16px 32px #c0c0c0, -16px -16px 32px #ffffff'
+            }}
+            whileTap={{ 
+              scale: 0.98,
+              boxShadow: 'inset 8px 8px 16px #c8c8c8, inset -8px -8px 16px #ffffff'
+            }}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
             viewport={{ once: true }}
           >
             <motion.div
-              className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-              whileHover={{ rotate: 10, scale: 1.1 }}
+              className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-gray-600"
+              style={{
+                background: 'linear-gradient(145deg, #e8e8e8, #d2d2d2)',
+                boxShadow: '8px 8px 16px #c0c0c0, -8px -8px 16px #ffffff'
+              }}
+              whileHover={{ 
+                scale: 1.1,
+                boxShadow: 'inset 6px 6px 12px #c0c0c0, inset -6px -6px 12px #ffffff'
+              }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               {feature.icon}
             </motion.div>
             <motion.h3
-              className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 dark:group-hover:from-blue-400 dark:group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300"
+              className="text-xl font-bold text-gray-700 mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -82,7 +100,7 @@ export default function FeaturesSection() {
               {feature.title}
             </motion.h3>
             <motion.p
-              className="text-gray-600 dark:text-gray-300 leading-relaxed"
+              className="text-gray-600 leading-relaxed"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
