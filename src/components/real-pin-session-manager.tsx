@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getSupabase } from '@/lib/supabase';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,23 +35,38 @@ export default function RealPinSessionManager() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   useEffect(() => {
     loadUserAndSession();
   }, []);
 
+  // Realtime: subscribe to attendee changes and session updates for the current session
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (currentSession?.is_active) {
-      // Refresh attendees every 5 seconds for active sessions
-      interval = setInterval(() => {
+    if (!currentSession?.id) return;
+    const supabase = getSupabase();
+
+    const attendeesChannel = supabase
+      .channel(`session-attendees-${currentSession.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_attendance_records', filter: `session_id=eq.${currentSession.id}` }, () => {
         loadAttendees(currentSession.id);
-      }, 5000);
-    }
+      })
+      .subscribe();
+
+    const sessionChannel = supabase
+      .channel(`session-${currentSession.id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'attendance_sessions', filter: `id=eq.${currentSession.id}` }, (payload) => {
+        const updated = payload.new as any;
+        setCurrentSession(prev => prev ? { ...prev, pin: updated.pin ?? prev.pin, end_time: updated.end_time ?? prev.end_time, is_active: !updated.end_time } : prev);
+      })
+      .subscribe();
+
     return () => {
-      if (interval) clearInterval(interval);
+      supabase.removeChannel(attendeesChannel);
+      supabase.removeChannel(sessionChannel);
     };
-  }, [currentSession]);
+  }, [currentSession?.id]);
 
   const loadUserAndSession = async () => {
     try {
@@ -66,25 +83,38 @@ export default function RealPinSessionManager() {
   };
 
   const loadActiveSession = async (teacherId: string) => {
-    const result = await RealPinAttendanceService.getActiveSession(teacherId);
-    if (result.success && result.session) {
-      setCurrentSession(result.session);
-      await loadAttendees(result.session.id);
-    }
+    try {
+      const res = await fetch(`/api/attendance/sessions/active?teacherId=${encodeURIComponent(teacherId)}`);
+      if (!res.ok) { setCurrentSession(null); return; }
+      const session = await res.json();
+      if (session) {
+        setCurrentSession(session);
+        await loadAttendees(session.id);
+      } else {
+        setCurrentSession(null);
+      }
+    } catch { setCurrentSession(null); }
   };
 
   const loadSessionHistory = async (teacherId: string) => {
-    const result = await RealPinAttendanceService.getSessionHistory(teacherId);
-    if (result.success && result.sessions) {
-      setSessionHistory(result.sessions);
-    }
+    try {
+      const params = new URLSearchParams({ teacherId });
+      if (startDate) params.set('start', new Date(startDate).toISOString());
+      if (endDate) params.set('end', new Date(endDate).toISOString());
+      const res = await fetch(`/api/attendance/sessions/history?${params.toString()}`);
+      if (!res.ok) return;
+      const list = await res.json();
+      setSessionHistory(Array.isArray(list) ? list : []);
+    } catch {}
   };
 
   const loadAttendees = async (sessionId: string) => {
-    const result = await RealPinAttendanceService.getSessionAttendees(sessionId);
-    if (result.success && result.attendees) {
-      setAttendees(result.attendees);
-    }
+    try {
+      const res = await fetch(`/api/attendance/sessions/${sessionId}/attendees`);
+      if (!res.ok) return;
+      const list = await res.json();
+      setAttendees(Array.isArray(list) ? list : []);
+    } catch {}
   };
 
   const startSession = async () => {
@@ -221,7 +251,7 @@ export default function RealPinSessionManager() {
                 <Label className="text-sm font-medium">Session PIN</Label>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-3xl font-mono font-bold tracking-widest">
-                    {showPin ? currentSession.pin : '••••'}
+                    {showPin ? currentSession.pin : '•'.repeat(currentSession.pin?.length || 5)}
                   </span>
                   <Button 
                     variant="ghost" 
@@ -265,15 +295,35 @@ export default function RealPinSessionManager() {
               <Label className="text-sm font-medium">
                 Attendees ({attendees.length})
               </Label>
+              <div className="flex justify-end my-2">
+                <Button size="sm" variant="outline" onClick={() => {
+                  const header = 'Name,Email,Marked At\n';
+                  const rows = attendees.map(a => {
+                    const name = (a as any).student_name || '';
+                    const email = (a as any).student_email || '';
+                    const ts = new Date((a as any).marked_at).toISOString();
+                    return [name, email, ts].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+                  }).join('\n');
+                  const csv = header + rows;
+                  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `attendees-${currentSession?.id || 'session'}.csv`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}>Export CSV</Button>
+              </div>
               <div className="mt-2 p-3 bg-muted rounded-lg max-h-40 overflow-y-auto">
                 {attendees.length > 0 ? (
                   <div className="space-y-2">
                     {attendees.map((attendee) => (
                       <div key={attendee.id} className="flex items-center justify-between text-sm">
-                        <span className="font-medium">{attendee.student_name}</span>
-                        <span className="text-muted-foreground">
-                          {formatTime(attendee.marked_at)}
-                        </span>
+                        <div>
+                          <span className="font-medium">{(attendee as any).student_name || 'Student'}</span>
+                          <span className="ml-2 text-xs text-muted-foreground">{(attendee as any).student_email || ''}</span>
+                        </div>
+                        <span className="text-muted-foreground">{formatTime((attendee as any).marked_at)}</span>
                       </div>
                     ))}
                   </div>
@@ -334,6 +384,17 @@ export default function RealPinSessionManager() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <div className="flex flex-wrap items-end gap-3 mb-4">
+              <div>
+                <Label className="text-sm">From</Label>
+                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-sm">To</Label>
+                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              </div>
+              <Button variant="outline" onClick={() => { if (currentUser) loadSessionHistory(currentUser.id); }}>Apply</Button>
+            </div>
             <div className="space-y-3">
               {sessionHistory.map((session) => (
                 <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -352,6 +413,30 @@ export default function RealPinSessionManager() {
                     <p className="text-xs text-muted-foreground mt-1">
                       {formatDuration(session.start_time, session.end_time)}
                     </p>
+                    <div className="mt-2">
+                      <Button size="sm" variant="outline" onClick={async () => {
+                        try {
+                          const res = await fetch(`/api/attendance/sessions/${session.id}/attendees`);
+                          if (!res.ok) return;
+                          const attendees = await res.json();
+                          const header = 'Name,Email,Marked At\n';
+                          const rows = (attendees || []).map((a: any) => {
+                            const name = a.student_name || '';
+                            const email = a.student_email || '';
+                            const ts = new Date(a.marked_at).toISOString();
+                            return [name, email, ts].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+                          }).join('\n');
+                          const csv = header + rows;
+                          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `attendees-${session.id}.csv`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                        } catch {}
+                      }}>Export CSV</Button>
+                    </div>
                   </div>
                 </div>
               ))}
