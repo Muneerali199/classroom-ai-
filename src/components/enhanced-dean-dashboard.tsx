@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getSupabase } from '@/lib/supabase';
+
 import { EnhancedTeacherService } from '@/lib/enhanced-teacher-service';
 import { Teacher } from '@/lib/types';
 import DeanTeacherManagement from './dean-teacher-management';
@@ -98,6 +100,30 @@ export default function EnhancedDeanDashboard({ initialTeachers }: EnhancedDeanD
 
     calculateStats();
   }, [teachers]);
+
+  // Realtime subscriptions: teachers, subjects, meetings, timetables, attendance sessions
+  useEffect(() => {
+    const supabase = getSupabase();
+    const channels = [
+      supabase.channel('rt-dean-teachers').on('postgres_changes', { event: '*', schema: 'public', table: 'teachers' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Teachers Updated', message: 'A teacher record changed', ts: Date.now() } }));
+        refreshData();
+      }).subscribe(),
+      supabase.channel('rt-dean-subjects').on('postgres_changes', { event: '*', schema: 'public', table: 'subjects' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Subjects Updated', message: 'Subject created or updated', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-dean-meetings').on('postgres_changes', { event: '*', schema: 'public', table: 'meetings' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Meetings Updated', message: 'A meeting was scheduled/updated', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-dean-timetables').on('postgres_changes', { event: '*', schema: 'public', table: 'timetables' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Timetable Updated', message: 'A timetable was published', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-dean-attendance').on('postgres_changes', { event: '*', schema: 'public', table: 'attendance_sessions' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Session', message: 'Session opened/updated', ts: Date.now() } }));
+      }).subscribe(),
+    ];
+    return () => { channels.forEach((c) => supabase.removeChannel(c)); };
+  }, []);
 
   const refreshData = async () => {
     try {
