@@ -3,7 +3,8 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "students": "Students",
-    "attendance": "Attendance"
+    "attendance": "Attendance",
+    "assistant": "AI Assistant"
   },
   "ProfilePage": {
     "title": "Profile Settings",
@@ -35,5 +36,51 @@
       "successDescription": "Your profile has been updated successfully.",
       "errorUnknown": "An unexpected error occurred."
     }
+  },
+  "chatbot": {
+    "aiAssistant": "AI Assistant",
+    "welcomeStudent": "Hi! I'm your study and attendance assistant. Ask me about your grades, attendance, or upcoming assignments.",
+    "welcomeTeacher": "Hello! I'm your classroom assistant. I can help with student performance, attendance summaries, and schedules.",
+    "welcomeDean": "Welcome! I can help provide overviews of attendance and academic performance across departments.",
+    "welcomeDefault": "Hello! I'm here to help with academics and attendance. How can I assist you today?",
+    "performanceResponse": "Here's a summary of your recent academic performance.",
+    "attendanceResponse": "Here's your attendance summary and recent streak.",
+    "assignmentResponse": "Here are your assignments and progress.",
+    "scheduleResponse": "Here's your schedule and upcoming classes.",
+    "helpResponse": "You can ask me about performance, attendance, assignments, or schedules.",
+    "defaultResponse": "Got it! I'm processing your request.",
+    "showingPerformance": "Showing your performance and attendance details below.",
+    "showPerformance": "Show my performance",
+    "checkAttendance": "Check my attendance",
+    "viewAssignments": "View assignments",
+    "getHelp": "Get help",
+    "thinking": "Thinking...",
+    "typeOrSpeak": "Type or speak your message...",
+    "voiceInput": "Voice Input",
+    "listening": "Listening...",
+    "speechNotSupported": "Speech recognition is not supported in this browser. Please try Chrome or Edge.",
+    "startListening": "Start",
+    "stopListening": "Stop",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "send": "Send",
+    "characterCount": "Characters"
+  },
+  "performance": {
+    "performanceOverview": "Performance Overview",
+    "academics": "Academics",
+    "attendance": "Attendance",
+    "goals": "Goals",
+    "overallGrade": "Overall Grade",
+    "rankOutOf": "Rank out of",
+    "subjectPerformance": "Subject Performance",
+    "assignments": "Assignments",
+    "overallAttendance": "Overall Attendance",
+    "dayStreak": "Day Streak",
+    "lastAbsent": "Last Absent",
+    "subjectAttendance": "Subject Attendance",
+    "deadline": "Deadline",
+    "progress": "Progress"
   }
 }
