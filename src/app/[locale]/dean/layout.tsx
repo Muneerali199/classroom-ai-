@@ -10,15 +10,16 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, User, Users, Settings, School } from 'lucide-react';
+import { Home, User, Users, Settings, School, Bot } from 'lucide-react';
 import Header from '@/components/header';
 import { Logo } from '@/components/icons';
-import Link from 'next/link';
+import { Link } from '@/routing';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
+import ChatbotMount from '@/components/chatbot-mount';
 
 function DeanSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="neo-bg">
       <SidebarHeader>
         <div className="flex items-center gap-2 p-2">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -31,9 +32,9 @@ function DeanSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
+          <SidebarMenu className="px-2 space-y-2">
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
+              <SidebarMenuButton asChild isActive className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/dean/dashboard">
                   <Home />
                   Dashboard
@@ -41,7 +42,7 @@ function DeanSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="#">
                   <Users />
                   User Management
@@ -49,19 +50,27 @@ function DeanSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
                 <School />
                 Course Management
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
                 <Settings />
                 System Settings
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href={'/dashboard/assistant'}>
+                  <Bot />
+                  AI Assistant
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/dashboard/profile">
                   <User />
                   Profile
@@ -84,9 +93,11 @@ export default function DeanLayout({
     <DashboardAuthWrapper>
       <SidebarProvider>
         <DeanSidebar />
-        <SidebarInset>
+        <SidebarInset className="neo-bg min-h-screen">
           <Header />
           <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+          {/* Floating AI Chatbot for dean dashboard */}
+          <ChatbotMount />
         </SidebarInset>
       </SidebarProvider>
     </DashboardAuthWrapper>
