@@ -35,8 +35,8 @@ export class RealPinAttendanceService {
 
       const teacherName = user.user_metadata?.displayName || user.email?.split('@')[0] || 'Teacher';
       
-      // Generate a 6-digit PIN and unique ID
-      const pin = Math.floor(100000 + Math.random() * 900000).toString();
+      // Generate a 5-digit PIN and unique ID
+      const pin = Math.floor(10000 + Math.random() * 90000).toString();
       const sessionId = crypto.randomUUID();
       
       // Insert session directly into attendance_sessions table
@@ -105,7 +105,7 @@ export class RealPinAttendanceService {
   static async regeneratePin(sessionId: string): Promise<{ success: boolean; pin?: string; error?: string }> {
     try {
       const supabase = getSupabase();
-      const newPin = Math.floor(1000 + Math.random() * 9000).toString();
+      const newPin = Math.floor(10000 + Math.random() * 90000).toString();
       
       const { error } = await supabase
         .from('attendance_sessions')
@@ -135,11 +135,14 @@ export class RealPinAttendanceService {
 
       const studentName = user.user_metadata?.displayName || user.email?.split('@')[0] || 'Student';
       
-      // Find the active session with the given PIN
+      // Find the active session with the given PIN, and only if within active window
+      const nowIso = new Date().toISOString();
       const { data: session, error: sessionError } = await supabase
         .from('attendance_sessions')
-        .select('*')
+        .select('id, start_time, end_time, pin')
         .eq('pin', pin)
+        .lte('start_time', nowIso)
+        .gte('end_time', nowIso)
         .single();
 
       if (sessionError || !session) {
@@ -186,6 +189,7 @@ export class RealPinAttendanceService {
     try {
       const supabase = getSupabase();
       
+      const now = new Date().toISOString();
       const { data, error } = await supabase
         .from('attendance_sessions')
         .select(`
@@ -193,7 +197,11 @@ export class RealPinAttendanceService {
           attendee_count:session_attendance_records(count)
         `)
         .eq('teacher_id', teacherId)
-        .single();
+        .lte('start_time', now)
+        .gte('end_time', now)
+        .order('start_time', { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
         return { success: false, error: error.message };
@@ -272,14 +280,27 @@ export class RealPinAttendanceService {
         return { success: false, error: error.message };
       }
 
-      const attendees = data?.map(record => ({
+      // Enhance with student names/emails by fetching from students using auth_user_id
+      const ids: string[] = Array.from(new Set((data || []).map((r: any) => r.student_id))).filter(Boolean);
+      let studentsByAuth: Record<string, { name?: string; email?: string }> = {};
+      if (ids.length > 0) {
+        const { data: studentsList } = await (supabase as any)
+          .from('students')
+          .select('auth_user_id,name,email')
+          .in('auth_user_id', ids);
+        (studentsList || []).forEach((s: any) => {
+          studentsByAuth[s.auth_user_id] = { name: s.name, email: s.email };
+        });
+      }
+
+      const attendees = (data || []).map((record: any) => ({
         id: record.id,
         session_id: record.session_id,
         student_id: record.student_id,
-        student_name: 'Student', // Default name since we don't have it in the record
-        student_email: '', // Default email since we don't have it in the record
+        student_name: studentsByAuth[record.student_id]?.name || 'Student',
+        student_email: studentsByAuth[record.student_id]?.email || '',
         marked_at: record.timestamp
-      })) || [];
+      }));
 
       return { success: true, attendees };
     } catch (error) {
