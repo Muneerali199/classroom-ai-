@@ -1,3 +1,4 @@
+"use client";
 
 import {
   Sidebar,
@@ -10,15 +11,18 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, User, BookOpen, BarChart3, Hash } from 'lucide-react';
+import { Home, User, BookOpen, BarChart3, Hash, Bot, Calendar as CalendarIcon, Video, FileText } from 'lucide-react';
 import Header from '@/components/header';
 import { Logo } from '@/components/icons';
-import Link from 'next/link';
+import { Link } from '@/routing';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
+import ChatbotMount from '@/components/chatbot-mount';
+import { usePathname } from 'next/navigation';
 
 function StudentSidebar() {
+  const pathname = usePathname();
   return (
-    <Sidebar>
+    <Sidebar className="neo-bg">
       <SidebarHeader>
         <div className="flex items-center gap-2 p-2">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -31,9 +35,10 @@ function StudentSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
+          <SidebarMenu className="px-2 space-y-2">
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/dashboard')}
+                className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/dashboard">
                   <Home />
                   Dashboard
@@ -41,7 +46,7 @@ function StudentSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/pin-attendance')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/pin-attendance">
                   <Hash />
                   Mark Attendance
@@ -49,7 +54,7 @@ function StudentSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/students')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/students">
                   <BookOpen />
                   My Courses
@@ -57,13 +62,47 @@ function StudentSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <BarChart3 />
-                My Attendance
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/attendance')} className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href="/student/attendance">
+                  <BarChart3 />
+                  My Attendance
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/assignments')} className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href="/student/assignments">
+                  <FileText />
+                  Assignments
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/timetable')} className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href="/student/timetable">
+                  <CalendarIcon />
+                  Timetable
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/meetings')} className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href="/student/meetings">
+                  <Video />
+                  Meetings
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/assistant')} className="neo-surface hover:shadow-lg rounded-xl">
+                <Link href={'/student/assistant'}>
+                  <Bot />
+                  AI Assistant
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname?.includes('/student/profile')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/profile">
                   <User />
                   Profile
@@ -86,9 +125,11 @@ export default function StudentLayout({
     <DashboardAuthWrapper>
       <SidebarProvider>
         <StudentSidebar />
-        <SidebarInset>
+        <SidebarInset className="neo-bg min-h-screen">
           <Header />
           <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+          {/* Floating AI Chatbot for student dashboard */}
+          <ChatbotMount />
         </SidebarInset>
       </SidebarProvider>
     </DashboardAuthWrapper>
