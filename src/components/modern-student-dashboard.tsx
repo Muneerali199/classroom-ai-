@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getSupabase } from '@/lib/supabase';
+import { useToast } from '@/hooks/use-toast';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -9,13 +12,24 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { Calendar, Clock, BookOpen, TrendingUp, User, QrCode, Pin } from 'lucide-react';
 import { AuthService } from '@/lib/auth';
-import { getStudents } from '@/lib/data';
+// import { getStudents } from '@/lib/data';
 import type { Student } from '@/lib/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import RealPinAttendanceStudent from '@/components/real-pin-attendance-student';
+import { Subject } from '@/lib/database.types';
 
 export default function ModernStudentDashboard() {
+  const { toast } = useToast();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [studentData, setStudentData] = useState<Student | null>(null);
   const [loading, setLoading] = useState(true);
+  const [liveNote, setLiveNote] = useState<string>('');
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [lastMarked, setLastMarked] = useState<any | null>(null);
+  const [liveActive, setLiveActive] = useState<any | null>(null);
+  const [liveCountdown, setLiveCountdown] = useState<string>("");
 
   useEffect(() => {
     const loadStudentData = async () => {
@@ -24,19 +38,17 @@ export default function ModernStudentDashboard() {
         setCurrentUser(user);
 
         if (user) {
-          // Try to find student data by email or ID
-          const students = await getStudents();
-          const student = students.find(s => 
-            s.email === user.email || 
-            s.id === user.id ||
-            s.auth_user_id === user.id
-          );
-          
-          if (student) {
-            setStudentData(student);
+          // Fetch student's own profile directly (avoid broad table reads under RLS)
+          const supabase = getSupabase();
+          const { data, error } = await (supabase as any)
+            .from('students')
+            .select('*')
+            .eq('auth_user_id', user.id)
+            .single();
+          if (!error && data) {
+            setStudentData(data as any);
           } else {
-            // Student not found - this should not happen in a properly managed system
-            console.warn('Student data not found for authenticated user:', user.id);
+            console.warn('Student profile not found for auth user:', user.id, error?.message);
             setStudentData(null);
           }
         }
@@ -47,8 +59,149 @@ export default function ModernStudentDashboard() {
       }
     };
 
+  const fetchAttendanceChips = async () => {
+    try {
+      const [lastRes, activeRes] = await Promise.all([
+        fetch('/api/attendance/students/me/last'),
+        fetch('/api/attendance/students/me/active')
+      ]);
+      if (lastRes.ok) {
+        const last = await lastRes.json();
+        setLastMarked(last || null);
+      }
+      if (activeRes.ok) {
+        const act = await activeRes.json();
+        setLiveActive(act || null);
+      }
+    } catch {}
+  };
+
     loadStudentData();
+    // Initial fetch for subjects/assignments
+    fetchSubjects();
+    fetchAssignments();
+    fetchAttendanceChips();
   }, []);
+
+  // Countdown for active session end
+  useEffect(() => {
+    if (!liveActive?.end_time) { setLiveCountdown(""); return; }
+    const update = () => {
+      const end = new Date(liveActive.end_time).getTime();
+      const now = Date.now();
+      const diff = Math.max(0, end - now);
+      const m = Math.floor(diff / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setLiveCountdown(`Ends in ${m}m ${s}s`);
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [liveActive?.end_time]);
+
+  const fetchSubjects = async () => {
+    try {
+      const supabase = getSupabase();
+      // Get enrollments for this student
+      const user = await AuthService.getCurrentUser();
+      if (!user) return;
+      const { data: enrollments, error: enrErr } = await supabase
+        .from('subject_enrollments')
+        .select('subject_id')
+        .eq('student_id', user.id);
+      if (enrErr) return;
+      const subjectIds = (enrollments || []).map((e: any) => e.subject_id);
+      if (subjectIds.length === 0) {
+        setSubjects([]);
+        return;
+      }
+      const { data: subs, error: subErr } = await supabase
+        .from('subjects')
+        .select('*')
+        .in('id', subjectIds)
+        .order('name');
+      if (!subErr) setSubjects((subs || []) as Subject[]);
+    } catch {}
+  };
+
+  const fetchAssignments = async () => {
+    try {
+      const res = await fetch('/api/assignments');
+      if (res.ok) {
+        const data = await res.json();
+        setAssignments(Array.isArray(data) ? data : []);
+      }
+    } catch {
+      // Keep fallback mock below if API not available
+      if (assignments.length === 0) {
+        setAssignments([
+          { subject: 'Mathematics', title: 'Algebra Problem Set', dueDate: '2025-01-25', status: 'pending' },
+          { subject: 'English', title: 'Essay on Shakespeare', dueDate: '2025-01-27', status: 'submitted' },
+          { subject: 'Science', title: 'Lab Report', dueDate: '2025-01-30', status: 'pending' },
+        ]);
+      }
+    }
+  };
+
+  // Realtime classroom and attendance notifications
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const supabase = getSupabase();
+
+    const subjectsChannel = supabase
+      .channel('rt-subjects')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'subjects' }, (payload) => {
+        const name = (payload.new as any)?.name || 'New subject';
+        toast({ title: 'New Class Added', description: `${name} is now available.`, duration: 4000 });
+        setLiveNote(`New class: ${name}`);
+        fetchSubjects();
+        // Notify header bell
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'New Class', message: `${name} added`, ts: Date.now() } }));
+      })
+      .subscribe();
+
+    const sessionsChannel = supabase
+      .channel('rt-attendance-sessions')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'attendance_sessions' }, (payload) => {
+        const course = (payload.new as any)?.course_id || 'Class';
+        toast({ title: 'Attendance Open', description: `PIN active for ${course}.`, duration: 4000 });
+        setLiveNote(`Attendance PIN active for ${course}`);
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Open', message: `${course} PIN active`, ts: Date.now() } }));
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'attendance_sessions' }, (payload) => {
+        if ((payload.new as any)?.end_time) {
+          const course = (payload.new as any)?.course_id || 'Class';
+          toast({ title: 'Attendance Closed', description: `${course} session ended.`, duration: 4000 });
+          window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Closed', message: `${course} session ended`, ts: Date.now() } }));
+        }
+      })
+      .subscribe();
+
+    const myAttendanceChannel = supabase
+      .channel(`rt-my-attendance-${currentUser.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'session_attendance_records', filter: `student_id=eq.${currentUser.id}` }, () => {
+        toast({ title: 'Attendance Marked', description: 'Your attendance has been recorded.', duration: 3000 });
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Marked', message: 'You were marked present', ts: Date.now() } }));
+        fetchAttendanceChips();
+      })
+      .subscribe();
+
+    // Optional: assignments realtime if table exists
+    const assignmentsChannel = supabase
+      .channel('rt-assignments')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'assignments' }, () => {
+        fetchAssignments();
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Assignments Updated', message: 'New or updated assignment', ts: Date.now() } }));
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subjectsChannel);
+      supabase.removeChannel(sessionsChannel);
+      supabase.removeChannel(myAttendanceChannel);
+      supabase.removeChannel(assignmentsChannel);
+    };
+  }, [currentUser?.id, toast]);
 
   // Mock attendance data
   const attendanceData = [
@@ -68,20 +221,22 @@ export default function ModernStudentDashboard() {
 
   const attendancePercentage = ((attendanceStats.present + attendanceStats.late) / attendanceStats.total) * 100;
 
-  // Mock upcoming classes
-  const upcomingClasses = [
-    { subject: 'Mathematics', time: '09:00 AM', room: 'Room 101', teacher: 'Ms. Johnson' },
-    { subject: 'English Literature', time: '10:30 AM', room: 'Room 205', teacher: 'Mr. Smith' },
-    { subject: 'Physics', time: '01:00 PM', room: 'Lab 301', teacher: 'Dr. Brown' },
-    { subject: 'History', time: '02:30 PM', room: 'Room 150', teacher: 'Mrs. Davis' },
-  ];
+  // Upcoming classes derived from subjects (fallback to sample if API empty)
+  const upcomingClasses = (subjects && subjects.length > 0)
+    ? subjects.slice(0, 4).map((s: any) => ({
+        subject: s.name || 'Class',
+        time: s.time || '09:00 AM',
+        room: s.room || 'Room 101',
+        teacher: s.teacher || 'Teacher'
+      }))
+    : [
+        { subject: 'Mathematics', time: '09:00 AM', room: 'Room 101', teacher: 'Ms. Johnson' },
+        { subject: 'English Literature', time: '10:30 AM', room: 'Room 205', teacher: 'Mr. Smith' },
+        { subject: 'Physics', time: '01:00 PM', room: 'Lab 301', teacher: 'Dr. Brown' },
+        { subject: 'History', time: '02:30 PM', room: 'Room 150', teacher: 'Mrs. Davis' },
+      ];
 
-  // Mock assignments
-  const assignments = [
-    { subject: 'Mathematics', title: 'Algebra Problem Set', dueDate: '2025-01-25', status: 'pending' },
-    { subject: 'English', title: 'Essay on Shakespeare', dueDate: '2025-01-27', status: 'submitted' },
-    { subject: 'Science', title: 'Lab Report', dueDate: '2025-01-30', status: 'pending' },
-  ];
+  // Assignments now from state (fallback populated in fetchAssignments if API missing)
 
   if (loading) {
     return (
@@ -129,6 +284,23 @@ export default function ModernStudentDashboard() {
           <p className="text-gray-600 mt-2">
             Here&apos;s what&apos;s happening with your studies today.
           </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {lastMarked && (
+              <span className="neumorphic-sm px-3 py-1 rounded-full text-xs text-green-700">
+                Attendance recorded for {lastMarked.course_name} at {new Date(lastMarked.marked_at).toLocaleTimeString()}
+              </span>
+            )}
+            {liveActive && (
+              <span className="neumorphic-sm px-3 py-1 rounded-full text-xs text-blue-700">
+                Live present count: {liveActive.attendee_count}{liveCountdown ? ` • ${liveCountdown}` : ''}
+              </span>
+            )}
+          </div>
+          {liveNote && (
+            <div className="mt-3 text-xs text-gray-600">
+              Live: {liveNote}
+            </div>
+          )}
         </div>
 
         {/* Quick Stats */}
@@ -282,7 +454,10 @@ export default function ModernStudentDashboard() {
                   <QrCode className="h-6 w-6 mb-2 text-gray-600" />
                   <span className="text-sm font-medium text-gray-700">Scan QR Code</span>
                 </button>
-                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
+                <button
+                  className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300"
+                  onClick={() => setIsPinModalOpen(true)}
+                >
                   <Pin className="h-6 w-6 mb-2 text-gray-600" />
                   <span className="text-sm font-medium text-gray-700">Enter PIN</span>
                 </button>
@@ -355,10 +530,15 @@ export default function ModernStudentDashboard() {
                   <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
                     <div>
                       <p className="font-medium text-gray-700">{assignment.title}</p>
-                      <p className="text-sm text-gray-600">{assignment.subject}</p>
+                      <p className="text-sm text-gray-600">{assignment.subject_name || '—'}</p>
+                      {assignment.file_url && (
+                        <a href={assignment.file_url} target="_blank" rel="noreferrer" className="text-xs text-blue-600 underline">
+                          View attachment ({assignment.file_type?.split('/')?.[1] || 'file'})
+                        </a>
+                      )}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-gray-700">Due: {assignment.dueDate}</p>
+                      <p className="text-sm font-medium text-gray-700">Due: {assignment.dueDate || '—'}</p>
                       <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium mt-1 ${
                         assignment.status === 'submitted' ? 'text-green-700' : 'text-yellow-700'
                       }`}>
@@ -404,6 +584,15 @@ export default function ModernStudentDashboard() {
             </div>
           </TabsContent>
         </Tabs>
+        {/* Enter PIN Modal */}
+        <Dialog open={isPinModalOpen} onOpenChange={setIsPinModalOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Enter Attendance PIN</DialogTitle>
+            </DialogHeader>
+            <RealPinAttendanceStudent />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
