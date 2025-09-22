@@ -6,8 +6,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { CheckCircle, XCircle, Hash, Loader2 } from 'lucide-react';
-import { RealPinAttendanceService } from '@/lib/real-pin-attendance';
+import { CheckCircle, XCircle, Hash, Loader2, Copy } from 'lucide-react';
+import { AuthService } from '@/lib/auth';
+// Server route will handle validation and RLS via admin client
 
 export default function RealPinAttendanceStudent() {
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -23,9 +24,9 @@ export default function RealPinAttendanceStudent() {
             return;
         }
 
-        if (pin.length < 4 || pin.length > 4) {
+        if (pin.length < 5 || pin.length > 5) {
             setStatus('error');
-            setMessage('PIN must be exactly 4 digits');
+            setMessage('PIN must be exactly 5 digits');
             return;
         }
 
@@ -33,15 +34,40 @@ export default function RealPinAttendanceStudent() {
         setMessage('');
 
         try {
-            const result = await RealPinAttendanceService.markAttendance(pin.trim());
-            
-            if (result.success) {
+            const user = await AuthService.getCurrentUser();
+            const student_id = user?.id;
+            const student_email = user?.email;
+            if (!student_id) {
+                setStatus('error');
+                setMessage('Please sign in');
+                return;
+            }
+            const res = await fetch('/api/attendance/mark', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: pin.trim(), student_id, student_email })
+            });
+            if (res.ok) {
                 setStatus('success');
-                setMessage(result.message || 'Attendance marked successfully!');
-                setPin(''); // Clear the PIN
+                setMessage('Attendance marked successfully!');
+                setPin('');
+                // Notify header bell
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance', message: 'Marked successfully', ts: Date.now() } }));
+                }
+            } else if (res.status === 409) {
+                setStatus('error');
+                setMessage('You have already marked attendance for this session');
+            } else if (res.status === 400) {
+                const j = await res.json().catch(() => ({}));
+                setStatus('error');
+                setMessage(j.error || 'Invalid or inactive PIN');
+            } else if (res.status === 401) {
+                setStatus('error');
+                setMessage('Please sign in');
             } else {
                 setStatus('error');
-                setMessage(result.error || 'Failed to mark attendance');
+                setMessage('Failed to mark attendance');
             }
         } catch (error) {
             setStatus('error');
@@ -57,7 +83,7 @@ export default function RealPinAttendanceStudent() {
 
     const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.replace(/\D/g, ''); // Only allow digits
-        if (value.length <= 4) {
+        if (value.length <= 5) {
             setPin(value);
             if (status === 'error') {
                 setStatus('idle');
@@ -72,7 +98,7 @@ export default function RealPinAttendanceStudent() {
                 <CardHeader>
                     <CardTitle>PIN Attendance</CardTitle>
                     <CardDescription>
-                        Enter the 4-digit PIN provided by your teacher to mark your attendance.
+                        Enter the 5-digit PIN provided by your teacher to mark your attendance.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -80,19 +106,26 @@ export default function RealPinAttendanceStudent() {
                         <form onSubmit={handleSubmitPin} className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="pin">Attendance PIN</Label>
-                                <Input
-                                    id="pin"
-                                    type="text"
-                                    inputMode="numeric"
-                                    pattern="[0-9]*"
-                                    value={pin}
-                                    onChange={handlePinChange}
-                                    placeholder="Enter 4-digit PIN"
-                                    className="text-center text-2xl font-mono tracking-wider"
-                                    maxLength={4}
-                                    disabled={status === 'submitting'}
-                                    autoComplete="off"
-                                />
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                      id="pin"
+                                      type="text"
+                                      inputMode="numeric"
+                                      pattern="[0-9]*"
+                                      value={pin}
+                                      onChange={handlePinChange}
+                                      placeholder="Enter 5-digit PIN"
+                                      className="text-center text-2xl font-mono tracking-wider"
+                                      maxLength={5}
+                                      disabled={status === 'submitting'}
+                                      autoComplete="off"
+                                  />
+                                  <Button type="button" variant="outline" size="icon" disabled={!pin} onClick={async () => {
+                                    try { await navigator.clipboard.writeText(pin); } catch {}
+                                  }} title="Copy PIN">
+                                    <Copy className="w-4 h-4"/>
+                                  </Button>
+                                </div>
                                 <p className="text-sm text-muted-foreground text-center">
                                     Ask your teacher for the current session PIN
                                 </p>
@@ -101,7 +134,7 @@ export default function RealPinAttendanceStudent() {
                             <Button 
                                 type="submit" 
                                 className="w-full" 
-                                disabled={status === 'submitting' || pin.length !== 4}
+                                disabled={status === 'submitting' || pin.length !== 5}
                             >
                                 {status === 'submitting' ? (
                                     <>
@@ -159,7 +192,7 @@ export default function RealPinAttendanceStudent() {
                             <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium">
                                 2
                             </div>
-                            <p>They will share a 4-digit PIN with the class</p>
+                            <p>They will share a 5-digit PIN with the class</p>
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium">
