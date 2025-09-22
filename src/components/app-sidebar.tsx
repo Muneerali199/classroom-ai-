@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useTranslations } from 'next-intl';
-import { Home, User, Users, BarChart3 } from 'lucide-react';
+import { Home, User, Users, BarChart3, Bot } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import Link from 'next/link';
 import { usePathname } from '@/routing';
@@ -28,7 +28,7 @@ export default function AppSidebar() {
   const isActive = (path: string) => pathname === getRelativePath(path);
 
   return (
-    <Sidebar className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-xl border-r border-gray-200 dark:border-gray-800">
+    <Sidebar className="neo-bg backdrop-blur-lg border-r border-gray-200 dark:border-gray-800">
       {/* Header */}
       <SidebarHeader>
         <div className="flex items-center gap-3 p-4">
@@ -37,8 +37,8 @@ export default function AppSidebar() {
             <Logo className="w-7 h-7 text-white" />
           </div>
 
-          {/* EduTrack gradient text */}
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent tracking-tight">
+          {/* EduTrack text */}
+          <span className="text-2xl font-extrabold tracking-tight text-gray-800">
             EduTrack
           </span>
         </div>
@@ -61,6 +61,26 @@ export default function AppSidebar() {
                 icon: <Users />,
               },
               {
+                href: '/dashboard/assignments',
+                label: 'Assignments',
+                icon: <BarChart3 />,
+              },
+              {
+                href: '/dashboard/timetable',
+                label: 'Timetable',
+                icon: <BarChart3 />,
+              },
+              {
+                href: '/dashboard/meetings',
+                label: 'Meetings',
+                icon: <Users />,
+              },
+              {
+                href: '/dashboard/assistant',
+                label: t('assistant'),
+                icon: <Bot />,
+              },
+              {
                 href: '/dashboard/profile',
                 label: t('profile'),
                 icon: <User />,
@@ -70,12 +90,7 @@ export default function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   isActive={isActive(href)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all duration-200
-                    ${
-                      isActive(href)
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                        : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 text-gray-700 dark:text-gray-300'
-                    }`}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 text-gray-700 dark:text-gray-300 neo-surface hover:shadow-lg ${isActive(href) ? 'ring-2 ring-blue-400' : ''}`}
                 >
                   <Link href={href} className="flex items-center gap-3">
                     <span className="w-5 h-5">{icon}</span>
