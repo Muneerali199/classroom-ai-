@@ -66,6 +66,8 @@ export function useAuth() {
     const isTeacherDashboard = pathname.startsWith('/dashboard') || pathname.startsWith(`/${localePrefix}/dashboard`);
     const isDeanDashboard = pathname.startsWith('/dean') || pathname.startsWith(`/${localePrefix}/dean`);
     const isStudentDashboard = pathname.startsWith('/student') || pathname.startsWith(`/${localePrefix}/student`);
+    const isAssistantPage = pathname.startsWith('/assistant') || pathname.startsWith(`/${localePrefix}/assistant`);
+    const isDashboardAssistantPage = pathname.startsWith('/dashboard/assistant') || pathname.startsWith(`/${localePrefix}/dashboard/assistant`);
 
     if (user) {
       const { role } = user as UserWithRole;
@@ -77,9 +79,12 @@ export function useAuth() {
         else router.push('/dashboard'); // Default to teacher dashboard
       } else {
         // Prevent users from accessing dashboards of other roles
-        if (role === 'teacher' && !isTeacherDashboard) router.push('/dashboard');
-        if (role === 'dean' && !isDeanDashboard) router.push('/dean/dashboard');
-        if (role === 'student' && !isStudentDashboard) router.push('/student/dashboard');
+        // Allow common pages like the AI Assistant for all roles
+        if (!isAssistantPage && !isDashboardAssistantPage) {
+          if (role === 'teacher' && !isTeacherDashboard) router.push('/dashboard');
+          if (role === 'dean' && !isDeanDashboard) router.push('/dean/dashboard');
+          if (role === 'student' && !isStudentDashboard) router.push('/student/dashboard');
+        }
       }
 
     } else {
