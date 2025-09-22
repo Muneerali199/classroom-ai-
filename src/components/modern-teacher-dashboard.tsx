@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
 import type { Student } from '@/lib/types';
@@ -18,6 +18,8 @@ import RealPinSessionManager from '@/components/real-pin-session-manager';
 import SubjectManagement from '@/components/subject-management';
 import RoomManagement from '@/components/room-management';
 import EnrollmentManagement from '@/components/enrollment-management';
+import PerformanceCharts from '@/components/performance-charts';
+import { getSupabase } from '@/lib/supabase';
 
 interface ModernTeacherDashboardProps {
   initialStudents: Student[];
@@ -28,6 +30,7 @@ export default function ModernTeacherDashboard({
 }: ModernTeacherDashboardProps) {
   const { user } = useAuth();
   const [students, setStudents] = useState<Student[]>(initialStudents);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleStudentDeleted = (deletedStudentId: string) => {
     setStudents(prevStudents => 
@@ -58,6 +61,100 @@ export default function ModernTeacherDashboard({
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(s.created_at) > weekAgo;
   }).length;
+
+  // Build performance analytics from real attendance data
+  const buildWeeklyGradeTrend = () => {
+    // Last 8 weeks (W1 oldest ... W8 latest)
+    const now = new Date();
+    const weeks: { weekStart: Date; label: string }[] = [];
+    for (let i = 7; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i * 7);
+      const label = `W${8 - i}`;
+      weeks.push({ weekStart: d, label });
+    }
+
+    return weeks.map(({ weekStart, label }, idx) => {
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 7);
+
+      let total = 0;
+      let present = 0;
+      students.forEach((s) => {
+        (s.attendance || []).forEach((a) => {
+          const ad = new Date(a.date);
+          if (ad >= weekStart && ad < weekEnd) {
+            total += 1;
+            if (a.status === 'Present') present += 1;
+          }
+        });
+      });
+
+      const rate = total > 0 ? Math.round((present / total) * 100) : (idx > 0 ? 0 : 0);
+      return { week: label, grade: rate };
+    });
+  };
+
+  const buildMonthlyAttendance = () => {
+    // Last 6 calendar months including current
+    const months: { key: string; label: string; start: Date; end: Date }[] = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const start = new Date(d.getFullYear(), d.getMonth(), 1);
+      const end = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+      const label = d.toLocaleString(undefined, { month: 'short' });
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      months.push({ key, label, start, end });
+    }
+
+    return months.map(({ label, start, end }) => {
+      let present = 0;
+      let total = 0;
+      students.forEach((s) => {
+        (s.attendance || []).forEach((a) => {
+          const ad = new Date(a.date);
+          if (ad >= start && ad < end) {
+            total += 1;
+            if (a.status === 'Present') present += 1;
+          }
+        });
+      });
+      return { month: label, present, total };
+    });
+  };
+
+  const gradeTrend = buildWeeklyGradeTrend();
+  const monthlyAttendance = buildMonthlyAttendance();
+
+  // Realtime: subjects, assignments, timetables, meetings, attendance
+  useEffect(() => {
+    const supabase = getSupabase();
+    const channels = [
+      supabase.channel('rt-teacher-subjects').on('postgres_changes', { event: '*', schema: 'public', table: 'subjects' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Subjects Updated', message: 'A subject was added or updated', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-teacher-assignments').on('postgres_changes', { event: '*', schema: 'public', table: 'assignments' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Assignments Updated', message: 'An assignment changed', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-teacher-timetables').on('postgres_changes', { event: '*', schema: 'public', table: 'timetables' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Timetable Updated', message: 'A timetable was published', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-teacher-meetings').on('postgres_changes', { event: '*', schema: 'public', table: 'meetings' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Meetings Updated', message: 'A meeting was created or changed', ts: Date.now() } }));
+      }).subscribe(),
+      supabase.channel('rt-teacher-attendance-sessions').on('postgres_changes', { event: '*', schema: 'public', table: 'attendance_sessions' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Sessions', message: 'Attendance session updated', ts: Date.now() } }));
+        setRefreshKey((k) => k + 1);
+      }).subscribe(),
+      supabase.channel('rt-teacher-attendance-records').on('postgres_changes', { event: '*', schema: 'public', table: 'session_attendance_records' }, () => {
+        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance Recorded', message: 'A student attendance record changed', ts: Date.now() } }));
+        setRefreshKey((k) => k + 1);
+      }).subscribe(),
+    ];
+
+    return () => { channels.forEach((c) => supabase.removeChannel(c)); };
+  }, []);
 
   return (
     <div className="min-h-screen text-gray-700" style={{
@@ -211,6 +308,20 @@ export default function ModernTeacherDashboard({
               </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* Performance Analytics - Charts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="neumorphic-card p-6"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-700">Performance Analytics</h2>
+            <span className="text-xs text-gray-500">Demo data</span>
+          </div>
+          <PerformanceCharts gradeData={gradeTrend} attendanceData={monthlyAttendance} />
         </motion.div>
 
         {/* Enhanced Tabs Section */}
