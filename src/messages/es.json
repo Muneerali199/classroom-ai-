@@ -3,7 +3,8 @@
     "dashboard": "Tablero",
     "profile": "Perfil",
     "students": "Estudiantes",
-    "attendance": "Asistencia"
+    "attendance": "Asistencia",
+    "assistant": "Asistente IA"
   },
   "ProfilePage": {
     "title": "Configuración de perfil",
@@ -35,5 +36,51 @@
       "successDescription": "Tu perfil ha sido actualizado exitosamente.",
       "errorUnknown": "Ocurrió un error inesperado."
     }
+  },
+  "chatbot": {
+    "aiAssistant": "Asistente de IA",
+    "welcomeStudent": "¡Hola! Soy tu asistente de estudio y asistencia. Pregúntame sobre tus calificaciones, asistencia o próximas tareas.",
+    "welcomeTeacher": "¡Hola! Soy tu asistente de aula. Puedo ayudar con el rendimiento de los estudiantes, resúmenes de asistencia y horarios.",
+    "welcomeDean": "¡Bienvenido! Puedo ayudar con vistas generales de asistencia y rendimiento académico entre departamentos.",
+    "welcomeDefault": "¡Hola! Estoy aquí para ayudarte con lo académico y la asistencia. ¿Cómo puedo ayudarte hoy?",
+    "performanceResponse": "Aquí tienes un resumen de tu rendimiento académico reciente.",
+    "attendanceResponse": "Aquí está tu resumen de asistencia y tu racha reciente.",
+    "assignmentResponse": "Aquí están tus tareas y progreso.",
+    "scheduleResponse": "Aquí está tu horario y las próximas clases.",
+    "helpResponse": "Puedes preguntarme sobre rendimiento, asistencia, tareas u horarios.",
+    "defaultResponse": "¡Entendido! Estoy procesando tu solicitud.",
+    "showingPerformance": "Mostrando tus detalles de rendimiento y asistencia abajo.",
+    "showPerformance": "Mostrar mi rendimiento",
+    "checkAttendance": "Revisar mi asistencia",
+    "viewAssignments": "Ver tareas",
+    "getHelp": "Obtener ayuda",
+    "thinking": "Pensando...",
+    "typeOrSpeak": "Escribe o habla tu mensaje...",
+    "voiceInput": "Entrada de voz",
+    "listening": "Escuchando...",
+    "speechNotSupported": "El reconocimiento de voz no es compatible en este navegador. Prueba con Chrome o Edge.",
+    "startListening": "Iniciar",
+    "stopListening": "Detener",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "send": "Enviar",
+    "characterCount": "Caracteres"
+  },
+  "performance": {
+    "performanceOverview": "Resumen de rendimiento",
+    "academics": "Académico",
+    "attendance": "Asistencia",
+    "goals": "Metas",
+    "overallGrade": "Calificación general",
+    "rankOutOf": "Puesto de",
+    "subjectPerformance": "Rendimiento por materia",
+    "assignments": "Tareas",
+    "overallAttendance": "Asistencia general",
+    "dayStreak": "Racha de días",
+    "lastAbsent": "Última inasistencia",
+    "subjectAttendance": "Asistencia por materia",
+    "deadline": "Fecha límite",
+    "progress": "Progreso"
   }
 }
