@@ -22,6 +22,9 @@ export default function TeacherAssignmentsPanel() {
   const [subjects, setSubjects] = useState<Array<{ id: string; name: string }>>([]);
   const [listLoading, setListLoading] = useState(true);
   const [subjectFilter, setSubjectFilter] = useState<string>("");
+  const [showCustomSubject, setShowCustomSubject] = useState(false);
+  const [customSubjectName, setCustomSubjectName] = useState("");
+  const [creatingSubject, setCreatingSubject] = useState(false);
 
   const fetchAssignments = async () => {
     try {
@@ -33,15 +36,45 @@ export default function TeacherAssignmentsPanel() {
     finally { setListLoading(false); }
   };
 
+  const fetchSubjects = async () => {
+    try {
+      const { data } = await (getSupabase() as any).from('subjects').select('id,name').order('name');
+      setSubjects(data || []);
+    } catch {}
+  };
+
+  const createCustomSubject = async () => {
+    if (!customSubjectName.trim()) return;
+    
+    try {
+      setCreatingSubject(true);
+      const supabase = getSupabase();
+      const { data, error } = await (supabase as any)
+        .from('subjects')
+        .insert({ 
+          name: customSubjectName.trim(),
+          id: crypto.randomUUID()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      await fetchSubjects();
+      setSubjectId(data.id);
+      setCustomSubjectName("");
+      setShowCustomSubject(false);
+      toast({ title: "Subject created", description: `${customSubjectName} has been added` });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+      setCreatingSubject(false);
+    }
+  };
+
   useEffect(() => {
     fetchAssignments();
-    // subjects dropdown
-    (async () => {
-      try {
-        const { data } = await (getSupabase() as any).from('subjects').select('id,name').order('name');
-        setSubjects(data || []);
-      } catch {}
-    })();
+    fetchSubjects();
     const supabase = getSupabase();
     const ch = supabase
       .channel("rt-assignments-panel")
@@ -62,23 +95,82 @@ export default function TeacherAssignmentsPanel() {
     }
     try {
       setLoading(true);
+      
+      // Handle recommended subjects (create them if they don't exist)
+      let finalSubjectId = subjectId;
+      const recommendedSubjects: Record<string, string> = {
+        'math': 'Mathematics',
+        'english': 'English',
+        'science': 'Science', 
+        'history': 'History',
+        'physics': 'Physics',
+        'chemistry': 'Chemistry',
+        'biology': 'Biology',
+        'computer': 'Computer Science'
+      };
+      
+      if (recommendedSubjects[subjectId]) {
+        // Check if subject already exists
+        const existingSubject = subjects.find(s => s.name === recommendedSubjects[subjectId]);
+        if (existingSubject) {
+          finalSubjectId = existingSubject.id;
+        } else {
+          // Create the recommended subject
+          const supabase = getSupabase();
+          const newSubjectId = crypto.randomUUID();
+          const { error } = await (supabase as any)
+            .from('subjects')
+            .insert({ 
+              id: newSubjectId,
+              name: recommendedSubjects[subjectId]
+            });
+          
+          if (!error) {
+            finalSubjectId = newSubjectId;
+            await fetchSubjects(); // Refresh subjects list
+          }
+        }
+      }
+      
       const fd = new FormData();
       fd.append("title", title);
       if (description) fd.append("description", description);
       if (dueDate) fd.append("due_date", dueDate);
-      if (subjectId) fd.append("subject_id", subjectId);
+      if (finalSubjectId) fd.append("subject_id", finalSubjectId);
       if (file) fd.append("file", file);
       const res = await fetch("/api/assignments", { method: "POST", body: fd });
       if (!res.ok) {
         const j = await res.json();
         throw new Error(j.error || "Failed to create assignment");
       }
+      
+      const assignmentData = await res.json();
+      
+      // Send notifications to students
+      try {
+        const subjectName = subjects.find(s => s.id === finalSubjectId)?.name || 
+                           recommendedSubjects[subjectId] || '';
+        
+        await fetch("/api/assignments/notifications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            assignment_id: assignmentData.id,
+            title: title,
+            subject_name: subjectName
+          })
+        });
+      } catch (notifError) {
+        console.error('Failed to send notifications:', notifError);
+        // Don't fail the main operation
+      }
+      
       setTitle("");
       setDescription("");
       setDueDate("");
       setSubjectId("");
       setFile(null);
-      toast({ title: "Assignment created" });
+      toast({ title: "Assignment created", description: "Students have been notified" });
     } catch (e: any) {
       toast({ title: "Error", description: e.message, variant: "destructive" });
     } finally {
@@ -108,14 +200,69 @@ export default function TeacherAssignmentsPanel() {
             </div>
             <div className="space-y-2">
               <Label>Subject</Label>
-              <select className="w-full border rounded-md h-9 px-2"
-                      value={subjectId}
-                      onChange={(e) => setSubjectId(e.target.value)}>
-                <option value="">Select subject</option>
-                {subjects.map(s => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
-                ))}
-              </select>
+              {!showCustomSubject ? (
+                <div className="space-y-2">
+                  <select className="w-full border rounded-md h-9 px-2"
+                          value={subjectId}
+                          onChange={(e) => setSubjectId(e.target.value)}>
+                    <option value="">Select subject</option>
+                    <optgroup label="Your Subjects">
+                      {subjects.map(s => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Recommended Subjects">
+                      <option value="math">Mathematics</option>
+                      <option value="english">English</option>
+                      <option value="science">Science</option>
+                      <option value="history">History</option>
+                      <option value="physics">Physics</option>
+                      <option value="chemistry">Chemistry</option>
+                      <option value="biology">Biology</option>
+                      <option value="computer">Computer Science</option>
+                    </optgroup>
+                  </select>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setShowCustomSubject(true)}
+                    className="w-full"
+                  >
+                    + Create New Subject
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Input
+                    value={customSubjectName}
+                    onChange={(e) => setCustomSubjectName(e.target.value)}
+                    placeholder="Enter subject name (e.g., Advanced Physics)"
+                    onKeyDown={(e) => e.key === 'Enter' && createCustomSubject()}
+                  />
+                  <div className="flex gap-2">
+                    <Button 
+                      type="button" 
+                      size="sm" 
+                      onClick={createCustomSubject}
+                      disabled={!customSubjectName.trim() || creatingSubject}
+                    >
+                      {creatingSubject ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create"}
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        setShowCustomSubject(false);
+                        setCustomSubjectName("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label>Attachment (image/PDF/any)</Label>
