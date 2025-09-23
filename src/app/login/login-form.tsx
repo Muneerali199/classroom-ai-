@@ -165,7 +165,10 @@ export default function LoginForm() {
             Select Your Role
           </Label>
           <Select onValueChange={(value) => setValue('role', value as 'student' | 'teacher' | 'dean')}>
-            <SelectTrigger className="w-full neumorphic-input rounded-xl h-12 px-4 text-gray-700">
+            <SelectTrigger 
+              className="w-full neumorphic-input rounded-xl h-12 px-4 text-gray-700"
+              suppressHydrationWarning
+            >
               <SelectValue placeholder="Choose your role" />
             </SelectTrigger>
             <SelectContent className="neumorphic-card rounded-2xl border-0">
