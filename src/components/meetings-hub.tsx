@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar, Video, Loader2, Filter } from "lucide-react";
+import { Calendar, Video, Loader2, Filter, PlusCircle } from "lucide-react";
 
 interface Meeting { id: string; title: string; description?: string; start_time: string; subject_id?: string; room_url: string; }
 
@@ -27,6 +27,21 @@ export default function MeetingsHub({ viewOnly = false }: { viewOnly?: boolean }
   const [subjects, setSubjects] = useState<Array<{ id: string; name: string }>>([]);
   const [filterSubject, setFilterSubject] = useState<string>("");
   const [filterSoon, setFilterSoon] = useState<boolean>(false);
+  const [showCustomSubject, setShowCustomSubject] = useState(false);
+  const [customSubjectName, setCustomSubjectName] = useState("");
+  const [creatingSubject, setCreatingSubject] = useState(false);
+
+  // Recommended subjects for meetings
+  const recommendedSubjects = {
+    'math': 'Mathematics',
+    'physics': 'Physics', 
+    'chemistry': 'Chemistry',
+    'biology': 'Biology',
+    'english': 'English Literature',
+    'history': 'History',
+    'cs': 'Computer Science',
+    'business': 'Business Studies'
+  };
 
   const supabase = useMemo(() => getSupabase(), []);
 
@@ -41,15 +56,45 @@ export default function MeetingsHub({ viewOnly = false }: { viewOnly?: boolean }
     finally { setListLoading(false); }
   };
 
+  const fetchSubjects = async () => {
+    try {
+      const { data } = await (getSupabase() as any).from('subjects').select('id,name').order('name');
+      setSubjects(data || []);
+    } catch {}
+  };
+
+  const createCustomSubject = async () => {
+    if (!customSubjectName.trim()) return;
+    
+    try {
+      setCreatingSubject(true);
+      const supabase = getSupabase();
+      const { data, error } = await (supabase as any)
+        .from('subjects')
+        .insert({ 
+          name: customSubjectName.trim(),
+          id: crypto.randomUUID()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      await fetchSubjects();
+      setSubjectId(data.id);
+      setCustomSubjectName("");
+      setShowCustomSubject(false);
+      toast({ title: "Subject created", description: `${customSubjectName} has been added` });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+      setCreatingSubject(false);
+    }
+  };
+
   useEffect(() => {
     fetchMeetings();
-    // load subjects for dropdowns
-    (async () => {
-      try {
-        const { data } = await (getSupabase() as any).from('subjects').select('id,name').order('name');
-        setSubjects(data || []);
-      } catch {}
-    })();
+    fetchSubjects();
     const ch = supabase
       .channel('rt-meetings')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'meetings' }, () => {
