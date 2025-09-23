@@ -93,23 +93,49 @@ export default function AIChatbot({
 
   const generateAIResponse = async (userMessage: string): Promise<string> => {
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: userMessage,
-          userRole,
-          userId,
-          locale
-        })
+      // Use the AI configuration system for real AI responses
+      const { callAI } = await import('@/lib/ai-config');
+      
+      // Create context-aware prompt based on user role
+      const contextPrompt = `You are an AI assistant for a classroom management system. 
+User Role: ${userRole}
+User Message: ${userMessage}
+
+Please provide a helpful, educational response. If the user is:
+- A student: Help with learning, assignments, attendance questions
+- A teacher: Assist with class management, student insights, grading
+- A dean: Provide administrative insights, curriculum guidance
+
+Keep responses concise and actionable. Use a friendly, professional tone.`;
+
+      const aiResponse = await callAI('general', contextPrompt, {
+        maxTokens: 500,
+        temperature: 0.7
       });
-      if (!res.ok) throw new Error('Network error');
-      const data = await res.json();
-      return (data.text as string) || t('defaultResponse');
-    } catch (e) {
-      return t('defaultResponse');
+
+      return aiResponse || t('defaultResponse');
+    } catch (error) {
+      console.error('AI Response Error:', error);
+      // Fallback to API route if direct AI call fails
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: userMessage,
+            userRole,
+            userId,
+            locale
+          })
+        });
+        if (!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        return (data.text as string) || t('defaultResponse');
+      } catch (e) {
+        return t('defaultResponse');
+      }
     }
   };
 
