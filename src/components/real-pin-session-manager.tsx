@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { getSupabase } from '@/lib/supabase';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Play, 
   Square, 
@@ -37,6 +38,7 @@ export default function RealPinSessionManager() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     loadUserAndSession();
@@ -49,7 +51,8 @@ export default function RealPinSessionManager() {
 
     const attendeesChannel = supabase
       .channel(`session-attendees-${currentSession.id}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_attendance_records', filter: `session_id=eq.${currentSession.id}` }, () => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_attendance_records', filter: `session_id=eq.${currentSession.id}` }, (payload) => {
+        console.log('🔔 Real-time: Attendance record changed', payload);
         loadAttendees(currentSession.id);
       })
       .subscribe();
@@ -110,11 +113,18 @@ export default function RealPinSessionManager() {
 
   const loadAttendees = async (sessionId: string) => {
     try {
+      console.log('📋 Loading attendees for session:', sessionId);
       const res = await fetch(`/api/attendance/sessions/${sessionId}/attendees`);
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.error('❌ Failed to load attendees:', res.status);
+        return;
+      }
       const list = await res.json();
+      console.log('✅ Loaded attendees:', list);
       setAttendees(Array.isArray(list) ? list : []);
-    } catch {}
+    } catch (error) {
+      console.error('❌ Error loading attendees:', error);
+    }
   };
 
   const startSession = async () => {
@@ -126,18 +136,35 @@ export default function RealPinSessionManager() {
     setLoading(true);
     setError(null);
 
-    const result = await RealPinAttendanceService.startSession(courseName.trim(), location.trim() || undefined);
-    
-    if (result.success && result.session) {
-      setCurrentSession(result.session);
-      setAttendees([]);
-      setCourseName('');
-      setLocation('');
-      if (currentUser) {
-        await loadSessionHistory(currentUser.id);
+    try {
+      const res = await fetch('/api/attendance/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          course_name: courseName.trim(), 
+          location: location.trim() || undefined,
+          teacher_id: currentUser?.id 
+        })
+      });
+
+      if (res.ok) {
+        const session = await res.json();
+        setCurrentSession(session);
+        setAttendees([]);
+        setCourseName('');
+        setLocation('');
+        setShowSuccessModal(true);
+        // Load attendees for the new session (should be empty initially)
+        await loadAttendees(session.id);
+        if (currentUser) {
+          await loadSessionHistory(currentUser.id);
+        }
+      } else {
+        const error = await res.json().catch(() => ({ error: 'Failed to start session' }));
+        setError(error.error || 'Failed to start session');
       }
-    } else {
-      setError(result.error || 'Failed to start session');
+    } catch (error) {
+      setError('Failed to start session');
     }
     
     setLoading(false);
@@ -147,16 +174,24 @@ export default function RealPinSessionManager() {
     if (!currentSession) return;
 
     setLoading(true);
-    const result = await RealPinAttendanceService.endSession(currentSession.id);
     
-    if (result.success) {
-      setCurrentSession(null);
-      setAttendees([]);
-      if (currentUser) {
-        await loadSessionHistory(currentUser.id);
+    try {
+      const res = await fetch(`/api/attendance/sessions/${currentSession.id}/end`, {
+        method: 'POST'
+      });
+
+      if (res.ok) {
+        setCurrentSession(null);
+        setAttendees([]);
+        if (currentUser) {
+          await loadSessionHistory(currentUser.id);
+        }
+      } else {
+        const error = await res.json().catch(() => ({ error: 'Failed to end session' }));
+        setError(error.error || 'Failed to end session');
       }
-    } else {
-      setError(result.error || 'Failed to end session');
+    } catch (error) {
+      setError('Failed to end session');
     }
     
     setLoading(false);
@@ -166,12 +201,21 @@ export default function RealPinSessionManager() {
     if (!currentSession) return;
 
     setLoading(true);
-    const result = await RealPinAttendanceService.regeneratePin(currentSession.id);
     
-    if (result.success && result.pin) {
-      setCurrentSession({ ...currentSession, pin: result.pin });
-    } else {
-      setError(result.error || 'Failed to regenerate PIN');
+    try {
+      const res = await fetch(`/api/attendance/sessions/${currentSession.id}/regenerate`, {
+        method: 'POST'
+      });
+
+      if (res.ok) {
+        const { pin } = await res.json();
+        setCurrentSession({ ...currentSession, pin });
+      } else {
+        const error = await res.json().catch(() => ({ error: 'Failed to regenerate PIN' }));
+        setError(error.error || 'Failed to regenerate PIN');
+      }
+    } catch (error) {
+      setError('Failed to regenerate PIN');
     }
     
     setLoading(false);
@@ -267,8 +311,18 @@ export default function RealPinSessionManager() {
                     onClick={copyPin}
                     disabled={loading}
                     className={copySuccess ? 'text-green-600' : ''}
+                    title="Copy PIN"
                   >
                     {copySuccess ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={copyPin}
+                    disabled={loading}
+                    className={copySuccess ? 'text-green-600 border-green-600' : ''}
+                  >
+                    {copySuccess ? 'Copied!' : 'Copy PIN'}
                   </Button>
                 </div>
               </div>
@@ -401,7 +455,7 @@ export default function RealPinSessionManager() {
                   <div>
                     <p className="font-medium">{session.course_name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {formatTime(session.start_time)} - {session.end_time ? formatTime(session.end_time) : 'Ongoing'}
+                      {new Date(session.start_time).toLocaleDateString()} • {formatTime(session.start_time)} - {session.end_time ? formatTime(session.end_time) : 'Ongoing'}
                       {session.location && ` • ${session.location}`}
                     </p>
                   </div>
@@ -444,6 +498,32 @@ export default function RealPinSessionManager() {
           </CardContent>
         </Card>
       )}
+
+      {/* Success Modal with Confetti */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-green-700 flex items-center justify-center gap-2">
+              <CheckCircle className="w-6 h-6" />
+              Session Started!
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-6">
+            <div className="text-6xl mb-4">🎉</div>
+            <p className="text-lg font-medium text-gray-800 mb-2">Success!</p>
+            <p className="text-sm text-gray-600 mb-2">Your attendance session has been created.</p>
+            {currentSession && (
+              <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                <p className="text-sm text-gray-600">Session PIN:</p>
+                <p className="text-2xl font-mono font-bold text-blue-600">{currentSession.pin}</p>
+              </div>
+            )}
+            <Button onClick={() => setShowSuccessModal(false)} className="w-full">
+              Continue
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
