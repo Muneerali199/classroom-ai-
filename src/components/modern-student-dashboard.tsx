@@ -16,6 +16,8 @@ import { AuthService } from '@/lib/auth';
 import type { Student } from '@/lib/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import RealPinAttendanceStudent from '@/components/real-pin-attendance-student';
+import AILectureSummarizer from '@/components/ai-lecture-summarizer';
+import AIResourceRecommender from '@/components/ai-resource-recommender';
 import { Subject } from '@/lib/database.types';
 
 export default function ModernStudentDashboard() {
@@ -30,6 +32,8 @@ export default function ModernStudentDashboard() {
   const [lastMarked, setLastMarked] = useState<any | null>(null);
   const [liveActive, setLiveActive] = useState<any | null>(null);
   const [liveCountdown, setLiveCountdown] = useState<string>("");
+  const [liveProgress, setLiveProgress] = useState<number>(0);
+  const [attendanceStats, setAttendanceStats] = useState<any>(null);
 
   useEffect(() => {
     const loadStudentData = async () => {
@@ -76,11 +80,37 @@ export default function ModernStudentDashboard() {
     } catch {}
   };
 
+  const fetchAttendanceStats = async () => {
+    try {
+      const user = await AuthService.getCurrentUser();
+      if (!user) return;
+      
+      // First get the actual student record ID
+      const supabase = getSupabase();
+      const { data: student } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', user.id)
+        .maybeSingle();
+      
+      if (!student) return;
+      
+      const res = await fetch(`/api/attendance/students/${student.id}/stats`);
+      if (res.ok) {
+        const stats = await res.json();
+        setAttendanceStats(stats);
+      }
+    } catch (error) {
+      console.error('Error fetching attendance stats:', error);
+    }
+  };
+
     loadStudentData();
     // Initial fetch for subjects/assignments
     fetchSubjects();
     fetchAssignments();
     fetchAttendanceChips();
+    fetchAttendanceStats();
   }, []);
 
   // Countdown for active session end
@@ -88,16 +118,21 @@ export default function ModernStudentDashboard() {
     if (!liveActive?.end_time) { setLiveCountdown(""); return; }
     const update = () => {
       const end = new Date(liveActive.end_time).getTime();
+      const start = new Date(liveActive.start_time).getTime();
       const now = Date.now();
       const diff = Math.max(0, end - now);
+      const total = end - start;
+      const elapsed = now - start;
+      const progress = Math.min(100, Math.max(0, (elapsed / total) * 100));
       const m = Math.floor(diff / 60000);
       const s = Math.floor((diff % 60000) / 1000);
       setLiveCountdown(`Ends in ${m}m ${s}s`);
+      setLiveProgress(progress);
     };
     update();
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
-  }, [liveActive?.end_time]);
+  }, [liveActive?.end_time, liveActive?.start_time]);
 
   const fetchSubjects = async () => {
     try {
@@ -189,9 +224,24 @@ export default function ModernStudentDashboard() {
     // Optional: assignments realtime if table exists
     const assignmentsChannel = supabase
       .channel('rt-assignments')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'assignments' }, () => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'assignments' }, (payload) => {
+        const newAssignment = payload.new as any;
         fetchAssignments();
-        window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Assignments Updated', message: 'New or updated assignment', ts: Date.now() } }));
+        toast({ 
+          title: 'New Assignment!', 
+          description: `${newAssignment.title} has been published`, 
+          duration: 5000 
+        });
+        window.dispatchEvent(new CustomEvent('notify', { 
+          detail: { 
+            title: 'New Assignment', 
+            message: newAssignment.title, 
+            ts: Date.now() 
+          } 
+        }));
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'assignments' }, () => {
+        fetchAssignments();
       })
       .subscribe();
 
@@ -203,23 +253,17 @@ export default function ModernStudentDashboard() {
     };
   }, [currentUser?.id, toast]);
 
-  // Mock attendance data
-  const attendanceData = [
-    { date: '2025-01-20', status: 'Present', subject: 'Mathematics' },
-    { date: '2025-01-19', status: 'Present', subject: 'English' },
-    { date: '2025-01-18', status: 'Late', subject: 'Science' },
-    { date: '2025-01-17', status: 'Present', subject: 'History' },
-    { date: '2025-01-16', status: 'Present', subject: 'Mathematics' },
-  ];
-
-  const attendanceStats = {
-    present: attendanceData.filter(a => a.status === 'Present').length,
-    late: attendanceData.filter(a => a.status === 'Late').length,
-    absent: attendanceData.filter(a => a.status === 'Absent').length,
-    total: attendanceData.length,
+  // Real attendance data from API
+  const attendanceData = attendanceStats?.recentSessions || [];
+  
+  const attendanceStatsCalculated = {
+    present: attendanceStats?.totalSessions || 0,
+    late: 0, // We don't track late status yet
+    absent: 0, // We don't track absent status yet
+    total: attendanceStats?.totalSessions || 0,
   };
 
-  const attendancePercentage = ((attendanceStats.present + attendanceStats.late) / attendanceStats.total) * 100;
+  const attendancePercentage = attendanceStatsCalculated.total > 0 ? 100 : 0; // 100% since we only track present
 
   // Upcoming classes derived from subjects (fallback to sample if API empty)
   const upcomingClasses = (subjects && subjects.length > 0)
@@ -291,9 +335,15 @@ export default function ModernStudentDashboard() {
               </span>
             )}
             {liveActive && (
-              <span className="neumorphic-sm px-3 py-1 rounded-full text-xs text-blue-700">
-                Live present count: {liveActive.attendee_count}{liveCountdown ? ` • ${liveCountdown}` : ''}
-              </span>
+              <div className="neumorphic-sm px-3 py-1 rounded-full text-xs text-blue-700 relative overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-blue-200/30 transition-all duration-1000 ease-linear" 
+                  style={{ width: `${liveProgress}%` }}
+                />
+                <span className="relative z-10">
+                  Live present count: {liveActive.attendee_count}{liveCountdown ? ` • ${liveCountdown}` : ''}
+                </span>
+              </div>
             )}
           </div>
           {liveNote && (
@@ -383,6 +433,12 @@ export default function ModernStudentDashboard() {
                 Assignments
               </TabsTrigger>
               <TabsTrigger 
+                value="ai-tools" 
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+              >
+                AI Tools
+              </TabsTrigger>
+              <TabsTrigger 
                 value="profile" 
                 className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
               >
@@ -470,26 +526,59 @@ export default function ModernStudentDashboard() {
           </TabsContent>
 
           <TabsContent value="attendance" className="space-y-4">
+            {/* Attendance Graph */}
+            <div className="neumorphic-card p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-700">Attendance Trend (Last 30 Days)</h3>
+                <p className="text-sm text-gray-600">Your daily attendance pattern</p>
+              </div>
+              <div className="h-48 flex items-end justify-between gap-1 px-2">
+                {(attendanceStats?.last30Days || []).map((day: any, index: number) => (
+                  <div key={index} className="flex flex-col items-center flex-1">
+                    <div 
+                      className={`w-full rounded-t transition-all duration-300 ${
+                        day.count > 0 ? 'bg-green-400' : 'bg-gray-200'
+                      }`}
+                      style={{ 
+                        height: `${Math.max(8, (day.count / Math.max(1, Math.max(...(attendanceStats?.last30Days || []).map((d: any) => d.count)))) * 120)}px` 
+                      }}
+                      title={`${day.label}: ${day.count} session${day.count !== 1 ? 's' : ''}`}
+                    />
+                    <span className="text-xs text-gray-500 mt-1 transform -rotate-45 origin-left">
+                      {day.label.split(' ')[1]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {attendanceStats?.totalSessions === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No attendance data yet. Mark your first attendance to see the graph!</p>
+                </div>
+              )}
+            </div>
+
             <div className="neumorphic-card p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Attendance History</h3>
                 <p className="text-sm text-gray-600">Complete record of your attendance</p>
               </div>
               <div className="space-y-3">
-                {attendanceData.map((record, index) => (
+                {attendanceData.map((record: any, index: number) => (
                   <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-700">{record.subject}</p>
-                      <p className="text-sm text-gray-600">{record.date}</p>
+                      <p className="font-medium text-gray-700">{record.course || 'Class'}</p>
+                      <p className="text-sm text-gray-600">{record.date} • {record.time}</p>
                     </div>
-                    <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium ${
-                      record.status === 'Present' ? 'text-green-700' :
-                      record.status === 'Late' ? 'text-yellow-700' : 'text-red-700'
-                    }`}>
-                      {record.status}
+                    <div className="neumorphic-sm px-3 py-1 rounded-full text-xs font-medium text-green-700">
+                      Present
                     </div>
                   </div>
                 ))}
+                {attendanceData.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No attendance records yet. Mark your first attendance!</p>
+                  </div>
+                )}
               </div>
             </div>
           </TabsContent>
@@ -526,28 +615,47 @@ export default function ModernStudentDashboard() {
                 <p className="text-sm text-gray-600">Track your homework and projects</p>
               </div>
               <div className="space-y-3">
-                {assignments.map((assignment, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
-                    <div>
+                {assignments.map((assignment: any, index: number) => (
+                  <div key={assignment.id || index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                    <div className="flex-1">
                       <p className="font-medium text-gray-700">{assignment.title}</p>
-                      <p className="text-sm text-gray-600">{assignment.subject_name || '—'}</p>
+                      <p className="text-sm text-gray-600">{assignment.subject_name || assignment.subject || 'General'}</p>
+                      {assignment.description && (
+                        <p className="text-xs text-gray-500 mt-1">{assignment.description}</p>
+                      )}
                       {assignment.file_url && (
-                        <a href={assignment.file_url} target="_blank" rel="noreferrer" className="text-xs text-blue-600 underline">
-                          View attachment ({assignment.file_type?.split('/')?.[1] || 'file'})
+                        <a href={assignment.file_url} target="_blank" rel="noreferrer" className="text-xs text-blue-600 underline mt-1 inline-block">
+                          📎 View attachment
                         </a>
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-gray-700">Due: {assignment.dueDate || '—'}</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Due: {assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : assignment.dueDate || 'No due date'}
+                      </p>
                       <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium mt-1 ${
-                        assignment.status === 'submitted' ? 'text-green-700' : 'text-yellow-700'
+                        assignment.status === 'submitted' ? 'text-green-700' : 'text-orange-700'
                       }`}>
-                        {assignment.status}
+                        {assignment.status || 'Assigned'}
                       </div>
                     </div>
                   </div>
                 ))}
+                {assignments.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    <BookOpen className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>No assignments yet</p>
+                    <p className="text-xs">New assignments will appear here</p>
+                  </div>
+                )}
               </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="ai-tools" className="space-y-4">
+            <div className="grid gap-6">
+              <AILectureSummarizer />
+              <AIResourceRecommender />
             </div>
           </TabsContent>
 
