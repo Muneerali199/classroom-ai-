@@ -7,10 +7,11 @@ import TeacherIdGenerator from '@/components/teacher-id-generator';
 import EnhancedTeacherForm from '@/components/enhanced-teacher-form';
 import TeacherListManager from '@/components/teacher-list-manager';
 import TeacherAttendanceManager from '@/components/teacher-attendance-manager';
+import DeanDashboard from '@/components/dean-dashboard';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings, Calendar, Shield } from 'lucide-react';
+import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings, Calendar, Shield, Brain } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface ModernDeanDashboardProps {
@@ -172,12 +173,17 @@ export default function ModernDeanDashboard({
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="teachers" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
           <TabsTrigger value="teachers">Teacher Management</TabsTrigger>
           <TabsTrigger value="attendance">Attendance Tracking</TabsTrigger>
           <TabsTrigger value="tools">Tools & Reports</TabsTrigger>
           <TabsTrigger value="system">System Overview</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="analytics" className="mt-6">
+          <DeanDashboard />
+        </TabsContent>
         
         <TabsContent value="teachers" className="mt-6">
           <div className="space-y-6">
