@@ -8,12 +8,14 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { CheckCircle, XCircle, Hash, Loader2, Copy } from 'lucide-react';
 import { AuthService } from '@/lib/auth';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 // Server route will handle validation and RLS via admin client
 
 export default function RealPinAttendanceStudent() {
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
     const [pin, setPin] = useState('');
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const handleSubmitPin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,6 +53,7 @@ export default function RealPinAttendanceStudent() {
                 setStatus('success');
                 setMessage('Attendance marked successfully!');
                 setPin('');
+                setShowSuccessModal(true);
                 // Notify header bell
                 if (typeof window !== 'undefined') {
                     window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Attendance', message: 'Marked successfully', ts: Date.now() } }));
@@ -79,6 +82,7 @@ export default function RealPinAttendanceStudent() {
         setStatus('idle');
         setMessage('');
         setPin('');
+        setShowSuccessModal(false);
     };
 
     const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,6 +213,26 @@ export default function RealPinAttendanceStudent() {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* Success Modal with Confetti */}
+            <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="text-center text-green-700 flex items-center justify-center gap-2">
+                            <CheckCircle className="w-6 h-6" />
+                            Attendance Marked!
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="text-center py-6">
+                        <div className="text-6xl mb-4">🎉</div>
+                        <p className="text-lg font-medium text-gray-800 mb-2">Success!</p>
+                        <p className="text-sm text-gray-600 mb-4">Your attendance has been recorded successfully.</p>
+                        <Button onClick={() => setShowSuccessModal(false)} className="w-full">
+                            Continue
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
