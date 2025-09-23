@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin, getSupabase } from '@/lib/supabase';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const sessionId = params.id;
+    const { id: sessionId } = await params;
     if (!sessionId) return NextResponse.json({ error: 'session id required' }, { status: 400 });
 
     const supabase = supabaseAdmin || getSupabase();
@@ -15,15 +15,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    const ids: string[] = Array.from(new Set((recs || []).map((r: any) => r.student_id))).filter(Boolean);
-    let studentsByAuth: Record<string, { name?: string; email?: string }> = {};
+    const ids: string[] = Array.from(new Set((recs || []).map((r: any) => r.student_id))).filter(Boolean) as string[];
+    let studentsById: Record<string, { name?: string; email?: string }> = {};
     if (ids.length > 0) {
       const { data: studentsList } = await (supabase as any)
         .from('students')
-        .select('auth_user_id,name,email')
-        .in('auth_user_id', ids);
+        .select('id,name,email')
+        .in('id', ids);
       (studentsList || []).forEach((s: any) => {
-        studentsByAuth[s.auth_user_id] = { name: s.name, email: s.email };
+        studentsById[s.id] = { name: s.name, email: s.email };
       });
     }
 
@@ -31,8 +31,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       id: record.id,
       session_id: record.session_id,
       student_id: record.student_id,
-      student_name: studentsByAuth[record.student_id]?.name || 'Student',
-      student_email: studentsByAuth[record.student_id]?.email || '',
+      student_name: studentsById[record.student_id]?.name || 'Student',
+      student_email: studentsById[record.student_id]?.email || '',
       marked_at: record.timestamp,
     }));
 
