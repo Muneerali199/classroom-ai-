@@ -44,7 +44,7 @@ export default function WorkingPinSessionManager() {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const generatePin = () => {
-    return Math.floor(1000 + Math.random() * 9000).toString();
+    return Math.floor(10000 + Math.random() * 90000).toString();
   };
 
   const startSession = () => {
@@ -162,7 +162,7 @@ export default function WorkingPinSessionManager() {
                 <Label className="text-sm font-medium">Session PIN</Label>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-3xl font-mono font-bold tracking-widest">
-                    {showPin ? currentSession.pin : '••••'}
+                    {showPin ? currentSession.pin : '•'.repeat(currentSession.pin?.length || 5)}
                   </span>
                   <Button 
                     variant="ghost" 
