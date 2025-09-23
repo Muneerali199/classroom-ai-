@@ -12,13 +12,17 @@ import StudentListManager from '@/components/student-list-manager';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings } from 'lucide-react';
+import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings, Brain } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import RealPinSessionManager from '@/components/real-pin-session-manager';
 import SubjectManagement from '@/components/subject-management';
 import RoomManagement from '@/components/room-management';
 import EnrollmentManagement from '@/components/enrollment-management';
 import PerformanceCharts from '@/components/performance-charts';
+import AIStudentInsights from '@/components/ai-student-insights';
+import AISmartAttendance from '@/components/ai-smart-attendance';
+import AIGradingAssistant from '@/components/ai-grading-assistant';
+import AISettings from '@/components/ai-settings';
 import { getSupabase } from '@/lib/supabase';
 
 interface ModernTeacherDashboardProps {
@@ -332,7 +336,7 @@ export default function ModernTeacherDashboard({
           className="neumorphic-card p-6"
         >
           <Tabs defaultValue="attendance" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto p-3 neumorphic-sm-inset rounded-2xl gap-2">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-9 h-auto p-3 neumorphic-sm-inset rounded-2xl gap-2">
               <TabsTrigger
                 value="attendance"
                 className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
@@ -350,12 +354,20 @@ export default function ModernTeacherDashboard({
                 <span className="sm:hidden">Sub.</span>
               </TabsTrigger>
               <TabsTrigger
-                value="rooms"
+                value="ai-settings"
                 className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
               >
                 <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Rooms</span>
-                <span className="sm:hidden">Rooms</span>
+                <span className="hidden sm:inline">AI Settings</span>
+                <span className="sm:hidden">AI</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="tools"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Tools</span>
+                <span className="sm:hidden">Tools</span>
               </TabsTrigger>
               <TabsTrigger
                 value="students"
@@ -372,6 +384,30 @@ export default function ModernTeacherDashboard({
                 <UserPlus className="h-4 w-4" />
                 <span className="hidden sm:inline">Enrollments</span>
                 <span className="sm:hidden">Enroll.</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="ai-attendance"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+              >
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">Smart Attendance</span>
+                <span className="sm:hidden">Smart</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="ai-grading"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+              >
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Grading</span>
+                <span className="sm:hidden">Grade</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="ai-insights"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+              >
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Insights</span>
+                <span className="sm:hidden">AI</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tools"
@@ -531,6 +567,22 @@ export default function ModernTeacherDashboard({
               </motion.div>
             </TabsContent>
         
+            <TabsContent value="ai-attendance" className="mt-8 space-y-8">
+              <AISmartAttendance />
+            </TabsContent>
+
+            <TabsContent value="ai-grading" className="mt-8 space-y-8">
+              <AIGradingAssistant />
+            </TabsContent>
+
+            <TabsContent value="ai-insights" className="mt-8 space-y-8">
+              <AIStudentInsights />
+            </TabsContent>
+
+            <TabsContent value="ai-settings" className="mt-8 space-y-8">
+              <AISettings />
+            </TabsContent>
+
             <TabsContent value="tools" className="mt-8 p-6 space-y-8">
               {/* ID Generator Section */}
               <motion.div
