@@ -1,28 +1,57 @@
-# EduTrack - Smart Attendance & Activity Management System
+# 🎓 ClassroomAI - Complete AI-Powered Education Management System
 
 <div align="center">
 
-![EduTrack Banner](https://placehold.co/1200x400/4F46E5/FFFFFF?text=EduTrack+-+Smart+Attendance+%26+Activity+Management&font=montserrat)
+![ClassroomAI Banner](https://placehold.co/1200x400/4F46E5/FFFFFF?text=ClassroomAI+-+AI+Powered+Education+Management&font=montserrat)
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Latest-green?style=for-the-badge&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-FF6B6B?style=for-the-badge&logo=openai)](https://openai.com/)
 [![License](https://img.shields.io/github/license/Muneerali199/classroom-ai-?style=for-the-badge)](LICENSE)
 
 </div>
 
-## 📚 Overview
+## 🚀 Overview
 
-EduTrack is a cutting-edge, mobile-first platform designed for educational institutions to manage curriculum activities, monitor student progress, and track attendance seamlessly with real-time analytics. Built with modern web technologies and AI-powered insights, it offers a comprehensive solution for educational management.
+**ClassroomAI** is a revolutionary, AI-first educational management platform that transforms how institutions handle teaching, learning, and administration. With cutting-edge artificial intelligence integrated into every aspect, it provides intelligent insights, automated grading, smart attendance tracking, and personalized learning recommendations for the complete educational ecosystem.
 
 ### 🎯 Key Benefits
 
-- **📊 Real-time Analytics** - Instant insights into student attendance patterns
-- **📱 Mobile-First Design** - Responsive interface for all devices
-- **🔒 Controlled Access** - Secure, role-based authentication system
-- **🤖 AI-Powered Insights** - Automated summaries and trend analysis
-- **⏱️ Quick Setup** - Deploy in minutes with Supabase integration
+- **🤖 AI-First Approach** - Every feature powered by artificial intelligence
+- **📊 Smart Analytics** - Predictive insights and automated recommendations
+- **🎯 Personalized Learning** - AI-driven resource recommendations for students
+- **⚡ Automated Grading** - AI evaluates assignments, detects plagiarism, provides feedback
+- **👁️ Smart Attendance** - Face recognition, anomaly detection, pattern analysis
+- **📈 Predictive Insights** - Early warning systems and intervention suggestions
+- **🔍 Curriculum Intelligence** - AI analyzes industry trends to identify curriculum gaps
+- **📱 Mobile-First Design** - Responsive interface optimized for all devices
+- **🔒 Enterprise Security** - Role-based access with advanced authentication
+- **⏱️ Instant Deployment** - Production-ready with comprehensive documentation
+
+---
+
+## 🤖 AI-Powered Features
+
+### 🎓 For Students
+- **📚 AI Lecture Summarizer** - Converts lectures into concise summaries and revision notes
+- **🎯 Smart Resource Recommender** - Personalized learning materials based on performance weaknesses
+- **📊 Performance Analytics** - AI tracks progress and suggests improvement areas
+- **🔔 Intelligent Notifications** - Smart alerts for assignments, meetings, and deadlines
+
+### 👨‍🏫 For Teachers  
+- **🎯 Smart Attendance AI** - Face recognition, QR scanning, anomaly detection
+- **📝 AI Grading Assistant** - Automated evaluation of MCQs, coding tasks, and essays
+- **🧠 Student Insights** - AI identifies struggling students and suggests interventions
+- **📈 Progress Tracking** - Real-time analytics on class performance and engagement
+- **⚡ Workload Optimizer** - AI helps plan lectures, assignments, and exam schedules
+
+### 🏛️ For Deans/Administrators
+- **🔍 Curriculum Gap Detector** - AI analyzes industry trends vs current curriculum
+- **⚠️ Early Warning System** - Identifies courses falling behind and at-risk students
+- **📊 Department Analytics** - Institution-wide performance monitoring and insights
+- **🎯 Strategic Planning** - AI-driven recommendations for curriculum improvements
 
 ---
 
@@ -123,18 +152,84 @@ erDiagram
 
 ---
 
-## ✨ Key Features
+## ✨ Detailed Features
 
-### 📱 Smart Attendance Tracking
+### 🤖 AI Smart Attendance System
 
-- **QR Code System** - Quick scanning for attendance
-- **Real-time Sync** - Instant updates across devices
-- **AI Summaries** - Automated attendance analysis
+#### **Face Recognition Technology**
+- **Real-time Detection** - Automatically identifies students using advanced facial recognition
+- **Confidence Scoring** - AI provides confidence percentages for each identification
+- **Anomaly Detection** - Flags suspicious activities like proxy attendance
+- **Pattern Analysis** - Identifies attendance trends and behavioral patterns
+
+#### **QR Code Integration** 
+- **Personal QR Codes** - Each student gets a unique, secure QR code
+- **Instant Scanning** - Quick attendance marking via mobile devices
+- **Offline Support** - Works without internet connection, syncs when online
+- **Anti-fraud Measures** - Time-based tokens prevent QR code sharing
+
+#### **AI Anomaly Detection**
+```
+🚨 Detected Anomalies:
+• Facial recognition confidence below 45% - Possible proxy attendance
+• Attendance dropped from 95% to 60% in 2 weeks - Intervention needed
+• Unusual timing pattern - Student arriving 15 minutes later than usual
+```
 
 <div align="center">
-  <img src="https://placehold.co/600x300/4F46E5/FFFFFF?text=Attendance+Dashboard&font=montserrat" alt="Attendance Dashboard" width="45%" />
-  <img src="https://placehold.co/600x300/4F46E5/FFFFFF?text=QR+Code+Scanner&font=montserrat" alt="QR Code Scanner" width="45%" />
+  <img src="https://placehold.co/600x300/4F46E5/FFFFFF?text=AI+Face+Recognition&font=montserrat" alt="Face Recognition" width="30%" />
+  <img src="https://placehold.co/600x300/4F46E5/FFFFFF?text=QR+Scanner&font=montserrat" alt="QR Scanner" width="30%" />
+  <img src="https://placehold.co/600x300/4F46E5/FFFFFF?text=Anomaly+Detection&font=montserrat" alt="Anomaly Detection" width="30%" />
 </div>
+
+### 📝 AI-Powered Grading Assistant
+
+#### **Automated Assessment**
+- **Multi-format Support** - MCQs, coding assignments, essays, and mixed formats
+- **Rubric-based Grading** - Customizable criteria with weighted scoring
+- **Instant Feedback** - AI generates personalized improvement suggestions
+- **Batch Processing** - Grade multiple submissions simultaneously
+
+#### **Plagiarism Detection**
+- **Advanced Algorithms** - Detects copied content with percentage accuracy
+- **Source Identification** - Shows potential sources of plagiarized content
+- **Similarity Analysis** - Compares against academic databases and web content
+- **False Positive Reduction** - Smart filtering to avoid flagging legitimate citations
+
+#### **Grading Rubric Example**
+```
+📊 AI Grading Criteria:
+• Code Functionality (40pts) - Correctness and edge case handling
+• Code Quality (30pts) - Structure, readability, best practices  
+• Algorithm Efficiency (20pts) - Time and space complexity
+• Documentation (10pts) - Comments and code documentation
+
+🤖 AI Feedback: "Excellent implementation with proper error handling. 
+Consider optimizing the search function for better performance."
+```
+
+### 🎯 Smart Resource Recommender
+
+#### **Weakness Analysis**
+- **Performance Tracking** - AI analyzes test scores, assignment grades, attendance
+- **Learning Pattern Recognition** - Identifies individual learning styles and preferences
+- **Skill Gap Detection** - Pinpoints specific areas needing improvement
+- **Progress Monitoring** - Tracks improvement over time with trend analysis
+
+#### **Personalized Recommendations**
+- **Multi-Platform Content** - YouTube videos, MOOCs, PDFs, interactive quizzes
+- **Difficulty Matching** - Beginner, intermediate, and advanced content paths
+- **Provider Integration** - Khan Academy, Coursera, MIT OpenCourseWare, edX
+- **Real-time Updates** - Fresh recommendations based on latest performance data
+
+#### **Example Recommendations**
+```
+🎯 For Student Struggling in Calculus:
+• "Integration by Parts - Complete Tutorial" (Khan Academy, 18 min, ⭐4.8)
+• "Calculus Practice Problems" (MIT OCW, Interactive, ⭐4.6)  
+• "Chain Rule Explained Simply" (YouTube, 25 min, ⭐4.9)
+• "Limits and Continuity Study Guide" (PDF, 30 pages, ⭐4.5)
+```
 
 ### 🔐 Controlled User Management
 
@@ -162,14 +257,59 @@ flowchart LR
 📋 **[Complete Authentication Documentation](docs/AUTH_SYSTEM.md)**
 📋 **[User Creation Workflow Guide](docs/USER_CREATION_WORKFLOW.md)**
 
-### 🤖 AI-Powered Insights
+### 🔍 AI Curriculum Gap Detector
 
-- **Automated Summaries** - Generate attendance summaries with Genkit AI
-- **Trend Analysis** - Identify patterns in student attendance
-- **Performance Tracking** - Monitor student engagement over time
+#### **Industry Trend Analysis**
+- **Real-time Scanning** - Monitors GitHub repos, research papers, job portals
+- **Skill Demand Tracking** - Identifies emerging technologies and methodologies  
+- **Salary Intelligence** - Tracks compensation trends for different skills
+- **Growth Rate Analysis** - Measures skill popularity and adoption rates
+
+#### **Gap Identification**
+- **Curriculum Mapping** - Compares current courses against industry requirements
+- **Missing Skills Detection** - Identifies outdated or absent topics in curriculum
+- **Priority Classification** - Ranks gaps as Critical, Important, or Moderate
+- **Implementation Planning** - Provides actionable recommendations with timelines
+
+#### **Example Gap Analysis**
+```
+🔍 Detected Curriculum Gaps:
+
+🚨 CRITICAL - AI Ethics & Bias Detection
+   Current: Not covered in AI course
+   Industry Demand: High (89% of AI job postings)
+   Recommendation: Add 2-week ethics module
+   Implementation: 4-6 weeks
+
+⚠️ IMPORTANT - DevOps & CI/CD Pipelines  
+   Current: Basic coverage in Software Engineering
+   Industry Demand: High (76% of developer roles)
+   Recommendation: Hands-on DevOps lab with Docker, Jenkins
+   Implementation: 6-8 weeks
+
+💡 MODERATE - Quantum Computing Basics
+   Current: Not covered
+   Industry Demand: Growing (45% increase in job postings)
+   Recommendation: Optional advanced mathematics module
+   Implementation: 8-10 weeks
+```
+
+### 🎓 AI Lecture Summarizer
+
+#### **Multi-format Processing**
+- **Text Input** - Paste lecture content directly
+- **File Upload** - PDF, DOCX, PPTX, TXT support
+- **Audio Transcription** - Convert recorded lectures to text (future feature)
+- **Real-time Processing** - Live lecture summarization during class
+
+#### **Intelligent Output**
+- **Key Concepts** - Extracts main topics and learning objectives
+- **Quick Revision Notes** - Must-remember points and exam tips
+- **Structured Summaries** - Organized by topics with clear hierarchies
+- **Downloadable Content** - Export as PDF, DOCX, or plain text
 
 <div align="center">
-  <img src="https://placehold.co/800x300/4F46E5/FFFFFF?text=AI+Generated+Reports&font=montserrat" alt="AI Reports" />
+  <img src="https://placehold.co/800x300/4F46E5/FFFFFF?text=AI+Lecture+Summarizer&font=montserrat" alt="AI Lecture Summarizer" />
 </div>
 
 ### 🌐 Internationalization
@@ -181,68 +321,146 @@ Supports multiple languages:
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Advanced Tech Stack
 
 <div align="center">
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Frontend** | Next.js 15.3 | React framework with SSR |
-| | TypeScript | Type safety |
-| | Tailwind CSS | Styling |
-| | ShadcnUI | UI Components |
-| | React Hook Form | Form handling |
-| **Backend** | Supabase | Database & Authentication |
-| | PostgreSQL | Data storage |
-| **AI** | Genkit AI | Attendance analysis |
-| | Recharts | Data visualization |
-| **Dev Tools** | ESLint | Code quality |
-| | TypeScript | Type checking |
-| | Turbopack | Fast builds |
+| Layer | Technology | Purpose | AI Integration |
+|-------|------------|---------|----------------|
+| **Frontend** | Next.js 15.3 | React framework with SSR | Real-time AI updates |
+| | TypeScript | Type safety | AI response typing |
+| | Tailwind CSS | Modern styling | Responsive AI components |
+| | ShadcnUI | UI Components | AI-enhanced interfaces |
+| | Framer Motion | Animations | Smooth AI interactions |
+| **Backend** | Supabase | Database & Auth | AI data processing |
+| | PostgreSQL | Relational data | AI analytics storage |
+| | Row Level Security | Data protection | AI access control |
+| **AI Engine** | OpenAI GPT-4 | Natural language processing | Content generation |
+| | Custom AI Models | Specialized tasks | Attendance, grading analysis |
+| | TensorFlow.js | Client-side ML | Face recognition |
+| | Computer Vision | Image processing | Attendance verification |
+| **Analytics** | Recharts | Data visualization | AI insights display |
+| | D3.js | Advanced charts | Predictive analytics |
+| | React Query | Data caching | AI response optimization |
+| **Dev Tools** | ESLint | Code quality | AI code analysis |
+| | Prettier | Code formatting | Consistent AI outputs |
+| | Turbopack | Fast builds | AI model bundling |
 
 </div>
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start Guide
 
-### Prerequisites
+### 📋 Prerequisites
 
-- Node.js 18+
-- npm or yarn
-- Supabase account
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **npm or yarn** - Package manager
+- **Supabase account** - [Create free account](https://supabase.com/)
+- **OpenAI API key** (optional) - For enhanced AI features
 
-### Installation
+### ⚡ One-Click Setup
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Muneerali199/classroom-ai-.git
-   cd classroom-ai-
-   ```
+```bash
+# Clone and setup in one command
+git clone https://github.com/Muneerali199/classroom-ai-.git && cd classroom-ai- && npm install
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+### 🔧 Detailed Installation
 
-3. **Set up environment variables:**
-   ```bash
-   # Create a .env.local file with the following variables
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-   ```
+#### 1. **Clone the Repository**
+```bash
+git clone https://github.com/Muneerali199/classroom-ai-.git
+cd classroom-ai-
+```
 
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+#### 2. **Install Dependencies**
+```bash
+npm install
+# or for faster installation
+npm ci
+```
 
-5. **Open [http://localhost:9002](http://localhost:9002) in your browser.**
+#### 3. **Environment Configuration**
+Create `.env.local` file in the root directory:
+
+```bash
+# Supabase Configuration (Required)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# AI Configuration (Optional - for enhanced features)
+OPENAI_API_KEY=your_openai_api_key
+NEXT_PUBLIC_AI_ENABLED=true
+
+# Application Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME="ClassroomAI"
+
+# Email Configuration (Optional)
+SMTP_HOST=your_smtp_host
+SMTP_PORT=587
+SMTP_USER=your_email
+SMTP_PASS=your_password
+```
+
+#### 4. **Database Setup**
+
+**Option A: Automated Setup (Recommended)**
+```bash
+npm run setup:database
+```
+
+**Option B: Manual Setup**
+1. Go to your Supabase dashboard
+2. Navigate to SQL Editor
+3. Run the migration files from `/migrations/` folder
+4. Enable Row Level Security (RLS) policies
+
+#### 5. **Start Development Server**
+```bash
+npm run dev
+# Server starts at http://localhost:3000
+```
+
+#### 6. **Create Initial Admin Account**
+```bash
+# Run the admin setup script
+npm run setup:admin
+# Follow the prompts to create your first dean account
+```
+
+### 🎯 Production Deployment
+
+#### **Vercel (Recommended)**
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+
+# Set environment variables in Vercel dashboard
+```
+
+#### **Docker Deployment**
+```bash
+# Build Docker image
+docker build -t classroom-ai .
+
+# Run container
+docker run -p 3000:3000 --env-file .env.local classroom-ai
+```
+
+#### **Manual Server Deployment**
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
 
 ### Running Genkit AI Services
 
