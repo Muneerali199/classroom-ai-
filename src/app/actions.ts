@@ -179,8 +179,8 @@ export async function createPinAttendanceSessionAction(
         const now = new Date();
         const endTime = new Date(now.getTime() + durationInMinutes * 60000);
 
-        // Generate a 6-digit PIN
-        const pin = Math.floor(100000 + Math.random() * 900000).toString();
+        // Generate a 5-digit PIN
+        const pin = Math.floor(10000 + Math.random() * 90000).toString();
 
         const sessionId = randomUUID();
         
