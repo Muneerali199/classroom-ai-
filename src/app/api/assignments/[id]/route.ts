@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+// In Next.js 15, the RouteContext's params may be a Promise in type-space.
+// Accept a context with params as a Promise and await it inside the handler.
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = getSupabase() as any;
-    const id = params.id;
+    const { id } = await context.params;
     const { data: userRes } = await supabase.auth.getUser();
     const user = userRes?.user;
     const role = (user?.user_metadata as any)?.role || 'student';
@@ -58,10 +63,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  _req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = getSupabase() as any;
-    const id = params.id;
+    const { id } = await context.params;
     const { data: userRes } = await supabase.auth.getUser();
     const user = userRes?.user;
     const role = (user?.user_metadata as any)?.role || 'student';
