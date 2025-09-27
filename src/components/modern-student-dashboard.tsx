@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -19,9 +20,17 @@ import RealPinAttendanceStudent from '@/components/real-pin-attendance-student';
 import AILectureSummarizer from '@/components/ai-lecture-summarizer';
 import AIResourceRecommender from '@/components/ai-resource-recommender';
 import { Subject } from '@/lib/database.types';
+import PerformanceChart, { 
+  generateAttendanceData, 
+  generateGradeDistribution, 
+  generateSubjectPerformance,
+  generateProgressOverTime 
+} from '@/components/performance-chart';
 
 export default function ModernStudentDashboard() {
   const { toast } = useToast();
+  const t = useTranslations('StudentDashboard');
+  const tCommon = useTranslations('Common');
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [studentData, setStudentData] = useState<Student | null>(null);
   const [loading, setLoading] = useState(true);
@@ -298,60 +307,53 @@ export default function ModernStudentDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-gray-700" style={{
-        background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
-      }}>
-        <div className="neumorphic-card p-8 rounded-3xl">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-600 mx-auto"></div>
-          <p className="text-center mt-4 text-gray-600">Loading your dashboard...</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-sm">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cyan-400 mx-auto"></div>
+          <p className="text-center mt-4 text-gray-600 dark:text-gray-300">Loading your dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-gray-700" style={{
-      background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
-    }}>
-      {/* Subtle floating elements with neumorphic style */}
-      <div className="fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse"
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+      {/* Floating elements with glow effects - Only in dark mode */}
+      <div className="hidden dark:block fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse bg-cyan-400/10"
         style={{
-          background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
-          boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+          boxShadow: '0 0 40px rgba(110, 231, 183, 0.1)'
         }}
       />
-      <div className="fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse"
+      <div className="hidden dark:block fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse bg-pink-400/10"
         style={{
-          background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
-          boxShadow: '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
+          boxShadow: '0 0 30px rgba(255, 121, 198, 0.1)'
         }}
       />
-      <div className="fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse"
+      <div className="hidden dark:block fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse bg-blue-400/10"
         style={{
-          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
-          boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
+          boxShadow: '0 0 50px rgba(59, 130, 246, 0.1)'
         }}
       />
 
-      <div className="space-y-6 p-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-6 lg:space-y-8 relative z-10">
         {/* Header */}
-        <div className="neumorphic-card p-6 rounded-3xl">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-700">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm transition-colors duration-300">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
             Welcome back, {studentData?.name || 'Student'}!
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Here&apos;s what&apos;s happening with your studies today.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {lastMarked && (
-              <span className="neumorphic-sm px-3 py-1 rounded-full text-xs text-green-700">
+              <span className="bg-green-500/20 border border-green-400/30 px-3 py-1 rounded-full text-xs text-green-400">
                 Attendance recorded for {lastMarked.course_name} at {new Date(lastMarked.marked_at).toLocaleTimeString()}
               </span>
             )}
             {liveActive && (
-              <div className="neumorphic-sm px-3 py-1 rounded-full text-xs text-blue-700 relative overflow-hidden">
+              <div className="bg-blue-500/20 border border-blue-400/30 px-3 py-1 rounded-full text-xs text-blue-400 relative overflow-hidden">
                 <div 
-                  className="absolute inset-0 bg-blue-200/30 transition-all duration-1000 ease-linear" 
+                  className="absolute inset-0 bg-blue-400/30 transition-all duration-1000 ease-linear" 
                   style={{ width: `${liveProgress}%` }}
                 />
                 <span className="relative z-10">
@@ -361,100 +363,133 @@ export default function ModernStudentDashboard() {
             )}
           </div>
           {liveNote && (
-            <div className="mt-3 text-xs text-gray-600">
+            <div className="mt-3 text-xs text-slate-400">
               Live: {liveNote}
             </div>
           )}
         </div>
 
         {/* Quick Stats */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
-            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-700">Attendance Rate</h3>
-              <TrendingUp className="h-4 w-4 text-gray-600" />
-            </div>
-            <div className="text-2xl font-bold text-gray-700">{attendancePercentage.toFixed(1)}%</div>
-            <div className="mt-2 neumorphic-sm-inset rounded-full h-2">
-              <div 
-                className="neumorphic-sm rounded-full h-2 transition-all duration-500" 
-                style={{ width: `${attendancePercentage}%` }}
-              />
-            </div>
-          </div>
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-green-400/50">
+            <CardContent className="p-6">
+              <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">Attendance Rate</h3>
+                <TrendingUp className="h-4 w-4 text-green-500" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{attendancePercentage.toFixed(1)}%</div>
+              <div className="mt-2 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-green-500 to-cyan-400 rounded-full h-2 transition-all duration-500" 
+                  style={{ width: `${attendancePercentage}%` }}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
-            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-700">Classes Today</h3>
-              <Calendar className="h-4 w-4 text-gray-600" />
-            </div>
-            <div className="text-2xl font-bold text-gray-700">{upcomingClasses.length}</div>
-            <p className="text-xs text-gray-600">
-              Next: {upcomingClasses[0]?.time}
-            </p>
-          </div>
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-blue-400/50">
+            <CardContent className="p-6">
+              <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">Classes Today</h3>
+                <Calendar className="h-4 w-4 text-blue-500" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{upcomingClasses.length}</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Next: {upcomingClasses[0]?.time}
+              </p>
+            </CardContent>
+          </Card>
 
-          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
-            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-700">Pending Assignments</h3>
-              <BookOpen className="h-4 w-4 text-gray-600" />
-            </div>
-            <div className="text-2xl font-bold text-gray-700">
-              {assignments.filter(a => a.status === 'pending').length}
-            </div>
-            <p className="text-xs text-gray-600">
-              Due this week
-            </p>
-          </div>
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-purple-400/50">
+            <CardContent className="p-6">
+              <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">{t('assignmentsDue')}</h3>
+                <BookOpen className="h-4 w-4 text-purple-500" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {assignments.filter(a => a.status === 'pending').length}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {tCommon('thisWeek')}
+              </p>
+            </CardContent>
+          </Card>
 
-          <div className="neumorphic-card p-6 hover:scale-105 transition-transform duration-300">
-            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-700">Student ID</h3>
-              <User className="h-4 w-4 text-gray-600" />
-            </div>
-            <div className="text-lg font-bold text-gray-700">{studentData?.student_id || 'STU-2025-0001'}</div>
-            <p className="text-xs text-gray-600">
-              {studentData?.grade || '10th Grade'}
-            </p>
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-cyan-400/50">
+            <CardContent className="p-6">
+              <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">{tCommon('id')}</h3>
+                <User className="h-4 w-4 text-cyan-500" />
+              </div>
+              <div className="text-lg font-bold text-gray-900 dark:text-white">{studentData?.student_id || 'STU-2025-0001'}</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {studentData?.grade || '10th Grade'}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Performance Analytics for Students */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">My Performance</h2>
+            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Personal Analytics</span>
+          </div>
+          
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+            <PerformanceChart
+              type="line"
+              title="My Progress Over Time"
+              description="Your academic progress throughout the semester"
+              data={generateProgressOverTime()}
+              height={280}
+            />
+            <PerformanceChart
+              type="bar"
+              title="Subject Performance"
+              description="Your performance across different subjects"
+              data={generateSubjectPerformance()}
+              height={280}
+            />
           </div>
         </div>
 
-        <Tabs defaultValue="dashboard" className="space-y-4">
-          <div className="neumorphic-card p-2 rounded-2xl">
-            <TabsList className="neumorphic-sm-inset rounded-xl">
+        <Tabs defaultValue="dashboard" className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 shadow-sm transition-colors duration-300">
+            <TabsList className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-2 grid w-full grid-cols-2 sm:grid-cols-4 gap-2">
               <TabsTrigger 
                 value="dashboard" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
-                Dashboard
+                {t('title')}
               </TabsTrigger>
               <TabsTrigger 
                 value="attendance" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
-                Attendance
+                {tCommon('attendance')}
               </TabsTrigger>
               <TabsTrigger 
                 value="schedule" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
-                Schedule
+                {tCommon('schedule')}
               </TabsTrigger>
               <TabsTrigger 
                 value="assignments" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
-                Assignments
+                {tCommon('assignments')}
               </TabsTrigger>
               <TabsTrigger 
                 value="ai-tools" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
                 AI Tools
               </TabsTrigger>
               <TabsTrigger 
                 value="profile" 
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 hover:text-gray-900 dark:hover:text-white"
               >
                 Profile
               </TabsTrigger>
@@ -464,84 +499,92 @@ export default function ModernStudentDashboard() {
           <TabsContent value="dashboard" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               {/* Today's Schedule */}
-              <div className="neumorphic-card p-6">
+              <Card className="shadow-sm border border-border">
+                <CardContent className="p-6">
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-gray-700">Today&apos;s Classes</h3>
                   <p className="text-sm text-gray-600">Your schedule for today</p>
                 </div>
                 <div className="space-y-3">
                   {upcomingClasses.map((cls, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                       <div>
                         <p className="font-medium text-gray-700">{cls.subject}</p>
                         <p className="text-sm text-gray-600">{cls.teacher} • {cls.room}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium text-gray-700">{cls.time}</p>
-                        <div className="neumorphic-sm px-2 py-1 rounded-full text-xs text-gray-600 mt-1">
-                          <Clock className="w-3 h-3 mr-1 inline" />
+                        <Badge variant="secondary" className="text-xs mt-1">
+                          <Clock className="w-3 h-3 mr-1" />
                           Upcoming
-                        </div>
+                        </Badge>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Recent Attendance */}
-              <div className="neumorphic-card p-6">
+              <Card className="shadow-sm border border-border">
+                <CardContent className="p-6">
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-gray-700">Recent Attendance</h3>
                   <p className="text-sm text-gray-600">Your attendance for the past week</p>
                 </div>
                 <div className="space-y-3">
                   {attendanceData.slice(0, 5).map((record: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                       <div>
                         <p className="font-medium text-gray-700">{record.subject}</p>
                         <p className="text-sm text-gray-600">{record.date}</p>
                       </div>
-                      <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium ${
-                        record.status === 'Present' ? 'text-green-700' :
-                        record.status === 'Late' ? 'text-yellow-700' : 'text-red-700'
-                      }`}>
+                      <Badge 
+                        variant={record.status === 'Present' ? 'default' : record.status === 'Late' ? 'secondary' : 'destructive'}
+                        className="text-xs"
+                      >
                         {record.status}
-                      </div>
+                      </Badge>
                     </div>
                   ))}
                 </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Quick Actions */}
-            <div className="neumorphic-card p-6">
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-700">Quick Actions</h3>
-                <p className="text-sm text-gray-600">Common tasks and shortcuts</p>
-              </div>
-              <div className="grid gap-3 md:grid-cols-3">
-                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
-                  <QrCode className="h-6 w-6 mb-2 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">Scan QR Code</span>
-                </button>
-                <button
-                  className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300"
-                  onClick={() => setIsPinModalOpen(true)}
-                >
-                  <Pin className="h-6 w-6 mb-2 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">Enter PIN</span>
-                </button>
-                <button className="neumorphic-button h-20 flex-col rounded-xl hover:scale-105 transition-transform duration-300">
-                  <User className="h-6 w-6 mb-2 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">View Profile</span>
-                </button>
-              </div>
-            </div>
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-gray-700">Quick Actions</h3>
+                  <p className="text-sm text-gray-600">Common tasks and shortcuts</p>
+                </div>
+                <div className="grid gap-3 md:grid-cols-3">
+                  <Button variant="outline" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <QrCode className="h-6 w-6 mb-2" />
+                    <span className="text-sm font-medium">Scan QR Code</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+                    onClick={() => setIsPinModalOpen(true)}
+                  >
+                    <Pin className="h-6 w-6 mb-2" />
+                    <span className="text-sm font-medium">Enter PIN</span>
+                  </Button>
+                  <Button variant="outline" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <User className="h-6 w-6 mb-2" />
+                    <span className="text-sm font-medium">View Profile</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="attendance" className="space-y-4">
             {/* Attendance Graph */}
-            <div className="neumorphic-card p-6">
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Attendance Trend (Last 30 Days)</h3>
                 <p className="text-sm text-gray-600">Your daily attendance pattern</p>
@@ -569,23 +612,25 @@ export default function ModernStudentDashboard() {
                   <p>No attendance data yet. Mark your first attendance to see the graph!</p>
                 </div>
               )}
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="neumorphic-card p-6">
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Attendance History</h3>
                 <p className="text-sm text-gray-600">Complete record of your attendance</p>
               </div>
               <div className="space-y-3">
                 {attendanceData.map((record: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                     <div>
                       <p className="font-medium text-gray-700">{record.course || 'Class'}</p>
                       <p className="text-sm text-gray-600">{record.date} • {record.time}</p>
                     </div>
-                    <div className="neumorphic-sm px-3 py-1 rounded-full text-xs font-medium text-green-700">
+                    <Badge variant="default" className="text-xs">
                       Present
-                    </div>
+                    </Badge>
                   </div>
                 ))}
                 {attendanceData.length === 0 && (
@@ -594,18 +639,20 @@ export default function ModernStudentDashboard() {
                   </div>
                 )}
               </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-4">
-            <div className="neumorphic-card p-6">
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Weekly Schedule</h3>
                 <p className="text-sm text-gray-600">Your complete class schedule</p>
               </div>
               <div className="space-y-4">
                 {upcomingClasses.map((cls, index) => (
-                  <div key={index} className="p-4 neumorphic-sm-inset rounded-lg">
+                  <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-medium text-gray-700">{cls.subject}</h3>
@@ -619,18 +666,20 @@ export default function ModernStudentDashboard() {
                   </div>
                 ))}
               </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="assignments" className="space-y-4">
-            <div className="neumorphic-card p-6">
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Assignments</h3>
                 <p className="text-sm text-gray-600">Track your homework and projects</p>
               </div>
               <div className="space-y-3">
                 {assignments.map((assignment: any, index: number) => (
-                  <div key={assignment.id || index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
+                  <div key={assignment.id || index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                     <div className="flex-1">
                       <p className="font-medium text-gray-700">{assignment.title}</p>
                       <p className="text-sm text-gray-600">{assignment.subject_name || assignment.subject || 'General'}</p>
@@ -647,11 +696,12 @@ export default function ModernStudentDashboard() {
                       <p className="text-sm font-medium text-gray-700">
                         Due: {assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : assignment.dueDate || 'No due date'}
                       </p>
-                      <div className={`neumorphic-sm px-3 py-1 rounded-full text-xs font-medium mt-1 ${
-                        assignment.status === 'submitted' ? 'text-green-700' : 'text-orange-700'
-                      }`}>
+                      <Badge 
+                        variant={assignment.status === 'submitted' ? 'default' : 'secondary'} 
+                        className="text-xs mt-1"
+                      >
                         {assignment.status || 'Assigned'}
-                      </div>
+                      </Badge>
                     </div>
                   </div>
                 ))}
@@ -663,7 +713,8 @@ export default function ModernStudentDashboard() {
                   </div>
                 )}
               </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="ai-tools" className="space-y-4">
@@ -674,7 +725,8 @@ export default function ModernStudentDashboard() {
           </TabsContent>
 
           <TabsContent value="profile" className="space-y-4">
-            <div className="neumorphic-card p-6">
+            <Card className="shadow-sm border border-border">
+              <CardContent className="p-6">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-gray-700">Student Profile</h3>
                 <p className="text-sm text-gray-600">Your personal information</p>
