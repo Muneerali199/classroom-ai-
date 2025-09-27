@@ -4,7 +4,10 @@
     "profile": "Perfil",
     "students": "Estudiantes",
     "attendance": "Asistencia",
-    "assistant": "Asistente IA"
+    "assistant": "Asistente IA",
+    "assignments": "Tareas",
+    "timetable": "Horario",
+    "meetings": "Reuniones"
   },
   "ProfilePage": {
     "title": "Configuración de perfil",
@@ -82,5 +85,32 @@
     "subjectAttendance": "Asistencia por materia",
     "deadline": "Fecha límite",
     "progress": "Progreso"
+  },
+  "StudentNav": {
+    "dashboard": "Tablero",
+    "markAttendance": "Marcar asistencia",
+    "myCourses": "Mis cursos",
+    "myAttendance": "Mi asistencia",
+    "assignments": "Tareas",
+    "timetable": "Horario",
+    "meetings": "Reuniones",
+    "assistant": "Asistente IA",
+    "profile": "Perfil"
+  },
+  "DeanNav": {
+    "dashboard": "Tablero",
+    "userManagement": "Gestión de usuarios",
+    "courseManagement": "Gestión de cursos",
+    "systemSettings": "Configuración del sistema",
+    "assistant": "Asistente IA",
+    "profile": "Perfil"
+  },
+  "Header": {
+    "notifications": "Notificaciones",
+    "clear": "Limpiar",
+    "noRecent": "No hay notificaciones recientes",
+    "profile": "Perfil",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión"
   }
 }
