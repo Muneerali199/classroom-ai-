@@ -339,7 +339,7 @@ export function VoiceInterface({
 
       {transcript && (
         <div className="flex-1 min-w-0" role="status" aria-live="assertive">
-          <div className="text-xs text-muted-foreground italic truncate">"{transcript}"</div>
+          <div className="text-xs text-muted-foreground italic truncate">&quot;{transcript}&quot;</div>
         </div>
       )}
 
@@ -422,7 +422,7 @@ export function VoiceInterface({
           <div className="bg-muted/50 rounded-lg p-4 min-h-[60px]" role="log" aria-live="assertive">
             <div className="text-sm">
               {transcript && (<div className="text-muted-foreground italic">{transcript}</div>)}
-              {finalTranscript && (<div className="text-foreground font-medium mt-1">"{finalTranscript}"</div>)}
+              {finalTranscript && (<div className="text-foreground font-medium mt-1">&quot;{finalTranscript}&quot;</div>)}
             </div>
             {confidence > 0 && (<div className="mt-2 text-xs text-muted-foreground">Confidence: {Math.round(confidence * 100)}%</div>)}
           </div>
@@ -470,7 +470,7 @@ export function VoiceInterface({
         {(transcript || finalTranscript) && (
           <div className="max-w-md bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border rounded-lg p-4 shadow-sm" role="log" aria-live="assertive">
             {transcript && (<div className="text-muted-foreground italic text-sm">{transcript}</div>)}
-            {finalTranscript && (<div className="text-foreground font-medium text-sm mt-1">"{finalTranscript}"</div>)}
+            {finalTranscript && (<div className="text-foreground font-medium text-sm mt-1">&quot;{finalTranscript}&quot;</div>)}
           </div>
         )}
       </div>
