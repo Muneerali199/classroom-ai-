@@ -5,6 +5,12 @@ const withNextIntl = require('next-intl/plugin')(
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Ensure Next.js uses this project directory as the workspace root
+    outputFileTracingRoot: __dirname,
+    eslint: {
+        // Allow production builds to successfully complete even if there are ESLint warnings
+        ignoreDuringBuilds: false,
+    },
     images: {
         remotePatterns: [{
                 protocol: 'https',
