@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     // Join subjects to include subject_name
     const subjectIds = Array.from(new Set((data || []).map((a: any) => a.subject_id).filter(Boolean)));
-    let subjectsById: Record<string, any> = {};
+    const subjectsById: Record<string, any> = {};
     if (subjectIds.length > 0) {
       const { data: subs } = await supabase.from('subjects').select('id,name').in('id', subjectIds);
       (subs || []).forEach((s: any) => { subjectsById[s.id] = s; });
