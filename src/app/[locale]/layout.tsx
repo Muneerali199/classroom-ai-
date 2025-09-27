@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next';
 import '../globals.css';
-import { Toaster } from '@/components/ui/toaster';
+import ClientToaster from '@/components/client-toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -54,7 +54,7 @@ export default async function RootLayout({
             <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
               {children}
             </div>
-            <Toaster />
+            <ClientToaster />
             <Analytics />
           </ThemeProvider>
         </NextIntlClientProvider>
