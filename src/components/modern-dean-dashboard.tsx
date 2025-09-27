@@ -9,6 +9,11 @@ import TeacherListManager from '@/components/teacher-list-manager';
 import TeacherAttendanceManager from '@/components/teacher-attendance-manager';
 import DeanDashboard from '@/components/dean-dashboard';
 import { Separator } from '@/components/ui/separator';
+import PerformanceChart, { 
+  generateAttendanceData, 
+  generateGradeDistribution, 
+  generateSubjectPerformance 
+} from '@/components/performance-chart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Users, UserPlus, CreditCard, GraduationCap, BarChart3, Settings, Calendar, Shield, Brain } from 'lucide-react';
@@ -68,32 +73,37 @@ export default function ModernDeanDashboard({
   }, {} as Record<string, number>);
 
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-6 lg:space-y-8 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold font-headline tracking-tight">
-            Dean Dashboard
-          </h1>
-          <p className="text-muted-foreground">
-            Manage your institution, faculty, and staff members
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-sm">
-            <Shield className="h-3 w-3 mr-1" />
-            Administrator
-          </Badge>
-          <Badge variant="outline" className="text-sm">
-            {totalTeachers} Teacher{totalTeachers !== 1 ? 's' : ''}
-          </Badge>
-          {recentlyAdded > 0 && (
-            <Badge variant="secondary" className="text-sm">
-              +{recentlyAdded} This Week
-            </Badge>
-          )}
-        </div>
-      </div>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
+        <CardContent className="p-6 lg:p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Dean Dashboard
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+                Manage your institution, faculty, and staff members
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge variant="outline" className="text-sm bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700">
+                <Shield className="h-3 w-3 mr-1" />
+                Administrator
+              </Badge>
+              <Badge variant="outline" className="text-sm bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700">
+                <Users className="h-3 w-3 mr-1" />
+                {totalTeachers} Teacher{totalTeachers !== 1 ? 's' : ''}
+              </Badge>
+              {recentlyAdded > 0 && (
+                <Badge variant="secondary" className="text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
+                  +{recentlyAdded} This Week
+                </Badge>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-4">
@@ -169,11 +179,48 @@ export default function ModernDeanDashboard({
         </Card>
       )}
 
+      {/* Institution Performance Analytics */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Institution Analytics</h2>
+          <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Administrative Overview</span>
+        </div>
+        
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+          <PerformanceChart
+            type="bar"
+            title="Faculty Performance"
+            description="Overall faculty performance metrics"
+            data={generateSubjectPerformance()}
+            height={280}
+          />
+          <PerformanceChart
+            type="doughnut"
+            title="Department Distribution"
+            description="Faculty distribution across departments"
+            data={{
+              labels: Object.keys(departments).length > 0 ? Object.keys(departments) : ['Computer Science', 'Mathematics', 'Physics', 'Chemistry'],
+              datasets: [{
+                data: Object.keys(departments).length > 0 ? Object.values(departments) : [8, 6, 4, 3],
+              }]
+            }}
+            height={280}
+          />
+          <PerformanceChart
+            type="line"
+            title="Monthly Enrollment Trend"
+            description="Student enrollment over the past months"
+            data={generateAttendanceData()}
+            height={280}
+          />
+        </div>
+      </div>
+
       <Separator />
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="teachers" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-2 gap-2">
           <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
           <TabsTrigger value="teachers">Teacher Management</TabsTrigger>
           <TabsTrigger value="attendance">Attendance Tracking</TabsTrigger>
