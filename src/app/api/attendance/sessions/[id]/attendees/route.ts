@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     const ids: string[] = Array.from(new Set((recs || []).map((r: any) => r.student_id))).filter(Boolean) as string[];
-    let studentsById: Record<string, { name?: string; email?: string }> = {};
+    const studentsById: Record<string, { name?: string; email?: string }> = {};
     if (ids.length > 0) {
       const { data: studentsList } = await (supabase as any)
         .from('students')
