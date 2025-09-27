@@ -47,7 +47,7 @@ export default function TeacherTimetablePanel() {
         window.dispatchEvent(new CustomEvent('notify', { detail: { title: 'Timetable Updated', message: 'A timetable was added or changed', ts: Date.now() } }));
       })
       .subscribe();
-    return () => supabase.removeChannel(ch);
+    return () => { supabase.removeChannel(ch); };
   }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
