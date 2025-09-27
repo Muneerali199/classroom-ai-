@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
+import { useTranslations } from 'next-intl';
 import type { Student } from '@/lib/types';
 import DashboardClient from '@/components/dashboard-client';
 import RealUserManagement from '@/components/real-user-management';
@@ -19,6 +20,12 @@ import SubjectManagement from '@/components/subject-management';
 import RoomManagement from '@/components/room-management';
 import EnrollmentManagement from '@/components/enrollment-management';
 import PerformanceCharts from '@/components/performance-charts';
+import PerformanceChart, { 
+  generateAttendanceData, 
+  generateGradeDistribution, 
+  generateSubjectPerformance,
+  generateProgressOverTime 
+} from '@/components/performance-chart';
 import AIStudentInsights from '@/components/ai-student-insights';
 import AISmartAttendance from '@/components/ai-smart-attendance';
 import AIGradingAssistant from '@/components/ai-grading-assistant';
@@ -33,6 +40,8 @@ export default function ModernTeacherDashboard({
   initialStudents
 }: ModernTeacherDashboardProps) {
   const { user } = useAuth();
+  const t = useTranslations('TeacherDashboard');
+  const tCommon = useTranslations('Common');
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -161,53 +170,48 @@ export default function ModernTeacherDashboard({
   }, []);
 
   return (
-    <div className="min-h-screen text-gray-700" style={{
-      background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
-    }}>
-      {/* Subtle floating elements with neumorphic style */}
-      <div className="fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse"
+    <div className="min-h-screen text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      {/* Subtle floating elements for dark mode only */}
+      <div className="hidden dark:block fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse bg-cyan-400/5"
         style={{
-          background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
-          boxShadow: '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
+          boxShadow: '0 0 40px rgba(110, 231, 183, 0.1)'
         }}
       />
-      <div className="fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse"
+      <div className="hidden dark:block fixed top-60 right-16 w-12 h-12 rounded-full pointer-events-none z-0 animate-pulse bg-pink-400/10"
         style={{
-          background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
-          boxShadow: '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
+          boxShadow: '0 0 30px rgba(255, 121, 198, 0.1)'
         }}
       />
-      <div className="fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse"
+      <div className="hidden dark:block fixed bottom-32 left-24 w-20 h-20 rounded-full pointer-events-none z-0 animate-pulse bg-blue-400/10"
         style={{
-          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
-          boxShadow: '10px 10px 20px #c0c0c0, -10px -10px 20px #ffffff'
+          boxShadow: '0 0 50px rgba(59, 130, 246, 0.1)'
         }}
       />
 
-      <div className="container-modern section-padding space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-6 lg:space-y-8 relative z-10">
         {/* Modern Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="neumorphic-card p-6 lg:p-8"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 lg:p-8 shadow-sm transition-colors duration-300"
         >
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2">
-              <h1 className="text-responsive-xl font-bold font-headline tracking-tight text-gray-700">
-                Teacher Dashboard
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {t('title')}
               </h1>
-              <p className="text-gray-600 text-responsive-sm max-w-2xl text-balance">
-                Manage your classes, students, and attendance records with our modern interface
+              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base max-w-2xl">
+                {t('subtitle')}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <div className="neumorphic-sm px-4 py-2 rounded-xl text-sm font-medium text-gray-700">
+              <div className="bg-cyan-500/20 border border-cyan-400/30 px-4 py-2 rounded-xl text-sm font-medium text-cyan-400">
                 <Users className="w-4 h-4 mr-2 inline" />
-                {totalStudents} Student{totalStudents !== 1 ? 's' : ''}
+                {totalStudents} {t('totalStudents')}
               </div>
               {recentlyAdded > 0 && (
-                <div className="neumorphic-sm px-4 py-2 rounded-xl text-sm font-medium text-gray-700">
+                <div className="bg-green-500/20 border border-green-400/30 px-4 py-2 rounded-xl text-sm font-medium text-green-400">
                   <UserPlus className="w-4 h-4 mr-2 inline" />
                   +{recentlyAdded} This Week
                 </div>
@@ -223,90 +227,90 @@ export default function ModernTeacherDashboard({
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         >
-          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
-              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-lg hover:border-cyan-400/50">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10 dark:opacity-20">
+              <div className="w-full h-full bg-cyan-400/20 rounded-full"></div>
             </div>
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                <div className="p-4 bg-cyan-500/20 border border-cyan-400/30 rounded-2xl text-cyan-500 dark:text-cyan-400 group-hover:bg-cyan-500/30 transition-all duration-300">
                   <Users className="h-7 w-7" />
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold text-gray-700 mb-1">{totalStudents}</div>
-                  <div className="text-sm text-gray-500 font-medium">Total Students</div>
+                  <div className="text-4xl font-bold text-gray-900 dark:text-white mb-1">{totalStudents}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Students</div>
                 </div>
               </div>
-              <div className="neumorphic-sm-inset p-3 rounded-xl">
-                <p className="text-sm text-gray-600 font-medium">
+              <div className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl">
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                   Active in your classes
                 </p>
               </div>
             </div>
           </div>
           
-          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
-              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-lg hover:border-green-400/50">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10 dark:opacity-20">
+              <div className="w-full h-full bg-green-400/20 rounded-full"></div>
             </div>
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                <div className="p-4 bg-green-500/20 border border-green-400/30 rounded-2xl text-green-500 dark:text-green-400 group-hover:bg-green-500/30 transition-all duration-300">
                   <GraduationCap className="h-7 w-7" />
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold text-gray-700 mb-1">{studentsWithEmail}</div>
-                  <div className="text-sm text-gray-500 font-medium">Complete Profiles</div>
+                  <div className="text-4xl font-bold text-gray-900 dark:text-white mb-1">{studentsWithEmail}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Complete Profiles</div>
                 </div>
               </div>
-              <div className="neumorphic-sm-inset p-3 rounded-xl">
-                <p className="text-sm text-gray-600 font-medium">
+              <div className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl">
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                   With email addresses
                 </p>
               </div>
             </div>
           </div>
           
-          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
-              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+          <div className="bg-gray-900/50 border border-white/10 rounded-2xl p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden backdrop-blur-sm hover:border-blue-400/50">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-20">
+              <div className="w-full h-full bg-blue-400/10 rounded-full"></div>
             </div>
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                <div className="p-4 bg-blue-500/20 border border-blue-400/30 rounded-2xl text-blue-400 group-hover:bg-blue-500/30 transition-all duration-300">
                   <Settings className="h-7 w-7" />
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold text-gray-700 mb-1">{studentsWithEmergencyContact}</div>
-                  <div className="text-sm text-gray-500 font-medium">Emergency Contacts</div>
+                  <div className="text-4xl font-bold text-white mb-1">{studentsWithEmergencyContact}</div>
+                  <div className="text-sm text-slate-400 font-medium">Emergency Contacts</div>
                 </div>
               </div>
-              <div className="neumorphic-sm-inset p-3 rounded-xl">
-                <p className="text-sm text-gray-600 font-medium">
+              <div className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl">
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                   Safety information on file
                 </p>
               </div>
             </div>
           </div>
           
-          <div className="neumorphic-card p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
-              <div className="w-full h-full neumorphic-sm-inset rounded-full"></div>
+          <div className="bg-gray-900/50 border border-white/10 rounded-2xl p-8 group hover:scale-105 transition-all duration-300 relative overflow-hidden backdrop-blur-sm hover:border-purple-400/50">
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-20">
+              <div className="w-full h-full bg-purple-400/10 rounded-full"></div>
             </div>
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <div className="p-4 neumorphic-sm-inset rounded-2xl text-gray-600 group-hover:neumorphic-sm transition-all duration-300">
+                <div className="p-4 bg-purple-500/20 border border-purple-400/30 rounded-2xl text-purple-400 group-hover:bg-purple-500/30 transition-all duration-300">
                   <BarChart3 className="h-7 w-7" />
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold text-gray-700 mb-1">
+                  <div className="text-4xl font-bold text-white mb-1">
                     {students.reduce((sum, s) => sum + s.attendance.length, 0)}
                   </div>
-                  <div className="text-sm text-gray-500 font-medium">Attendance Records</div>
+                  <div className="text-sm text-slate-400 font-medium">Attendance Records</div>
                 </div>
               </div>
-              <div className="neumorphic-sm-inset p-3 rounded-xl">
-                <p className="text-sm text-gray-600 font-medium">
+              <div className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl">
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                   Total records tracked
                 </p>
               </div>
@@ -314,18 +318,56 @@ export default function ModernTeacherDashboard({
           </div>
         </motion.div>
 
-        {/* Performance Analytics - Charts */}
+        {/* Performance Analytics - Modern Charts */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="neumorphic-card p-6"
+          className="space-y-6"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-700">Performance Analytics</h2>
-            <span className="text-xs text-gray-500">Demo data</span>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Performance Analytics</h2>
+            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Live Data</span>
           </div>
-          <PerformanceCharts gradeData={gradeTrend} attendanceData={monthlyAttendance} />
+          
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+            <PerformanceChart
+              type="line"
+              title="Weekly Attendance Trend"
+              description="Student attendance rates over the past 6 weeks"
+              data={generateAttendanceData()}
+              height={280}
+            />
+            <PerformanceChart
+              type="bar"
+              title="Grade Distribution"
+              description="Current semester grade breakdown"
+              data={generateGradeDistribution()}
+              height={280}
+            />
+          </div>
+          
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+            <PerformanceChart
+              type="bar"
+              title="Subject Performance"
+              description="Average scores across different subjects"
+              data={generateSubjectPerformance()}
+              height={280}
+            />
+            <PerformanceChart
+              type="doughnut"
+              title="Class Progress Overview"
+              description="Overall class performance metrics"
+              data={{
+                labels: ['Excellent', 'Good', 'Average', 'Needs Improvement'],
+                datasets: [{
+                  data: [25, 35, 30, 10],
+                }]
+              }}
+              height={280}
+            />
+          </div>
         </motion.div>
 
         {/* Enhanced Tabs Section */}
@@ -333,37 +375,37 @@ export default function ModernTeacherDashboard({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="neumorphic-card p-6"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm transition-colors duration-300"
         >
           <Tabs defaultValue="attendance" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-9 h-auto p-3 neumorphic-sm-inset rounded-2xl gap-2">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 h-auto p-3 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl gap-2 overflow-x-auto">
               <TabsTrigger
                 value="attendance"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <BarChart3 className="h-4 w-4" />
-                <span className="hidden sm:inline">Attendance</span>
+                <span className="hidden sm:inline">{t('tabs.attendance')}</span>
                 <span className="sm:hidden">Att.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="subjects"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <GraduationCap className="h-4 w-4" />
-                <span className="hidden sm:inline">Subjects</span>
+                <span className="hidden sm:inline">{t('tabs.subjects')}</span>
                 <span className="sm:hidden">Sub.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="ai-settings"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">AI Settings</span>
+                <span className="hidden sm:inline">{t('tabs.settings')}</span>
                 <span className="sm:hidden">AI</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tools"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Settings className="h-4 w-4" />
                 <span className="hidden sm:inline">Tools</span>
@@ -371,47 +413,47 @@ export default function ModernTeacherDashboard({
               </TabsTrigger>
               <TabsTrigger
                 value="students"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Users className="h-4 w-4" />
-                <span className="hidden sm:inline">Students</span>
+                <span className="hidden sm:inline">{t('tabs.students')}</span>
                 <span className="sm:hidden">Stud.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="enrollments"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <UserPlus className="h-4 w-4" />
-                <span className="hidden sm:inline">Enrollments</span>
+                <span className="hidden sm:inline">{t('tabs.enrollment')}</span>
                 <span className="sm:hidden">Enroll.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="ai-attendance"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Brain className="h-4 w-4" />
-                <span className="hidden sm:inline">Smart Attendance</span>
+                <span className="hidden sm:inline">{t('smartAttendance')}</span>
                 <span className="sm:hidden">Smart</span>
               </TabsTrigger>
               <TabsTrigger
                 value="ai-grading"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Brain className="h-4 w-4" />
-                <span className="hidden sm:inline">AI Grading</span>
+                <span className="hidden sm:inline">{t('gradingAssistant')}</span>
                 <span className="sm:hidden">Grade</span>
               </TabsTrigger>
               <TabsTrigger
                 value="ai-insights"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <Brain className="h-4 w-4" />
-                <span className="hidden sm:inline">AI Insights</span>
+                <span className="hidden sm:inline">{t('aiInsights')}</span>
                 <span className="sm:hidden">AI</span>
               </TabsTrigger>
               <TabsTrigger
                 value="tools"
-                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 data-[state=active]:neumorphic-sm data-[state=active]:text-gray-700 transition-all duration-300 flex items-center gap-2"
+                className="rounded-xl px-4 sm:px-6 py-4 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 data-[state=active]:bg-cyan-500/20 data-[state=active]:border data-[state=active]:border-cyan-400/30 data-[state=active]:text-cyan-600 dark:data-[state=active]:text-cyan-400 transition-all duration-300 flex items-center gap-2 hover:text-gray-900 dark:hover:text-white"
               >
                 <CreditCard className="h-4 w-4" />
                 <span className="hidden sm:inline">Tools</span>
@@ -427,20 +469,24 @@ export default function ModernTeacherDashboard({
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="space-y-6"
               >
-                <div className="neumorphic-sm-inset p-6 rounded-2xl">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 neumorphic-sm rounded-xl text-gray-600">
-                      <Settings className="h-6 w-6" />
-                    </div>
+                <Card className="shadow-sm border border-border">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
+                        <Settings className="h-6 w-6" />
+                      </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-700">PIN Attendance Sessions</h2>
-                      <p className="text-sm text-gray-600">Create and manage attendance sessions with PIN codes</p>
+                      <h2 className="text-2xl font-bold text-gray-700">{t('pinAttendanceSessions')}</h2>
+                      <p className="text-sm text-gray-600">{t('pinAttendanceDescription')}</p>
                     </div>
                   </div>
-                  <div className="neumorphic-card p-8">
-                    <RealPinSessionManager />
-                  </div>
-                </div>
+                  <Card className="shadow-sm border border-border">
+                    <CardContent className="p-8">
+                      <RealPinSessionManager />
+                    </CardContent>
+                  </Card>
+                  </CardContent>
+                </Card>
               </motion.div>
               
               {/* Traditional Attendance Management */}
@@ -450,20 +496,24 @@ export default function ModernTeacherDashboard({
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="space-y-6"
               >
-                <div className="neumorphic-sm-inset p-6 rounded-2xl">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 neumorphic-sm rounded-xl text-gray-600">
-                      <BarChart3 className="h-6 w-6" />
-                    </div>
+                <Card className="shadow-sm border border-border">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
+                        <BarChart3 className="h-6 w-6" />
+                      </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-700">Manual Attendance</h2>
-                      <p className="text-sm text-gray-600">Track attendance manually and view detailed reports</p>
+                      <h2 className="text-2xl font-bold text-gray-700">{t('manualAttendance')}</h2>
+                      <p className="text-sm text-gray-600">{t('manualAttendanceDescription')}</p>
                     </div>
                   </div>
-                  <div className="neumorphic-card p-8">
-                    <DashboardClient initialStudents={students} />
-                  </div>
-                </div>
+                  <Card className="shadow-sm border border-border">
+                    <CardContent className="p-8">
+                      <DashboardClient initialStudents={students} />
+                    </CardContent>
+                  </Card>
+                  </CardContent>
+                </Card>
               </motion.div>
             </TabsContent>
 
@@ -512,35 +562,39 @@ export default function ModernTeacherDashboard({
                 className="space-y-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
                     <UserPlus className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-700">Add New Students</h2>
                 </div>
                 <div className="grid gap-6 lg:grid-cols-2">
-                  <div className="neumorphic-card p-6 space-y-4 hover:scale-105 transition-transform duration-300">
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold text-gray-700">Quick Registration</h3>
-                      <p className="text-sm text-gray-600">
-                        Fast student account creation with basic information
-                      </p>
-                    </div>
-                    <div className="pt-4 border-t border-gray-300/50">
-                      <RealUserManagement userRole="teacher" onSuccess={handleStudentCreated} />
-                    </div>
-                  </div>
+                  <Card className="shadow-sm border border-border hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <CardContent className="p-6 space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-700">Quick Registration</h3>
+                        <p className="text-sm text-gray-600">
+                          Fast student account creation with basic information
+                        </p>
+                      </div>
+                      <div className="pt-4 border-t border-gray-300/50">
+                        <RealUserManagement userRole="teacher" onSuccess={handleStudentCreated} />
+                      </div>
+                    </CardContent>
+                  </Card>
                   
-                  <div className="neumorphic-card p-6 space-y-4 hover:scale-105 transition-transform duration-300">
+                  <Card className="shadow-sm border border-border hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <CardContent className="p-6 space-y-4">
                     <div className="space-y-2">
                       <h3 className="text-lg font-semibold text-gray-700">Detailed Registration</h3>
                       <p className="text-sm text-gray-600">
                         Complete student profile with contact and medical information
                       </p>
                     </div>
-                    <div className="pt-4 border-t border-gray-300/50">
-                      <EnhancedStudentForm onSuccess={handleStudentCreated} />
-                    </div>
-                  </div>
+                      <div className="pt-4 border-t border-gray-300/50">
+                        <EnhancedStudentForm onSuccess={handleStudentCreated} />
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </motion.div>
               
@@ -552,18 +606,20 @@ export default function ModernTeacherDashboard({
                 className="space-y-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
                     <Users className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-700">Current Students</h2>
                 </div>
-                <div className="neumorphic-card p-6">
-                  <StudentListManager 
-                    students={students} 
-                    onStudentDeleted={handleStudentDeleted}
-                    onStudentUpdated={handleStudentUpdated}
-                  />
-                </div>
+                <Card className="shadow-sm border border-border">
+                  <CardContent className="p-6">
+                    <StudentListManager 
+                      students={students} 
+                      onStudentDeleted={handleStudentDeleted}
+                      onStudentUpdated={handleStudentUpdated}
+                    />
+                  </CardContent>
+                </Card>
               </motion.div>
             </TabsContent>
         
@@ -592,47 +648,50 @@ export default function ModernTeacherDashboard({
                 className="space-y-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
                     <CreditCard className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-700">ID Pass Generator</h2>
                 </div>
-                <div className="neumorphic-card p-6">
-                  <StudentIdGenerator students={students} />
-                </div>
+                <Card className="shadow-sm border border-border">
+                  <CardContent className="p-6">
+                    <StudentIdGenerator students={students} />
+                  </CardContent>
+                </Card>
               </motion.div>
               
               {/* Additional Tools Section */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="space-y-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 neumorphic-sm-inset rounded-xl text-gray-600">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-600">
                     <Settings className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-700">Additional Tools</h2>
                 </div>
-                <div className="neumorphic-card p-8 hover:scale-105 transition-transform duration-300">
-                  <div className="text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto neumorphic-sm-inset rounded-2xl flex items-center justify-center">
-                      <Settings className="h-8 w-8 text-gray-600" />
+                <Card className="shadow-sm border border-border hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                  <CardContent className="p-8">
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center">
+                        <Settings className="h-8 w-8 text-gray-600" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-700">More Features Coming Soon</h3>
+                        <p className="text-gray-600 max-w-md mx-auto">
+                          Bulk import, Export reports, Grade management, and more powerful tools will be available here
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-2 pt-4">
+                        <Badge variant="secondary" className="text-xs">Bulk Import</Badge>
+                        <Badge variant="secondary" className="text-xs">Export Reports</Badge>
+                        <Badge variant="secondary" className="text-xs">Grade Management</Badge>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold text-gray-700">More Features Coming Soon</h3>
-                      <p className="text-gray-600 max-w-md mx-auto">
-                        Bulk import, Export reports, Grade management, and more powerful tools will be available here
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-2 pt-4">
-                      <span className="px-3 py-1 neumorphic-sm rounded-full text-gray-700 text-xs font-medium">Bulk Import</span>
-                      <span className="px-3 py-1 neumorphic-sm rounded-full text-gray-700 text-xs font-medium">Export Reports</span>
-                      <span className="px-3 py-1 neumorphic-sm rounded-full text-gray-700 text-xs font-medium">Grade Management</span>
-                    </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             </TabsContent>
           </Tabs>
