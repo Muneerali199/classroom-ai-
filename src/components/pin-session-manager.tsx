@@ -15,7 +15,6 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, Hash, Timer, Users, Copy, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import { createPinAttendanceSessionAction, getSessionAttendanceAction } from '@/app/actions';
 import type { AttendanceSession } from '@/lib/database.types';
 import type { Student } from '@/lib/types';
 
@@ -30,13 +29,13 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
   const [sessionPin, setSessionPin] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [attendanceRecords, setAttendanceRecords] = useState<{ studentName: string; timestamp: string }[]>([]);
   const [copied, setCopied] = useState(false);
+  const [attendanceRecords, setAttendanceRecords] = useState<{ studentName: string; timestamp: string }[]>([]);
 
   // Check if user is a teacher
   const isTeacher = user?.role === 'teacher' || user?.user_metadata?.role === 'teacher';
 
-  const handleCreateSession = () => {
+  const startSession = async () => {
     setError(null);
     if (!user) {
       setError('You must be logged in to create a session.');
@@ -49,30 +48,56 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
     }
 
     startTransition(async () => {
-      const teacherName = user.user_metadata?.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Unknown Teacher';
-      const result = await createPinAttendanceSessionAction('CMPT-101', user.id!, duration, teacherName);
-      if (result.success && result.session && result.pin) {
-        setSession(result.session);
-        setSessionPin(result.pin);
-        // Start polling for attendance
-        pollAttendance(result.session.id);
-      } else {
-        setError(result.error || 'An unknown error occurred.');
+      try {
+        const teacherName = user.user_metadata?.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Unknown Teacher';
+        
+        const response = await fetch('/api/attendance/pin-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            courseId: 'CMPT-101',
+            teacherId: user.id!,
+            duration,
+            teacherName,
+          }),
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.session && result.pin) {
+          setSession(result.session);
+          setSessionPin(result.pin);
+          // Start polling for attendance
+          pollAttendance(result.session.id);
+        } else {
+          setError(result.error || 'An unknown error occurred.');
+        }
+      } catch (error) {
+        setError('Failed to create session. Please try again.');
+        console.error('Session creation error:', error);
       }
     });
   };
 
   const pollAttendance = (sessionId: string) => {
     const interval = setInterval(async () => {
-      const result = await getSessionAttendanceAction(sessionId);
-      if (result.success && result.records) {
-        setAttendanceRecords(result.records);
-      }
+      try {
+        const response = await fetch(`/api/attendance/pin-session?sessionId=${sessionId}`);
+        const result = await response.json();
+        
+        if (result.success && result.records) {
+          setAttendanceRecords(result.records);
+        }
 
-      // Stop polling if session has ended
-      const sessionToEnd = session || { end_time: new Date(0).toISOString() };
-      if (new Date() > new Date(sessionToEnd.end_time)) {
-        clearInterval(interval);
+        // Stop polling if session has ended
+        const sessionToEnd = session || { end_time: new Date(0).toISOString() };
+        if (new Date() > new Date(sessionToEnd.end_time)) {
+          clearInterval(interval);
+        }
+      } catch (error) {
+        console.error('Error polling attendance:', error);
       }
     }, 5000); // Poll every 5 seconds
   };
@@ -136,7 +161,7 @@ export default function PinSessionManager({ students }: PinSessionManagerProps) 
                   disabled={!isTeacher}
                 />
               </div>
-              <Button onClick={handleCreateSession} disabled={isPending || !isTeacher} className="w-full">
+              <Button onClick={startSession} disabled={isPending || !isTeacher} className="w-full">
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isPending ? 'Creating Session...' : 'Create New Session'}
               </Button>
