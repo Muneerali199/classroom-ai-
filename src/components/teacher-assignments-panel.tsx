@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSupabase } from "@/lib/supabase";
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,8 @@ import { Loader2, UploadCloud, PlusCircle } from "lucide-react";
 
 export default function TeacherAssignmentsPanel() {
   const { toast } = useToast();
+  const t = useTranslations('TeacherDashboard');
+  const tCommon = useTranslations('Common');
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any[]>([]);
   const [title, setTitle] = useState("");
@@ -170,7 +173,7 @@ export default function TeacherAssignmentsPanel() {
       setDueDate("");
       setSubjectId("");
       setFile(null);
-      toast({ title: "Assignment created", description: "Students have been notified" });
+      toast({ title: tCommon('success'), description: "Students have been notified" });
     } catch (e: any) {
       toast({ title: "Error", description: e.message, variant: "destructive" });
     } finally {
@@ -182,16 +185,16 @@ export default function TeacherAssignmentsPanel() {
     <div className="space-y-6">
       <Card className="neo-surface">
         <CardHeader>
-          <CardTitle className="text-gray-800 flex items-center gap-2"><PlusCircle className="w-4 h-4"/> Create Assignment</CardTitle>
+          <CardTitle className="text-gray-800 flex items-center gap-2"><PlusCircle className="w-4 h-4"/> {tCommon('create')} {tCommon('assignments')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="grid gap-4 sm:grid-cols-2" onSubmit={onSubmit}>
             <div className="space-y-2 sm:col-span-2">
-              <Label>Title</Label>
+              <Label>{tCommon('title')}</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., Chapter 5 Worksheet" required />
             </div>
             <div className="space-y-2 sm:col-span-2">
-              <Label>Description</Label>
+              <Label>{tCommon('description')}</Label>
               <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Instructions or notes" rows={3}/>
             </div>
             <div className="space-y-2">
@@ -271,7 +274,7 @@ export default function TeacherAssignmentsPanel() {
             <div className="sm:col-span-2">
               <Button type="submit" disabled={loading}>
                 {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin"/> : <UploadCloud className="w-4 h-4 mr-2"/>}
-                Publish Assignment
+                {tCommon('publish')} {tCommon('assignments')}
               </Button>
             </div>
           </form>
@@ -281,7 +284,7 @@ export default function TeacherAssignmentsPanel() {
       <Card className="neo-surface">
         <CardHeader>
           <div className="flex items-center justify-between gap-3">
-            <CardTitle className="text-gray-800">Latest Assignments</CardTitle>
+            <CardTitle className="text-gray-800">{tCommon('recent')} {tCommon('assignments')}</CardTitle>
             <div className="flex items-center gap-2">
               <label className="text-sm text-gray-600">Subject</label>
               <select className="border rounded-md h-9 px-2" value={subjectFilter} onChange={(e) => setSubjectFilter(e.target.value)}>
