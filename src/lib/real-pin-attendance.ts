@@ -282,7 +282,7 @@ export class RealPinAttendanceService {
 
       // Enhance with student names/emails by fetching from students using auth_user_id
       const ids: string[] = Array.from(new Set((data || []).map((r: any) => r.student_id))).filter(Boolean);
-      let studentsByAuth: Record<string, { name?: string; email?: string }> = {};
+      const studentsByAuth: Record<string, { name?: string; email?: string }> = {};
       if (ids.length > 0) {
         const { data: studentsList } = await (supabase as any)
           .from('students')
