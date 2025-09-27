@@ -71,16 +71,23 @@ export default function AILectureSummarizer() {
 ⚡ Review connections between concepts
 ⚡ Time management during problem-solving
 
-**Related Topics:** Connect with previous lectures on similar subjects
-`);
-      setKeyPoints(mockSummary.keyPoints);
+**Related Topics:** Connect with previous lectures on similar subjects`;
+      const mockKeyPoints = [
+        "Core principles and fundamental theories",
+        "Practical applications and real-world examples",
+        "Important formulas and methodologies",
+        "Historical context and development"
+      ];
+      
+      setSummary(mockSummary);
+      setRevisionNotes(mockRevisionNotes);
+      setKeyPoints(mockKeyPoints);
       toast({
         title: "AI Summary Generated",
         description: "Your lecture has been successfully summarized using AI!"
       });
     } catch (error: any) {
       console.error('AI Summary Error:', error);
-      setError("Failed to generate AI summary. Please check your AI configuration.");
       toast({
         title: "AI Error",
         description: "Failed to generate summary. Please check your AI settings.",
@@ -92,7 +99,6 @@ export default function AILectureSummarizer() {
   };
 
   const downloadNotes = () => {
-    const content = `${summary.title}\n\n${revisionNotes}\n\nKey Points:\n${keyPoints.map(point => `• ${point}`).join('\n')}`;
     const content = `${summary}\n\n${revisionNotes}\n\nKey Points:\n${keyPoints.map(point => `• ${point}`).join('\n')}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
