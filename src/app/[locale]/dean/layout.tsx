@@ -17,7 +17,10 @@ import { Link } from '@/routing';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
 import ChatbotMount from '@/components/chatbot-mount';
 
+import { useTranslations } from 'next-intl';
+
 function DeanSidebar() {
+  const t = useTranslations('DeanNav');
   return (
     <Sidebar className="neo-bg">
       <SidebarHeader>
@@ -37,7 +40,7 @@ function DeanSidebar() {
               <SidebarMenuButton asChild isActive className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/dean/dashboard">
                   <Home />
-                  Dashboard
+                  {t('dashboard')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -45,27 +48,27 @@ function DeanSidebar() {
               <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="#">
                   <Users />
-                  User Management
+                  {t('userManagement')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
               <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
                 <School />
-                Course Management
+                {t('courseManagement')}
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
               <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
                 <Settings />
-                System Settings
+                {t('systemSettings')}
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href={'/dashboard/assistant'}>
                   <Bot />
-                  AI Assistant
+                  {t('assistant')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -73,7 +76,7 @@ function DeanSidebar() {
               <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/dashboard/profile">
                   <User />
-                  Profile
+                  {t('profile')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
