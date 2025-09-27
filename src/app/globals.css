@@ -2,6 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling without Lenis */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
+/* Enhanced smooth scrolling for modern browsers */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom scrollbar styling */
+.scrollbar-modern {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156 163 175) transparent;
+}
+
+.scrollbar-modern::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb {
+  background-color: rgb(156 163 175);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}
+
+/* Dark mode scrollbar */
+.dark .scrollbar-modern {
+  scrollbar-color: rgb(75 85 99) transparent;
+}
+
+.dark .scrollbar-modern::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
+}
+
+.dark .scrollbar-modern::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}
+
 body {
   font-family: var(--font-body), sans-serif;
 }
@@ -240,7 +291,7 @@ body {
     box-shadow: var(--shadow-xl);
   }
   
-  /* Enhanced Neumorphic Design System */
+  /* Modern Design System - Replacing Neumorphism */
   
   /* Base neumorphic styles */
   .neumorphic {
@@ -543,6 +594,41 @@ body {
   
   .dark .neumorphic-badge:hover {
     box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
+  }
+  
+  /* Modern Design Utilities - Replacement for Neumorphism */
+  
+  /* Modern card variants */
+  .modern-card {
+    @apply bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  .modern-card-elevated {
+    @apply bg-card border border-border rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+  }
+  
+  .modern-card-interactive {
+    @apply bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 
+           transition-all duration-300 cursor-pointer hover:-translate-y-0.5;
+  }
+  
+  /* Modern button variants */
+  .modern-button {
+    @apply bg-background border border-border rounded-lg px-4 py-2 text-sm font-medium 
+           hover:bg-accent hover:text-accent-foreground transition-all duration-200 
+           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  .modern-button-primary {
+    @apply bg-primary text-primary-foreground border-0 rounded-lg px-4 py-2 text-sm font-medium 
+           hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  .modern-button-ghost {
+    @apply bg-transparent border-0 rounded-lg px-4 py-2 text-sm font-medium 
+           hover:bg-accent hover:text-accent-foreground transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
   
   /* Responsive dark mode neumorphic adjustments */
