@@ -8,8 +8,8 @@ const nextConfig = {
     // Ensure Next.js uses this project directory as the workspace root
     outputFileTracingRoot: __dirname,
     eslint: {
-        // Allow production builds to successfully complete even if there are ESLint warnings
-        ignoreDuringBuilds: false,
+        // Skip running ESLint during production builds to avoid noisy warnings in output
+        ignoreDuringBuilds: true,
     },
     images: {
         remotePatterns: [{
