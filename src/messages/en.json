@@ -4,7 +4,10 @@
     "profile": "Profile",
     "students": "Students",
     "attendance": "Attendance",
-    "assistant": "AI Assistant"
+    "assistant": "AI Assistant",
+    "assignments": "Assignments",
+    "timetable": "Timetable",
+    "meetings": "Meetings"
   },
   "ProfilePage": {
     "title": "Profile Settings",
@@ -82,5 +85,333 @@
     "subjectAttendance": "Subject Attendance",
     "deadline": "Deadline",
     "progress": "Progress"
+  },
+  "StudentNav": {
+    "dashboard": "Dashboard",
+    "markAttendance": "Mark Attendance",
+    "myCourses": "My Courses",
+    "myAttendance": "My Attendance",
+    "assignments": "Assignments",
+    "timetable": "Timetable",
+    "meetings": "Meetings",
+    "assistant": "AI Assistant",
+    "profile": "Profile"
+  },
+  "DeanNav": {
+    "dashboard": "Dashboard",
+    "userManagement": "User Management",
+    "courseManagement": "Course Management",
+    "systemSettings": "System Settings",
+    "assistant": "AI Assistant",
+    "profile": "Profile"
+  },
+  "TeacherDashboard": {
+    "title": "Teacher Dashboard",
+    "subtitle": "Manage your classroom with AI-powered insights",
+    "welcomeBack": "Welcome back",
+    "overview": "Overview",
+    "quickStats": "Quick Stats",
+    "totalStudents": "Total Students",
+    "activeAssignments": "Active Assignments",
+    "averageAttendance": "Average Attendance",
+    "upcomingMeetings": "Upcoming Meetings",
+    "recentActivity": "Recent Activity",
+    "studentManagement": "Student Management",
+    "addStudent": "Add Student",
+    "generateId": "Generate ID",
+    "viewAll": "View All",
+    "attendanceTracking": "Attendance Tracking",
+    "startSession": "Start Session",
+    "viewRecords": "View Records",
+    "aiInsights": "AI Insights",
+    "performanceAnalytics": "Performance Analytics",
+    "gradingAssistant": "Grading Assistant",
+    "smartAttendance": "Smart Attendance",
+    "aiSettings": "AI Settings",
+    "subjectManagement": "Subject Management",
+    "roomManagement": "Room Management",
+    "enrollmentManagement": "Enrollment Management",
+    "pinAttendanceSessions": "PIN Attendance Sessions",
+    "pinAttendanceDescription": "Create and manage attendance sessions with PIN codes",
+    "manualAttendance": "Manual Attendance",
+    "manualAttendanceDescription": "Track attendance manually and view detailed reports",
+    "tabs": {
+      "overview": "Overview",
+      "students": "Students",
+      "attendance": "Attendance",
+      "subjects": "Subjects",
+      "rooms": "Rooms",
+      "enrollment": "Enrollment",
+      "analytics": "Analytics",
+      "aiTools": "AI Tools",
+      "settings": "Settings"
+    }
+  },
+  "StudentDashboard": {
+    "title": "Student Dashboard",
+    "subtitle": "Track your academic progress",
+    "welcomeBack": "Welcome back",
+    "myProgress": "My Progress",
+    "currentGrade": "Current Grade",
+    "attendanceRate": "Attendance Rate",
+    "assignmentsDue": "Assignments Due",
+    "upcomingTests": "Upcoming Tests",
+    "recentGrades": "Recent Grades",
+    "attendanceHistory": "Attendance History",
+    "markAttendance": "Mark Attendance",
+    "viewCourses": "View Courses",
+    "submitAssignment": "Submit Assignment",
+    "scheduleHelp": "Schedule Help"
+  },
+  "DeanDashboard": {
+    "title": "Dean Dashboard",
+    "subtitle": "Institutional Overview & Management",
+    "welcomeBack": "Welcome back",
+    "institutionOverview": "Institution Overview",
+    "totalTeachers": "Total Teachers",
+    "totalStudents": "Total Students",
+    "totalCourses": "Total Courses",
+    "systemHealth": "System Health",
+    "userManagement": "User Management",
+    "courseManagement": "Course Management",
+    "systemSettings": "System Settings",
+    "reports": "Reports",
+    "analytics": "Analytics"
+  },
+  "Header": {
+    "notifications": "Notifications",
+    "clear": "Clear",
+    "noRecent": "No recent notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "update": "Update",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset",
+    "clear": "Clear",
+    "select": "Select",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "actions": "Actions",
+    "options": "Options",
+    "settings": "Settings",
+    "preferences": "Preferences",
+    "help": "Help",
+    "about": "About",
+    "contact": "Contact",
+    "support": "Support",
+    "documentation": "Documentation",
+    "version": "Version",
+    "lastUpdated": "Last Updated",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "online": "Online",
+    "offline": "Offline",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "public": "Public",
+    "private": "Private",
+    "draft": "Draft",
+    "published": "Published",
+    "archived": "Archived",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started",
+    "overdue": "Overdue",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "thisWeek": "This Week",
+    "lastWeek": "Last Week",
+    "nextWeek": "Next Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "nextMonth": "Next Month",
+    "thisYear": "This Year",
+    "lastYear": "Last Year",
+    "nextYear": "Next Year",
+    "id": "ID",
+    "attendance": "Attendance",
+    "schedule": "Schedule",
+    "assignments": "Assignments",
+    "title": "Title",
+    "description": "Description",
+    "publish": "Publish",
+    "recent": "Recent"
+  },
+  "Landing": {
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "about": "About",
+      "contact": "Contact",
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "title": "Transform Education with AI-Powered Analytics",
+      "subtitle": "Real-time insights for teachers, students, and administrators",
+      "ctaPrimary": "Get Started",
+      "ctaSecondary": "Watch Demo",
+      "trustIndicator": "Trusted by 10,000+ educators worldwide",
+      "statsTeachers": "Active Teachers",
+      "statsStudents": "Students Managed",
+      "statsUptime": "Uptime",
+      "joinWaitlist": "Join the waitlist"
+    },
+    "features": {
+      "title": "Powerful Features for Modern Education",
+      "subtitle": "Everything you need to manage your classroom efficiently",
+      "smartAttendance": {
+        "title": "Smart Attendance",
+        "description": "AI-powered attendance tracking with facial recognition and PIN-based systems"
+      },
+      "gradingAssistant": {
+        "title": "AI Grading Assistant",
+        "description": "Automated grading with intelligent feedback and performance analytics"
+      },
+      "analytics": {
+        "title": "Performance Analytics",
+        "description": "Deep insights into student performance with actionable recommendations"
+      },
+      "multilingual": {
+        "title": "Multilingual Support",
+        "description": "Support for 30+ languages including all major Indian languages"
+      }
+    },
+    "howItWorks": {
+      "title": "How ClassroomAI Works",
+      "subtitle": "Get started in minutes, not hours",
+      "step1": {
+        "title": "Setup Your Classroom",
+        "description": "Quick 5-minute setup process with guided onboarding"
+      },
+      "step2": {
+        "title": "AI Takes Over",
+        "description": "Automated attendance tracking and intelligent grading"
+      },
+      "step3": {
+        "title": "Get Insights",
+        "description": "Actionable analytics and performance reports"
+      }
+    },
+    "testimonials": {
+      "title": "What Educators Say",
+      "subtitle": "Join thousands of satisfied educators",
+      "testimonial1": {
+        "quote": "ClassroomAI has revolutionized how I manage my classroom. The AI insights are incredibly helpful.",
+        "author": "Dr. Sarah Johnson",
+        "role": "Professor, MIT"
+      },
+      "testimonial2": {
+        "quote": "The multilingual support makes it perfect for our diverse student body. Highly recommended!",
+        "author": "Rajesh Kumar",
+        "role": "Principal, Delhi Public School"
+      },
+      "testimonial3": {
+        "quote": "Attendance tracking is now effortless. The AI grading saves me hours every week.",
+        "author": "Maria Garcia",
+        "role": "High School Teacher, Barcelona"
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that works for you",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "save": "Save 20%",
+      "free": {
+        "title": "Free",
+        "price": "$0",
+        "period": "forever",
+        "description": "Perfect for individual teachers",
+        "features": [
+          "Up to 30 students",
+          "Basic attendance tracking",
+          "Email support",
+          "Core AI features"
+        ],
+        "cta": "Get Started Free"
+      },
+      "pro": {
+        "title": "Professional",
+        "price": "$29",
+        "period": "per month",
+        "description": "For serious educators",
+        "features": [
+          "Unlimited students",
+          "Advanced AI grading",
+          "Performance analytics",
+          "Priority support",
+          "Custom integrations"
+        ],
+        "cta": "Start Free Trial"
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "price": "Custom",
+        "period": "contact us",
+        "description": "For institutions",
+        "features": [
+          "Multi-campus support",
+          "Advanced security",
+          "Custom training",
+          "Dedicated support",
+          "API access"
+        ],
+        "cta": "Contact Sales"
+      }
+    },
+    "tech": {
+      "title": "Best-in-class Tech Stack",
+      "subtitle": "Built with modern, scalable tools"
+    },
+    "team": {
+      "title": "Built by Educators and Engineers",
+      "subtitle": "A passionate team crafting the future of classrooms"
+    },
+    "finalCta": {
+      "title": "Ready to Transform Your Classroom?",
+      "subtitle": "Join thousands of educators already using ClassroomAI to enhance their teaching experience",
+      "ctaPrimary": "Start Your Free Trial",
+      "ctaSecondary": "Schedule a Demo",
+      "noCredit": "No credit card required"
+    }
   }
 }
