@@ -15,11 +15,13 @@ import { Home, User, BookOpen, BarChart3, Hash, Bot, Calendar as CalendarIcon, V
 import Header from '@/components/header';
 import { Logo } from '@/components/icons';
 import { Link } from '@/routing';
+import { useTranslations } from 'next-intl';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
 import ChatbotMount from '@/components/chatbot-mount';
 import { usePathname } from 'next/navigation';
 
 function StudentSidebar() {
+  const t = useTranslations('StudentNav');
   const pathname = usePathname();
   return (
     <Sidebar className="neo-bg">
@@ -41,7 +43,7 @@ function StudentSidebar() {
                 className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/dashboard">
                   <Home />
-                  Dashboard
+                  {t('dashboard')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -49,7 +51,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/pin-attendance')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/pin-attendance">
                   <Hash />
-                  Mark Attendance
+                  {t('markAttendance')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -57,7 +59,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/students')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/students">
                   <BookOpen />
-                  My Courses
+                  {t('myCourses')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -65,7 +67,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/attendance')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/attendance">
                   <BarChart3 />
-                  My Attendance
+                  {t('myAttendance')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -73,7 +75,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/assignments')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/assignments">
                   <FileText />
-                  Assignments
+                  {t('assignments')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -81,7 +83,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/timetable')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/timetable">
                   <CalendarIcon />
-                  Timetable
+                  {t('timetable')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -89,7 +91,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/meetings')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/meetings">
                   <Video />
-                  Meetings
+                  {t('meetings')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -97,7 +99,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/assistant')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href={'/student/assistant'}>
                   <Bot />
-                  AI Assistant
+                  {t('assistant')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -105,7 +107,7 @@ function StudentSidebar() {
               <SidebarMenuButton asChild isActive={pathname?.includes('/student/profile')} className="neo-surface hover:shadow-lg rounded-xl">
                 <Link href="/student/profile">
                   <User />
-                  Profile
+                  {t('profile')}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
