@@ -4,21 +4,21 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useState, useTransition, useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from '@/routing';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/use-auth';
-import { updateProfileAction } from '@/app/actions';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
+import { updateProfileAction } from '@/app/actions/profile';
+import { useState, useEffect, useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-import { Textarea } from './ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Checkbox } from './ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -149,21 +149,24 @@ export default function ProfileForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-2xl">
        {error && (
-        <div className="neumorphic-sm-inset p-4 rounded-xl border-l-4 border-red-500">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            <h4 className="font-semibold text-red-700">{t('updateFailed')}</h4>
+            <h4 className="font-semibold text-red-700 dark:text-red-400">{t('updateFailed')}</h4>
           </div>
-          <p className="text-sm text-red-600 mt-1">{error}</p>
+          <p className="text-sm text-red-600 dark:text-red-300 mt-1">{error}</p>
         </div>
       )}
       
       {/* Personal Information Section */}
-      <div className="neumorphic-sm-inset p-6 rounded-2xl">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-          Personal Information
-        </h3>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            Personal Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
               <Label htmlFor="firstName" className="text-sm font-medium text-gray-600">{t('firstName')}</Label>
