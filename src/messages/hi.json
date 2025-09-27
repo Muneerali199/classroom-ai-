@@ -4,7 +4,10 @@
     "profile": "प्रोफ़ाइल",
     "students": "छात्र",
     "attendance": "उपस्थिति",
-    "assistant": "एआई सहायक"
+    "assistant": "एआई सहायक",
+    "assignments": "असाइनमेंट",
+    "timetable": "समय-सारिणी",
+    "meetings": "बैठकें"
   },
   "ProfilePage": {
     "title": "प्रोफ़ाइल सेटिंग्स",
@@ -82,5 +85,333 @@
     "subjectAttendance": "विषय-वार उपस्थिति",
     "deadline": "अंतिम तिथि",
     "progress": "प्रगति"
+  },
+  "StudentNav": {
+    "dashboard": "डैशबोर्ड",
+    "markAttendance": "उपस्थिति दर्ज करें",
+    "myCourses": "मेरे पाठ्यक्रम",
+    "myAttendance": "मेरी उपस्थिति",
+    "assignments": "असाइनमेंट",
+    "timetable": "समय-सारिणी",
+    "meetings": "बैठकें",
+    "assistant": "एआई सहायक",
+    "profile": "प्रोफ़ाइल"
+  },
+  "DeanNav": {
+    "dashboard": "डैशबोर्ड",
+    "userManagement": "उपयोगकर्ता प्रबंधन",
+    "courseManagement": "पाठ्यक्रम प्रबंधन",
+    "systemSettings": "सिस्टम सेटिंग्स",
+    "assistant": "एआई सहायक",
+    "profile": "प्रोफाइल"
+  },
+  "Header": {
+    "notifications": "सूचनाएं",
+    "clear": "साफ करें",
+    "noRecent": "कोई हाल की सूचनाएं नहीं",
+    "profile": "प्रोफाइल",
+    "settings": "सेटिंग्स",
+    "logout": "लॉग आउट"
+  },
+  "TeacherDashboard": {
+    "title": "शिक्षक डैशबोर्ड",
+    "subtitle": "AI-संचालित अंतर्दृष्टि के साथ अपनी कक्षा का प्रबंधन करें",
+    "welcomeBack": "वापस स्वागत है",
+    "overview": "अवलोकन",
+    "quickStats": "त्वरित आंकड़े",
+    "totalStudents": "कुल छात्र",
+    "activeAssignments": "सक्रिय असाइनमेंट",
+    "averageAttendance": "औसत उपस्थिति",
+    "upcomingMeetings": "आगामी बैठकें",
+    "recentActivity": "हाल की गतिविधि",
+    "studentManagement": "छात्र प्रबंधन",
+    "addStudent": "छात्र जोड़ें",
+    "generateId": "ID जेनरेट करें",
+    "viewAll": "सभी देखें",
+    "attendanceTracking": "उपस्थिति ट्रैकिंग",
+    "startSession": "सत्र शुरू करें",
+    "viewRecords": "रिकॉर्ड देखें",
+    "aiInsights": "AI अंतर्दृष्टि",
+    "performanceAnalytics": "प्रदर्शन विश्लेषण",
+    "gradingAssistant": "ग्रेडिंग सहायक",
+    "smartAttendance": "स्मार्ट उपस्थिति",
+    "aiSettings": "AI सेटिंग्स",
+    "subjectManagement": "विषय प्रबंधन",
+    "roomManagement": "कमरा प्रबंधन",
+    "enrollmentManagement": "नामांकन प्रबंधन",
+    "pinAttendanceSessions": "PIN उपस्थिति सत्र",
+    "pinAttendanceDescription": "PIN कोड के साथ उपस्थिति सत्र बनाएं और प्रबंधित करें",
+    "manualAttendance": "मैनुअल उपस्थिति",
+    "manualAttendanceDescription": "मैन्युअल रूप से उपस्थिति ट्रैक करें और विस्तृत रिपोर्ट देखें",
+    "tabs": {
+      "overview": "अवलोकन",
+      "students": "छात्र",
+      "attendance": "उपस्थिति",
+      "subjects": "विषय",
+      "rooms": "कमरे",
+      "enrollment": "नामांकन",
+      "analytics": "विश्लेषण",
+      "aiTools": "AI उपकरण",
+      "settings": "सेटिंग्स"
+    }
+  },
+  "StudentDashboard": {
+    "title": "छात्र डैशबोर्ड",
+    "subtitle": "अपनी शैक्षणिक प्रगति को ट्रैक करें",
+    "welcomeBack": "वापस स्वागत है",
+    "myProgress": "मेरी प्रगति",
+    "currentGrade": "वर्तमान ग्रेड",
+    "attendanceRate": "उपस्थिति दर",
+    "assignmentsDue": "देय असाइनमेंट",
+    "upcomingTests": "आगामी परीक्षाएं",
+    "recentGrades": "हाल के ग्रेड",
+    "attendanceHistory": "उपस्थिति इतिहास",
+    "markAttendance": "उपस्थिति चिह्नित करें",
+    "viewCourses": "पाठ्यक्रम देखें",
+    "submitAssignment": "असाइनमेंट जमा करें",
+    "scheduleHelp": "शेड्यूल सहायता"
+  },
+  "DeanDashboard": {
+    "title": "डीन डैशबोर्ड",
+    "subtitle": "संस्थागत अवलोकन और प्रबंधन",
+    "welcomeBack": "वापस स्वागत है",
+    "institutionOverview": "संस्थान अवलोकन",
+    "totalTeachers": "कुल शिक्षक",
+    "totalStudents": "कुल छात्र",
+    "totalCourses": "कुल पाठ्यक्रम",
+    "systemHealth": "सिस्टम स्वास्थ्य",
+    "userManagement": "उपयोगकर्ता प्रबंधन",
+    "courseManagement": "पाठ्यक्रम प्रबंधन",
+    "systemSettings": "सिस्टम सेटिंग्स",
+    "reports": "रिपोर्ट",
+    "analytics": "विश्लेषण"
+  },
+  "Common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "warning": "चेतावनी",
+    "info": "जानकारी",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "add": "जोड़ें",
+    "remove": "हटाएं",
+    "update": "अपडेट करें",
+    "create": "बनाएं",
+    "search": "खोजें",
+    "filter": "फिल्टर",
+    "sort": "क्रमबद्ध करें",
+    "export": "निर्यात",
+    "import": "आयात",
+    "refresh": "रीफ्रेश",
+    "close": "बंद करें",
+    "open": "खोलें",
+    "yes": "हां",
+    "no": "नहीं",
+    "confirm": "पुष्टि करें",
+    "back": "वापस",
+    "next": "अगला",
+    "previous": "पिछला",
+    "submit": "जमा करें",
+    "reset": "रीसेट",
+    "clear": "साफ करें",
+    "select": "चुनें",
+    "selectAll": "सभी चुनें",
+    "deselectAll": "सभी अचयनित करें",
+    "actions": "क्रियाएं",
+    "options": "विकल्प",
+    "settings": "सेटिंग्स",
+    "preferences": "प्राथमिकताएं",
+    "help": "सहायता",
+    "about": "के बारे में",
+    "contact": "संपर्क",
+    "support": "समर्थन",
+    "documentation": "दस्तावेज़ीकरण",
+    "version": "संस्करण",
+    "lastUpdated": "अंतिम अपडेट",
+    "createdAt": "बनाया गया",
+    "updatedAt": "अपडेट किया गया",
+    "status": "स्थिति",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+    "online": "ऑनलाइन",
+    "offline": "ऑफलाइन",
+    "available": "उपलब्ध",
+    "unavailable": "अनुपलब्ध",
+    "public": "सार्वजनिक",
+    "private": "निजी",
+    "draft": "मसौदा",
+    "published": "प्रकाशित",
+    "archived": "संग्रहीत",
+    "pending": "लंबित",
+    "approved": "अनुमोदित",
+    "rejected": "अस्वीकृत",
+    "completed": "पूर्ण",
+    "inProgress": "प्रगति में",
+    "notStarted": "शुरू नहीं हुआ",
+    "overdue": "देर से",
+    "today": "आज",
+    "yesterday": "कल",
+    "tomorrow": "कल",
+    "thisWeek": "इस सप्ताह",
+    "lastWeek": "पिछले सप्ताह",
+    "nextWeek": "अगले सप्ताह",
+    "thisMonth": "इस महीने",
+    "lastMonth": "पिछले महीने",
+    "nextMonth": "अगले महीने",
+    "thisYear": "इस साल",
+    "lastYear": "पिछले साल",
+    "nextYear": "अगले साल",
+    "id": "आईडी",
+    "attendance": "उपस्थिति",
+    "schedule": "शेड्यूल",
+    "assignments": "असाइनमेंट",
+    "title": "शीर्षक",
+    "description": "विवरण",
+    "publish": "प्रकाशित करें",
+    "recent": "हाल का"
+  },
+  "Landing": {
+    "nav": {
+      "features": "विशेषताएँ",
+      "pricing": "मूल्य",
+      "about": "हमारे बारे में",
+      "contact": "संपर्क",
+      "signIn": "साइन इन",
+      "getStarted": "शुरू करें"
+    },
+    "hero": {
+      "title": "AI-संचालित एनालिटिक्स के साथ शिक्षा को बदलें",
+      "subtitle": "शिक्षकों, छात्रों और प्रशासकों के लिए रियल-टाइम इनसाइट्स",
+      "ctaPrimary": "शुरू करें",
+      "ctaSecondary": "डेमो देखें",
+      "trustIndicator": "दुनियाभर के 10,000+ शिक्षकों का भरोसा",
+      "statsTeachers": "सक्रिय शिक्षक",
+      "statsStudents": "प्रबंधित छात्र",
+      "statsUptime": "अपटाइम",
+      "joinWaitlist": "वेटलिस्ट से जुड़ें"
+    },
+    "features": {
+      "title": "आधुनिक शिक्षा के लिए शक्तिशाली सुविधाएं",
+      "subtitle": "अपनी कक्षा को कुशलता से प्रबंधित करने के लिए आवश्यक सब कुछ",
+      "smartAttendance": {
+        "title": "स्मार्ट उपस्थिति",
+        "description": "चेहरा पहचान और PIN-आधारित सिस्टम के साथ AI-संचालित उपस्थिति ट्रैकिंग"
+      },
+      "gradingAssistant": {
+        "title": "AI ग्रेडिंग सहायक",
+        "description": "बुद्धिमान फीडबैक और प्रदर्शन विश्लेषण के साथ स्वचालित ग्रेडिंग"
+      },
+      "analytics": {
+        "title": "प्रदर्शन विश्लेषण",
+        "description": "कार्यात्मक सिफारिशों के साथ छात्र प्रदर्शन में गहरी अंतर्दृष्टि"
+      },
+      "multilingual": {
+        "title": "बहुभाषी समर्थन",
+        "description": "सभी प्रमुख भारतीय भाषाओं सहित 30+ भाषाओं का समर्थन"
+      }
+    },
+    "howItWorks": {
+      "title": "ClassroomAI कैसे काम करता है",
+      "subtitle": "घंटों में नहीं, मिनटों में शुरुआत करें",
+      "step1": {
+        "title": "अपनी कक्षा सेट करें",
+        "description": "निर्देशित ऑनबोर्डिंग के साथ त्वरित 5-मिनट सेटअप प्रक्रिया"
+      },
+      "step2": {
+        "title": "AI संभाल लेता है",
+        "description": "स्वचालित उपस्थिति ट्रैकिंग और बुद्धिमान ग्रेडिंग"
+      },
+      "step3": {
+        "title": "अंतर्दृष्टि प्राप्त करें",
+        "description": "कार्यात्मक विश्लेषण और प्रदर्शन रिपोर्ट"
+      }
+    },
+    "testimonials": {
+      "title": "शिक्षक क्या कहते हैं",
+      "subtitle": "हजारों संतुष्ट शिक्षकों से जुड़ें",
+      "testimonial1": {
+        "quote": "ClassroomAI ने मेरी कक्षा प्रबंधन की पद्धति में क्रांति ला दी है। AI अंतर्दृष्टि अविश्वसनीय रूप से सहायक है।",
+        "author": "डॉ. सारा जॉनसन",
+        "role": "प्रोफेसर, MIT"
+      },
+      "testimonial2": {
+        "quote": "बहुभाषी समर्थन इसे हमारे विविध छात्र समुदाय के लिए एकदम सही बनाता है। अत्यधिक अनुशंसित!",
+        "author": "राजेश कुमार",
+        "role": "प्रधानाचार्य, दिल्ली पब्लिक स्कूल"
+      },
+      "testimonial3": {
+        "quote": "उपस्थिति ट्रैकिंग अब सहज है। AI ग्रेडिंग मुझे हर सप्ताह घंटों की बचत करता है।",
+        "author": "मारिया गार्सिया",
+        "role": "हाई स्कूल शिक्षक, बार्सिलोना"
+      }
+    },
+    "pricing": {
+      "title": "सरल, पारदर्शी मूल्य निर्धारण",
+      "subtitle": "अपने लिए उपयुक्त योजना चुनें",
+      "monthly": "मासिक",
+      "annual": "वार्षिक",
+      "save": "20% बचाएं",
+      "free": {
+        "title": "निःशुल्क",
+        "price": "₹0",
+        "period": "हमेशा के लिए",
+        "description": "व्यक्तिगत शिक्षकों के लिए एकदम सही",
+        "features": [
+          "30 छात्रों तक",
+          "बुनियादी उपस्थिति ट्रैकिंग",
+          "ईमेल समर्थन",
+          "मुख्य AI सुविधाएं"
+        ],
+        "cta": "निःशुल्क शुरुआत करें"
+      },
+      "pro": {
+        "title": "व्यावसायिक",
+        "price": "₹2,400",
+        "period": "प्रति माह",
+        "description": "गंभीर शिक्षकों के लिए",
+        "features": [
+          "असीमित छात्र",
+          "उन्नत AI ग्रेडिंग",
+          "प्रदर्शन विश्लेषण",
+          "प्राथमिकता समर्थन",
+          "कस्टम एकीकरण"
+        ],
+        "cta": "निःशुल्क परीक्षण शुरू करें"
+      },
+      "enterprise": {
+        "title": "एंटरप्राइज़",
+        "price": "कस्टम",
+        "period": "हमसे संपर्क करें",
+        "description": "संस्थानों के लिए",
+        "features": [
+          "मल्टी-कैंपस समर्थन",
+          "उन्नत सुरक्षा",
+          "कस्टम प्रशिक्षण",
+          "समर्पित समर्थन",
+          "API पहुंच"
+        ],
+        "cta": "बिक्री से संपर्क करें"
+      }
+    },
+    "tech": {
+      "title": "उत्कृष्ट तकनीकी स्टैक",
+      "subtitle": "आधुनिक और स्केलेबल टूल्स के साथ निर्मित"
+    },
+    "team": {
+      "title": "शिक्षकों और इंजीनियरों द्वारा निर्मित",
+      "subtitle": "एक समर्पित टीम जो कक्षाओं का भविष्य बना रही है"
+    },
+    "finalCta": {
+      "title": "अपनी कक्षा को बदलने के लिए तैयार हैं?",
+      "subtitle": "हजारों शिक्षकों से जुड़ें जो पहले से ही अपने शिक्षण अनुभव को बेहतर बनाने के लिए ClassroomAI का उपयोग कर रहे हैं",
+      "ctaPrimary": "अपना निःशुल्क परीक्षण शुरू करें",
+      "ctaSecondary": "डेमो शेड्यूल करें",
+      "noCredit": "क्रेडिट कार्ड की आवश्यकता नहीं"
+    }
   }
 }
