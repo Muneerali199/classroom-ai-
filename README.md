@@ -312,12 +312,62 @@ flowchart LR
   <img src="https://placehold.co/800x300/4F46E5/FFFFFF?text=AI+Lecture+Summarizer&font=montserrat" alt="AI Lecture Summarizer" />
 </div>
 
-### 🌐 Internationalization
+### 🌐 Comprehensive Multilanguage Support
 
-Supports multiple languages:
-- English (en)
-- Spanish (es)
-- Hindi (hi)
+**ClassroomAI** now supports **30+ languages** including all major Indian languages, making it accessible to users across India and beyond:
+
+#### **International Languages**
+- 🇺🇸 **English** (en) - Global standard
+- 🇪🇸 **Spanish** (es) - International reach
+
+#### **Major Indian Languages**
+- 🇮🇳 **Hindi** (hi) - हिन्दी
+- 🇮🇳 **Bengali** (bn) - বাংলা
+- 🇮🇳 **Telugu** (te) - తెలుగు
+- 🇮🇳 **Marathi** (mr) - मराठी
+- 🇮🇳 **Tamil** (ta) - தமிழ்
+- 🇮🇳 **Gujarati** (gu) - ગુજરાતી
+- 🇮🇳 **Urdu** (ur) - اردو
+- 🇮🇳 **Kannada** (kn) - ಕನ್ನಡ
+- 🇮🇳 **Odia** (or) - ଓଡ଼ିଆ
+- 🇮🇳 **Malayalam** (ml) - മലയാളം
+- 🇮🇳 **Punjabi** (pa) - ਪੰਜਾਬੀ
+- 🇮🇳 **Assamese** (as) - অসমীয়া
+
+#### **Regional & Classical Languages**
+- 🇳🇵 **Nepali** (ne) - नेपाली
+- 🇮🇳 **Sanskrit** (sa) - संस्कृतम्
+- 🇮🇳 **Maithili** (mai) - मैथिली
+- 🇮🇳 **Magahi** (mag) - मगही
+- 🇮🇳 **Bhojpuri** (bho) - भोजपुरी
+- 🇮🇳 **Rajasthani** (raj) - राजस्थानी
+- 🇮🇳 **Bishnupriya** (bpy) - বিষ্ণুপ্রিয়া
+- 🇮🇳 **Chhattisgarhi** (hne) - छत्तीसगढ़ी
+- 🇮🇳 **Konkani** (gom) - कोंकणी
+- 🇮🇳 **Kashmiri** (ks) - कॉशुर
+- 🇵🇰 **Sindhi** (sd) - سنڌي
+- 🇮🇳 **Dogri** (doi) - डोगरी
+- 🇮🇳 **Manipuri** (mni) - মৈতৈলোন্
+- 🇮🇳 **Santali** (sat) - ᱥᱟᱱᱛᱟᱲᱤ
+- 🇮🇳 **Konkani Goan** (kok) - कोंकणी
+- 🇮🇳 **Bodo** (brx) - बर\'
+
+#### **🚀 Language Features**
+- **Smart Language Switcher** with search functionality
+- **Grouped by regions** for easy navigation
+- **Native script support** for all languages
+- **RTL support** for Arabic-script languages (Urdu, Sindhi)
+- **Automatic language detection** based on user preferences
+- **Consistent translations** across all UI components
+- **Cultural adaptation** of date/time formats and number systems
+
+#### **🎯 Accessibility Impact**
+- **500M+ Hindi speakers** can now use the platform natively
+- **100M+ Bengali speakers** have full language support
+- **75M+ Telugu speakers** can access all features
+- **Complete coverage** of India's 22 official languages
+- **Regional language support** for rural and tribal communities
+- **Educational inclusion** for non-English speaking students and teachers
 
 ---
 
