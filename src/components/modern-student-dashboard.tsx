@@ -35,6 +35,50 @@ export default function ModernStudentDashboard() {
   const [liveProgress, setLiveProgress] = useState<number>(0);
   const [attendanceStats, setAttendanceStats] = useState<any>(null);
 
+  // Fetch last marked and active session chips
+  const fetchAttendanceChips = async () => {
+    try {
+      const [lastRes, activeRes] = await Promise.all([
+        fetch('/api/attendance/students/me/last'),
+        fetch('/api/attendance/students/me/active')
+      ]);
+      if (lastRes.ok) {
+        const last = await lastRes.json();
+        setLastMarked(last || null);
+      }
+      if (activeRes.ok) {
+        const act = await activeRes.json();
+        setLiveActive(act || null);
+      }
+    } catch {}
+  };
+
+  // Fetch attendance stats for graphs
+  const fetchAttendanceStats = async () => {
+    try {
+      const user = await AuthService.getCurrentUser();
+      if (!user) return;
+      
+      // First get the actual student record ID
+      const supabase = getSupabase();
+      const { data: student } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', user.id)
+        .maybeSingle();
+      
+      if (!student) return;
+      
+      const res = await fetch(`/api/attendance/students/${student.id}/stats`);
+      if (res.ok) {
+        const stats = await res.json();
+        setAttendanceStats(stats);
+      }
+    } catch (error) {
+      console.error('Error fetching attendance stats:', error);
+    }
+  };
+
   useEffect(() => {
     const loadStudentData = async () => {
       try {
@@ -62,48 +106,6 @@ export default function ModernStudentDashboard() {
         setLoading(false);
       }
     };
-
-  const fetchAttendanceChips = async () => {
-    try {
-      const [lastRes, activeRes] = await Promise.all([
-        fetch('/api/attendance/students/me/last'),
-        fetch('/api/attendance/students/me/active')
-      ]);
-      if (lastRes.ok) {
-        const last = await lastRes.json();
-        setLastMarked(last || null);
-      }
-      if (activeRes.ok) {
-        const act = await activeRes.json();
-        setLiveActive(act || null);
-      }
-    } catch {}
-  };
-
-  const fetchAttendanceStats = async () => {
-    try {
-      const user = await AuthService.getCurrentUser();
-      if (!user) return;
-      
-      // First get the actual student record ID
-      const supabase = getSupabase();
-      const { data: student } = await supabase
-        .from('students')
-        .select('id')
-        .eq('auth_user_id', user.id)
-        .maybeSingle();
-      
-      if (!student) return;
-      
-      const res = await fetch(`/api/attendance/students/${student.id}/stats`);
-      if (res.ok) {
-        const stats = await res.json();
-        setAttendanceStats(stats);
-      }
-    } catch (error) {
-      console.error('Error fetching attendance stats:', error);
-    }
-  };
 
     loadStudentData();
     // Initial fetch for subjects/assignments
@@ -140,10 +142,22 @@ export default function ModernStudentDashboard() {
       // Get enrollments for this student
       const user = await AuthService.getCurrentUser();
       if (!user) return;
+
+      // Map auth user to student record ID first
+      const { data: student } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', user.id)
+        .maybeSingle();
+      if (!student) {
+        setSubjects([]);
+        return;
+      }
+
       const { data: enrollments, error: enrErr } = await supabase
-        .from('subject_enrollments')
+        .from('subject_students')
         .select('subject_id')
-        .eq('student_id', user.id);
+        .eq('student_id', student.id);
       if (enrErr) return;
       const subjectIds = (enrollments || []).map((e: any) => e.subject_id);
       if (subjectIds.length === 0) {
@@ -481,7 +495,7 @@ export default function ModernStudentDashboard() {
                   <p className="text-sm text-gray-600">Your attendance for the past week</p>
                 </div>
                 <div className="space-y-3">
-                  {attendanceData.slice(0, 5).map((record, index) => (
+                  {attendanceData.slice(0, 5).map((record: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-3 neumorphic-sm-inset rounded-lg">
                       <div>
                         <p className="font-medium text-gray-700">{record.subject}</p>
