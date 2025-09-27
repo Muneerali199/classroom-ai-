@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     console.log('📝 Request body:', { pin: body?.pin ? '***' : 'missing', student_id: body?.student_id ? 'present' : 'missing', student_email: body?.student_email ? 'present' : 'missing' });
     
     const pin: string | undefined = body?.pin?.toString();
-    let student_id: string | undefined = body?.student_id?.toString();
+    const student_id: string | undefined = body?.student_id?.toString();
     const student_email: string | undefined = body?.student_email?.toString();
     
     if (!pin) return NextResponse.json({ error: 'PIN required' }, { status: 400 });
