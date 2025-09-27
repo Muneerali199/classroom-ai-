@@ -212,7 +212,7 @@ export default function AIResourceRecommender() {
 
   return (
     <div className="space-y-6">
-      <Card className="neumorphic-card">
+      <Card className="shadow-sm border border-border">
         <CardHeader>
           <CardTitle className="text-gray-800 flex items-center gap-2">
             <Brain className="w-5 h-5" />
@@ -229,7 +229,7 @@ export default function AIResourceRecommender() {
                   className={`p-3 rounded-lg border cursor-pointer transition-all ${
                     selectedSubject === weakness.subject 
                       ? 'ring-2 ring-blue-500 bg-blue-50' 
-                      : 'neumorphic-sm-inset hover:shadow-md'
+                      : 'bg-gray-50 dark:bg-gray-800 hover:shadow-md'
                   }`}
                   onClick={() => {
                     setSelectedSubject(weakness.subject);
