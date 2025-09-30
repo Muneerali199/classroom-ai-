@@ -172,9 +172,9 @@ export default function MeetingsHub({ viewOnly = false }: { viewOnly?: boolean }
   return (
     <div className="space-y-6">
       {!viewOnly && (
-        <Card className="neo-surface">
+        <Card className="huly-card">
           <CardHeader>
-            <CardTitle className="text-gray-800 flex items-center gap-2"><Video className="w-4 h-4"/> Create Meeting</CardTitle>
+            <CardTitle className="text-foreground flex items-center gap-2"><Video className="w-4 h-4"/> Create Meeting</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="grid gap-4 sm:grid-cols-2" onSubmit={createMeeting}>
@@ -209,9 +209,9 @@ export default function MeetingsHub({ viewOnly = false }: { viewOnly?: boolean }
         </Card>
       )}
 
-      <Card className="neo-surface">
+      <Card className="huly-card">
         <CardHeader>
-          <CardTitle className="text-gray-800 flex items-center gap-2"><Calendar className="w-4 h-4"/> Upcoming Meetings</CardTitle>
+          <CardTitle className="text-foreground flex items-center gap-2"><Calendar className="w-4 h-4"/> Upcoming Meetings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {startingSoon && (
