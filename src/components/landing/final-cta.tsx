@@ -3,26 +3,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
+import { HulyButton } from '@/components/ui/huly-button';
 import { ArrowRight, Calendar, Shield, Users, Zap } from 'lucide-react';
 
 export default function FinalCTASection() {
   const t = useTranslations('Landing.finalCta');
 
   return (
-    <section className="relative py-24 overflow-hidden bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      {/* Background Effects - Only visible in dark mode */}
-      <div className="absolute inset-0 dark:block hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(139,92,246,0.1),transparent_50%)]" />
-      </div>
+    <section id="contact" className="relative py-24 overflow-hidden bg-black transition-colors duration-300">
+      {/* Clean background */}
+      <div className="absolute inset-0 bg-black" />
 
-      {/* Animated Background Elements - Only in dark mode */}
-      <div className="absolute inset-0 overflow-hidden dark:block hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
         {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-blue-400/10 rounded-full"
+            className="absolute w-2 h-2 bg-cyan-400/20 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -56,7 +53,7 @@ export default function FinalCTASection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
             >
               Ready to transform your classroom?
             </motion.h2>
@@ -66,7 +63,7 @@ export default function FinalCTASection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
             >
               Join thousands of educators who trust ClassroomAI to streamline their teaching workflow and improve student outcomes.
             </motion.p>
@@ -94,11 +91,11 @@ export default function FinalCTASection() {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 className="text-center"
               >
-                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-blue-100 dark:bg-white/10 backdrop-blur-lg flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center">
+                  <item.icon className="w-6 h-6 text-cyan-400" />
                 </div>
-                <div className="text-gray-900 dark:text-white font-semibold text-lg">{item.label}</div>
-                <div className="text-gray-600 dark:text-gray-400 text-sm">{item.value}</div>
+                <div className="text-white font-semibold text-lg">{item.label}</div>
+                <div className="text-gray-400 text-sm">{item.value}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -111,22 +108,23 @@ export default function FinalCTASection() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
           >
-            <Button 
-              size="lg" 
-              className="text-lg px-10 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 group border-0"
+            <HulyButton 
+              variant="primary"
+              size="large" 
+              className="text-lg px-10 py-6 group"
             >
               {t('ctaPrimary')}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
+            </HulyButton>
             
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="text-lg px-10 py-6 bg-white/5 backdrop-blur-sm border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 group"
+            <HulyButton 
+              variant="secondary"
+              size="large" 
+              className="text-lg px-10 py-6 group"
             >
               <Calendar className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
               {t('ctaSecondary')}
-            </Button>
+            </HulyButton>
           </motion.div>
 
           {/* No Credit Card Required */}
@@ -149,7 +147,7 @@ export default function FinalCTASection() {
             className="mt-16 pt-12 border-t border-white/10"
           >
             <div className="text-gray-400 text-sm mb-6">Trusted by educators worldwide</div>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div className="flex flex-wrap justify-center items-center gap-8 opacity-50">
               {/* Mock University Logos */}
               {[
                 'MIT', 'Stanford', 'Harvard', 'Oxford', 'IIT Delhi', 'NUS'
@@ -160,7 +158,7 @@ export default function FinalCTASection() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
-                  className="text-gray-500 font-semibold text-lg hover:text-gray-300 transition-colors duration-300"
+                  className="text-gray-400 font-semibold text-lg hover:text-cyan-400 transition-colors duration-300"
                 >
                   {university}
                 </motion.div>
@@ -171,7 +169,7 @@ export default function FinalCTASection() {
       </div>
 
       {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
     </section>
   );
 }
