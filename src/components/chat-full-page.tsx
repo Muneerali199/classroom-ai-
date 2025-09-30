@@ -12,6 +12,7 @@ import { VoiceInterface } from "@/components/voice-interface";
 import PerformanceTracker from "@/components/performance-tracker";
 import { useTranslations, useLocale } from "next-intl";
 import { useAuth } from "@/hooks/use-auth";
+import { useDashboardData } from "@/contexts/dashboard-data-context";
 
 interface Message {
   id: string;
@@ -24,9 +25,8 @@ export default function ChatFullPage() {
   const t = useTranslations('chatbot');
   const locale = useLocale();
   const { user } = useAuth();
-
-  const userId = (user?.id || user?.uid || 'guest') as string;
-  const userRole = ((user?.role || user?.user_metadata?.role) as 'student' | 'teacher' | 'dean') || 'teacher';
+  const { data: dashboardData, loading: dataLoading } = useDashboardData();
+  const userRole = (user?.user_metadata?.role || 'student') as 'student' | 'teacher' | 'dean';
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,14 +102,35 @@ export default function ChatFullPage() {
         setShowPerformance(true);
       }
 
-      const res = await fetch('/api/chat', {
+      // Prepare dashboard context for AI
+      const dashboardContext = dashboardData ? {
+        attendanceData: dashboardData.attendanceRecords,
+        assignmentData: dashboardData.assignments,
+        gradeData: dashboardData.grades,
+        studentData: dashboardData.students,
+        attendanceStats: dashboardData.attendanceStats,
+        assignmentStats: dashboardData.assignmentStats,
+        gradeStats: dashboardData.gradeStats,
+        classStats: dashboardData.classStats,
+        currentDate: dashboardData.currentDate,
+        academicYear: dashboardData.academicYear,
+        semester: dashboardData.currentSemester
+      } : null;
+
+      const res = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: content, userRole, userId, locale })
+        body: JSON.stringify({ 
+          message: content, 
+          userId: user?.id,
+          userRole,
+          dashboardContext
+        })
       });
+      
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
-      const text: string = data?.text || t('defaultResponse');
+      const text: string = data?.response || t('defaultResponse');
 
       setMessages(prev => [...prev, {
         id: `${Date.now()}-assistant`,
@@ -118,6 +139,7 @@ export default function ChatFullPage() {
         timestamp: new Date()
       }]);
     } catch (e) {
+      console.error('AI Chat Error:', e);
       setMessages(prev => [...prev, {
         id: `${Date.now()}-assistant`,
         content: t('defaultResponse'),
@@ -145,9 +167,9 @@ export default function ChatFullPage() {
   };
 
   return (
-    <div className="w-full min-h-screen neo-bg">
+    <div className="w-full min-h-screen bg-background">
       <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-        <Card className="neo-surface flex flex-col min-h-[80vh]">
+        <Card className="huly-card flex flex-col min-h-[80vh]">
           <CardHeader className="pb-3 border-b">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-lg">
@@ -165,7 +187,7 @@ export default function ChatFullPage() {
                   <select
                     value={voiceLang}
                     onChange={(e) => setVoiceLang(e.target.value)}
-                    className="text-xs rounded-md border px-2 py-1 bg-white"
+                    className="text-xs rounded-md border border-border px-2 py-1 bg-background text-foreground"
                   >
                     {languageOptions.map(opt => (
                       <option key={opt.code} value={opt.code}>{opt.label}</option>
@@ -178,7 +200,7 @@ export default function ChatFullPage() {
 
           {showPerformance && (
             <div className="border-b p-4">
-              <PerformanceTracker userId={userId} userRole={userRole} />
+              <PerformanceTracker userId={user?.id || ''} userRole={userRole} />
             </div>
           )}
 
@@ -225,10 +247,10 @@ export default function ChatFullPage() {
                     onKeyDown={handleKeyPress as any}
                     placeholder={t('typeOrSpeak')}
                     disabled={isLoading}
-                    className="neo-surface"
+                    className=""
                   />
                 </div>
-                <Button onClick={() => handleSend(inputMessage)} disabled={isLoading || !inputMessage.trim()} size="icon">
+                <Button onClick={() => handleSend(inputMessage)} disabled={isLoading || !inputMessage.trim()} size="sm">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </div>
