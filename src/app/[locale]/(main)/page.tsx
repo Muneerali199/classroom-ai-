@@ -1,5 +1,5 @@
-import LandingPage from "@/components/landing-page";
+import NewLandingPage from "@/components/new-landing-page";
 
 export default function LocaleHomePage() {
-  return <LandingPage />;
+  return <NewLandingPage />;
 }
