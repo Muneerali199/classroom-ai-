@@ -1,6 +1,6 @@
 
-import ModernStudentDashboard from '@/components/modern-student-dashboard';
+import UltraModernStudentDashboard from '@/components/ultra-modern-student-dashboard';
 
 export default function StudentDashboardPage() {
-  return <ModernStudentDashboard />;
+  return <UltraModernStudentDashboard />;
 }
