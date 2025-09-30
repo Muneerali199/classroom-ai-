@@ -67,7 +67,7 @@ export default function UltraModernStudentDashboard() {
           </div>
           <div>
             <h1 className="text-3xl font-black text-white">
-              Welcome back, {studentData?.full_name || 'Student'}!
+              Welcome back, {studentData?.name || 'Student'}!
             </h1>
             <p className="text-gray-400">Here's your academic overview</p>
           </div>

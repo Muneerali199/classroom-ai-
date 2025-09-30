@@ -33,6 +33,7 @@ const hulyButtonVariants = cva(
         true: "loading",
         false: "",
       },
+      // Removed disabled from variants to prevent conflict with ButtonHTMLAttributes
     },
     compoundVariants: [
       {
@@ -95,14 +96,27 @@ export interface HulyButtonProps
 }
 
 const HulyButton = React.forwardRef<HTMLButtonElement, HulyButtonProps>(
-  ({ className, variant, size, iconOnly, round, loading, disabled, asChild = false, icon, rightIcon, children, ...props }, ref) => {
+  ({ 
+    className, 
+    variant, 
+    size, 
+    iconOnly, 
+    round, 
+    loading, 
+    disabled = false, 
+    asChild = false, 
+    icon, 
+    rightIcon, 
+    children, 
+    ...props 
+  }, ref) => {
     const Comp = asChild ? Slot : "button"
     
     return (
       <Comp
         className={cn(hulyButtonVariants({ variant, size, iconOnly, round, loading, className }))}
         ref={ref}
-        disabled={disabled || loading}
+        disabled={Boolean(disabled) || Boolean(loading)}
         {...props}
       >
         {loading && (
