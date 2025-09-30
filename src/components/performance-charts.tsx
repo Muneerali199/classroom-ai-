@@ -59,9 +59,9 @@ export default function PerformanceCharts({ className = "", gradeData, attendanc
   const attendance = attendanceData && attendanceData.length > 0 ? attendanceData : demoAttendanceData;
   return (
     <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${className}`}>
-      <Card className="neo-surface">
+      <Card className="huly-card">
         <CardHeader>
-          <CardTitle className="text-gray-800">Academic Performance Trend</CardTitle>
+          <CardTitle className="text-foreground">Academic Performance Trend</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="h-64">
@@ -76,9 +76,9 @@ export default function PerformanceCharts({ className = "", gradeData, attendanc
         </CardContent>
       </Card>
 
-      <Card className="neo-surface">
+      <Card className="huly-card">
         <CardHeader>
-          <CardTitle className="text-gray-800">Attendance by Month</CardTitle>
+          <CardTitle className="text-foreground">Attendance by Month</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="h-64">
