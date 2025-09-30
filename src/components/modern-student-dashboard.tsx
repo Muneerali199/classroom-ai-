@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { HulyButton } from '@/components/ui/huly-button';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { Calendar, Clock, BookOpen, TrendingUp, User, QrCode, Pin } from 'lucide-react';
@@ -317,7 +317,7 @@ export default function ModernStudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-gray-900 text-white transition-colors duration-300">
       {/* Floating elements with glow effects - Only in dark mode */}
       <div className="hidden dark:block fixed top-20 left-10 w-16 h-16 rounded-full pointer-events-none z-0 animate-pulse bg-cyan-400/10"
         style={{
@@ -335,13 +335,13 @@ export default function ModernStudentDashboard() {
         }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-6 lg:space-y-8 relative z-10">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6 lg:space-y-8 relative z-10">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm transition-colors duration-300">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <div className="bg-gray-800 border border-gray-700 rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-sm transition-colors duration-300">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-white">
             Welcome back, {studentData?.name || 'Student'}!
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">
+          <p className="text-gray-300 mt-2 text-sm md:text-base">
             Here&apos;s what&apos;s happening with your studies today.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -370,15 +370,15 @@ export default function ModernStudentDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-green-400/50">
-            <CardContent className="p-6">
+        <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <Card className="bg-gray-800 border border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-green-400/50">
+            <CardContent className="p-4 md:p-6">
               <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">Attendance Rate</h3>
+                <h3 className="text-xs md:text-sm font-medium text-gray-300">Attendance Rate</h3>
                 <TrendingUp className="h-4 w-4 text-green-500" />
               </div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{attendancePercentage.toFixed(1)}%</div>
-              <div className="mt-2 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="text-xl md:text-2xl font-bold text-white">{attendancePercentage.toFixed(1)}%</div>
+              <div className="mt-2 bg-gray-700 rounded-full h-2">
                 <div 
                   className="bg-gradient-to-r from-green-500 to-cyan-400 rounded-full h-2 transition-all duration-500" 
                   style={{ width: `${attendancePercentage}%` }}
@@ -387,29 +387,29 @@ export default function ModernStudentDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-blue-400/50">
-            <CardContent className="p-6">
+          <Card className="bg-gray-800 border border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-blue-400/50">
+            <CardContent className="p-4 md:p-6">
               <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">Classes Today</h3>
+                <h3 className="text-xs md:text-sm font-medium text-gray-300">Classes Today</h3>
                 <Calendar className="h-4 w-4 text-blue-500" />
               </div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{upcomingClasses.length}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-xl md:text-2xl font-bold text-white">{upcomingClasses.length}</div>
+              <p className="text-xs text-gray-400">
                 Next: {upcomingClasses[0]?.time}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-purple-400/50">
-            <CardContent className="p-6">
+          <Card className="bg-gray-800 border border-gray-700 hover:shadow-lg transition-all duration-300 hover:border-purple-400/50">
+            <CardContent className="p-4 md:p-6">
               <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">{t('assignmentsDue')}</h3>
+                <h3 className="text-xs md:text-sm font-medium text-gray-300">{t('assignmentsDue')}</h3>
                 <BookOpen className="h-4 w-4 text-purple-500" />
               </div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              <div className="text-xl md:text-2xl font-bold text-white">
                 {assignments.filter(a => a.status === 'pending').length}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-400">
                 {tCommon('thisWeek')}
               </p>
             </CardContent>
@@ -560,22 +560,23 @@ export default function ModernStudentDashboard() {
                   <p className="text-sm text-gray-600">Common tasks and shortcuts</p>
                 </div>
                 <div className="grid gap-3 md:grid-cols-3">
-                  <Button variant="outline" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                  <HulyButton variant="secondary" size="large" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                     <QrCode className="h-6 w-6 mb-2" />
                     <span className="text-sm font-medium">Scan QR Code</span>
-                  </Button>
-                  <Button
-                    variant="outline"
+                  </HulyButton>
+                  <HulyButton
+                    variant="secondary"
+                    size="large"
                     className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1"
                     onClick={() => setIsPinModalOpen(true)}
                   >
                     <Pin className="h-6 w-6 mb-2" />
                     <span className="text-sm font-medium">Enter PIN</span>
-                  </Button>
-                  <Button variant="outline" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                  </HulyButton>
+                  <HulyButton variant="secondary" size="large" className="h-20 flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                     <User className="h-6 w-6 mb-2" />
                     <span className="text-sm font-medium">View Profile</span>
-                  </Button>
+                  </HulyButton>
                 </div>
               </CardContent>
             </Card>
@@ -727,35 +728,36 @@ export default function ModernStudentDashboard() {
           <TabsContent value="profile" className="space-y-4">
             <Card className="shadow-sm border border-border">
               <CardContent className="p-6">
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-700">Student Profile</h3>
-                <p className="text-sm text-gray-600">Your personal information</p>
-              </div>
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="neumorphic-sm-inset p-4 rounded-lg">
-                    <label className="text-sm font-medium text-gray-700">Name</label>
-                    <p className="text-sm text-gray-600 mt-1">{studentData?.name}</p>
-                  </div>
-                  <div className="neumorphic-sm-inset p-4 rounded-lg">
-                    <label className="text-sm font-medium text-gray-700">Student ID</label>
-                    <p className="text-sm text-gray-600 mt-1">{studentData?.student_id}</p>
-                  </div>
-                  <div className="neumorphic-sm-inset p-4 rounded-lg">
-                    <label className="text-sm font-medium text-gray-700">Email</label>
-                    <p className="text-sm text-gray-600 mt-1">{studentData?.email}</p>
-                  </div>
-                  <div className="neumorphic-sm-inset p-4 rounded-lg">
-                    <label className="text-sm font-medium text-gray-700">Grade Level</label>
-                    <p className="text-sm text-gray-600 mt-1">{studentData?.grade}</p>
-                  </div>
-                  <div className="neumorphic-sm-inset p-4 rounded-lg md:col-span-2">
-                    <label className="text-sm font-medium text-gray-700">Enrollment Date</label>
-                    <p className="text-sm text-gray-600 mt-1">{studentData?.created_at ? new Date(studentData.created_at).toLocaleDateString() : 'N/A'}</p>
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-foreground">Student Profile</h3>
+                  <p className="text-sm text-muted-foreground">Your personal information</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="huly-card p-4 rounded-lg">
+                      <label className="text-sm font-medium text-foreground">Name</label>
+                      <p className="text-sm text-muted-foreground mt-1">{studentData?.name}</p>
+                    </div>
+                    <div className="huly-card p-4 rounded-lg">
+                      <label className="text-sm font-medium text-foreground">Student ID</label>
+                      <p className="text-sm text-muted-foreground mt-1">{studentData?.student_id}</p>
+                    </div>
+                    <div className="huly-card p-4 rounded-lg">
+                      <label className="text-sm font-medium text-foreground">Email</label>
+                      <p className="text-sm text-muted-foreground mt-1">{studentData?.email}</p>
+                    </div>
+                    <div className="huly-card p-4 rounded-lg">
+                      <label className="text-sm font-medium text-foreground">Grade Level</label>
+                      <p className="text-sm text-muted-foreground mt-1">{studentData?.grade}</p>
+                    </div>
+                    <div className="huly-card p-4 rounded-lg md:col-span-2">
+                      <label className="text-sm font-medium text-foreground">Enrollment Date</label>
+                      <p className="text-sm text-muted-foreground mt-1">{studentData?.created_at ? new Date(studentData.created_at).toLocaleDateString() : 'N/A'}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
         {/* Enter PIN Modal */}
