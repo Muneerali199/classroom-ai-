@@ -1,7 +1,5 @@
-import { getStudents } from '@/lib/data';
-import ModernTeacherDashboard from '@/components/modern-teacher-dashboard';
+import UltraModernTeacherDashboard from '@/components/ultra-modern-teacher-dashboard';
 
 export default async function DashboardPage() {
-  const students = await getStudents();
-  return <ModernTeacherDashboard initialStudents={students} />;
+  return <UltraModernTeacherDashboard />;
 }
