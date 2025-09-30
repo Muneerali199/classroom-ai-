@@ -9,6 +9,8 @@ import HowItWorksSection from '@/components/landing/how-it-works';
 import FinalCTASection from '@/components/landing/final-cta';
 import TechStackSection from '@/components/landing/tech-stack';
 import TeamSection from '@/components/landing/team-section';
+import AboutSection from '@/components/landing/AboutSection';
+import PricingSection from '@/components/landing/pricing-section';
 
 export default function LandingPage() {
   const scrollToSection = (id: string) => {
@@ -19,10 +21,7 @@ export default function LandingPage() {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="min-h-screen overflow-x-hidden"
-      style={{ 
-        background: 'linear-gradient(180deg, #08090B 0%, #0E1317 100%)'
-      }}
+      className="min-h-screen overflow-x-hidden bg-black"
     >
       {/* Huly-style Hero (exact UI) */}
       <HulyHero />
@@ -35,6 +34,12 @@ export default function LandingPage() {
 
       {/* How It Works Section */}
       <HowItWorksSection />
+
+      {/* About Section */}
+      <AboutSection />
+
+      {/* Pricing Section */}
+      <PricingSection />
 
       {/* Team Section */}
       <TeamSection />
