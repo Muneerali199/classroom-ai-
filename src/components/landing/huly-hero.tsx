@@ -2,13 +2,14 @@
 
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { HulyButton } from '@/components/ui/huly-button';
 import { ArrowRight, Play } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import LaserFlow from '@/components/ui/laser-flow';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import '@/styles/laser-flow.css';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -31,7 +32,7 @@ export default function HulyHero() {
   return (
     <>
       {/* Enhanced Navbar - Huly.io style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 dark:bg-black/90 backdrop-blur-xl border-b border-white/10 dark:border-white/10">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-8">
@@ -39,21 +40,22 @@ export default function HulyHero() {
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
                   <span className="text-white font-bold text-sm">CA</span>
                 </div>
-                <div className="text-white dark:text-white font-bold text-xl">ClassroomAI</div>
+                <div className="text-white font-bold text-xl">ClassroomAI</div>
               </div>
               <div className="hidden lg:flex items-center space-x-1">
-                <a href="#features" className="text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('features')}</a>
-                <a href="#pricing" className="text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('pricing')}</a>
-                <a href="#about" className="text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('about')}</a>
-                <a href="#contact" className="text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('contact')}</a>
+                <a href="#features" className="text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('features')}</a>
+                <a href="#pricing" className="text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('pricing')}</a>
+                <a href="#about" className="text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('about')}</a>
+                <a href="#contact" className="text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('contact')}</a>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <ThemeToggle />
-              <a href="/login" className="text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/5">{tNav('signIn')}</a>
-              <a href="/signup" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 hover:scale-105">
-                {tNav('getStarted')}
-              </a>
+              <HulyButton variant="tertiary" size="medium">
+                <a href="/login" className="text-white">{tNav('signIn')}</a>
+              </HulyButton>
+              <HulyButton variant="primary" size="medium">
+                <a href="/signup" className="text-black">{tNav('getStarted')}</a>
+              </HulyButton>
             </div>
           </div>
         </div>
@@ -61,29 +63,28 @@ export default function HulyHero() {
       {/* Hero Section - Enhanced Huly.io style */}
       <section 
         ref={heroSectionRef}
-        className="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-black dark:to-gray-900 transition-colors duration-300"
+        className="relative min-h-screen flex items-center overflow-hidden bg-black transition-colors duration-300"
       >
-        {/* LaserFlow Background - Only in dark mode */}
-        <div className="absolute inset-0 opacity-90 dark:block hidden">
+        {/* LaserFlow Background */}
+        <div className="absolute inset-0 opacity-30">
           <LaserFlow
-            horizontalBeamOffset={0.15}
-            verticalBeamOffset={0.05}
-            color="#FF79C6"
-            wispDensity={2.0}
+            horizontalBeamOffset={0.12}
+            verticalBeamOffset={0.04}
+            color="#06b6d4"
+            wispDensity={1.6}
             flowSpeed={0.4}
             fogIntensity={0.8}
             wispIntensity={0.6}
             mouseTiltStrength={0.3}
-            className="w-full h-full"
+            className="laser-flow-container"
           />
         </div>
 
-        {/* Light mode gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:hidden block"></div>
+        {/* Dark background */}
+        <div className="absolute inset-0 bg-black"></div>
         
-        {/* Gradient overlays for depth - different for light/dark mode */}
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-100/30 via-transparent to-transparent dark:from-black/50 dark:via-transparent dark:to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-cyan-500/10 dark:from-cyan-500/5 dark:via-transparent dark:to-blue-500/5" />
+        {/* Minimal overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
 
         {/* Two-column layout */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
@@ -98,37 +99,39 @@ export default function HulyHero() {
                 className="flex items-center gap-3 text-sm"
               >
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-green-400 font-medium">Live</span>
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-emerald-400 font-medium">Live</span>
                 </div>
-                <span className="text-gray-400 dark:text-gray-400">•</span>
-                <span className="text-gray-600 dark:text-gray-300">Trusted by 10,000+ educators worldwide</span>
+                <span className="text-gray-500">•</span>
+                <span className="text-gray-400">Trusted by 10,000+ educators worldwide</span>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.9] mb-6 text-gray-900 dark:text-white"
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 text-white"
                 style={{ 
-                  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial'
+                  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                  opacity: 1
                 }}
               >
-                The future of{' '}
-                <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700 bg-clip-text text-transparent">
-                  classroom
-                </span>
+                Everything App
                 <br />
-                management
+                for{' '}
+                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  your classroom
+                </span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                className="text-xl text-gray-400 mb-8 max-w-2xl leading-relaxed"
                 style={{ 
-                  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial'
+                  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                  opacity: 1
                 }}
               >
                 Streamline attendance, automate grading, and unlock insights with our AI-powered platform. Built for educators who demand excellence.
@@ -140,15 +143,15 @@ export default function HulyHero() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <button className="group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-2xl font-semibold text-base transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-105 flex items-center justify-center">
+                <HulyButton variant="primary" size="large" className="group">
                   Get started for free
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </button>
+                </HulyButton>
                 
-                <button className="group flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 px-8 py-4 rounded-2xl border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 backdrop-blur-sm hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                <HulyButton variant="secondary" size="large" className="group">
                   <Play className="mr-3 h-5 w-5 transition-transform group-hover:scale-110" />
                   Watch demo
-                </button>
+                </HulyButton>
               </motion.div>
 
               {/* Stats */}
@@ -157,6 +160,7 @@ export default function HulyHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
                 className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10"
+                style={{ opacity: 1 }}
               >
                 <div className="text-center">
                   <div className="text-3xl font-bold text-white mb-1">10K+</div>
@@ -183,17 +187,21 @@ export default function HulyHero() {
               >
                 
                 {/* Main dashboard image with enhanced styling */}
-                <div className="relative group">
+                <div className="relative group rounded-3xl overflow-hidden">
                   <img
                     ref={heroImageRef}
                     src="/dashboard.png"
                     alt="Dashboard Preview"
-                    className="w-full h-auto rounded-3xl shadow-2xl relative z-5 transition-transform duration-500 group-hover:scale-[1.02]"
+                    className="w-full h-auto rounded-none shadow-2xl relative z-5 transition-transform duration-500 group-hover:scale-[1.02]"
                     style={{
                       filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.3)) brightness(1.05) contrast(1.1)',
                       boxShadow: '0 0 120px rgba(110, 231, 183, 0.15), inset 0 1px 0 rgba(255,255,255,0.1)'
                     }}
                   />
+                  {/* Glow overlay */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-blue-500/10"></div>
+                  </div>
                   
                   {/* Glassmorphism overlay */}
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-t from-black/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -273,7 +281,7 @@ export default function HulyHero() {
       {/* Clean Dashboard Preview Section */}
       <section 
         ref={dashboardRef}
-        className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black"
+        className="relative py-24 px-4 sm:px-6 lg:px-8 bg-black"
       >
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -282,10 +290,10 @@ export default function HulyHero() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
+              className="text-4xl md:text-5xl font-bold text-white mb-6"
             >
               Built for{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 modern
               </span>{' '}
               educators
@@ -294,7 +302,7 @@ export default function HulyHero() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+              className="text-xl text-gray-400 max-w-3xl mx-auto"
             >
               Everything you need to manage your classroom efficiently. Real-time attendance tracking, automated grading, and powerful analytics in one seamless platform.
             </motion.p>
@@ -304,7 +312,7 @@ export default function HulyHero() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="relative mx-auto rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 backdrop-blur-md overflow-hidden shadow-2xl"
+            className="relative mx-auto rounded-3xl border border-white/10 bg-black overflow-hidden shadow-lg"
           >
             {/* Enhanced Image with better styling */}
             <div className="relative group p-6">
@@ -340,10 +348,10 @@ export default function HulyHero() {
               { icon: '📝', title: 'Intelligent Grading', desc: 'AI-powered assessment with instant feedback loops' },
               { icon: '📈', title: 'Advanced Analytics', desc: 'Data-driven insights for better learning outcomes' }
             ].map((feature, i) => (
-              <div key={i} className="text-center p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300">
+              <div key={i} className="text-center p-6 rounded-2xl bg-black border border-white/10 hover:shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">{feature.desc}</p>
+                <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-400">{feature.desc}</p>
               </div>
             ))}
           </motion.div>
