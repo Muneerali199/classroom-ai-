@@ -12,6 +12,7 @@ export default function HeroSection() {
   const t = useTranslations('Landing');
   const heroRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -19,10 +20,10 @@ export default function HeroSection() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
     setIsVisible(true);
+    setIsMounted(true);
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -30,26 +31,31 @@ export default function HeroSection() {
   };
 
   return (
-    <section ref={heroRef} className="relative min-h-screen w-full overflow-hidden bg-slate-900">
-      {/* LaserFlow Background */}
-      <div className="absolute inset-0">
-        <LaserFlow 
-          color="#2563eb"
-          fogIntensity={0.6}
-          wispDensity={1.2}
-          flowSpeed={0.3}
-          horizontalBeamOffset={0.1}
-          verticalBeamOffset={0.0}
-          className="opacity-80"
-        />
-      </div>
+    <section ref={heroRef} className="relative min-h-screen w-full overflow-hidden bg-background">
+      {/* LaserFlow Background - Only in dark mode, client-side only */}
+      {isMounted && (
+        <div className="absolute inset-0 dark:block hidden">
+          <LaserFlow 
+            color="#2563eb"
+            fogIntensity={0.6}
+            wispDensity={1.2}
+            flowSpeed={0.3}
+            horizontalBeamOffset={0.1}
+            verticalBeamOffset={0.0}
+            className="opacity-80"
+          />
+        </div>
+      )}
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/30" />
+      {/* Light mode gradient background */}
+      <div className="absolute inset-0 dark:hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50" />
+      
+      {/* Dark mode gradient overlay */}
+      <div className="absolute inset-0 hidden dark:block bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/30" />
 
       {/* Content */}
       <motion.div 
-        style={{ y, opacity }}
+        style={{ y }}
         className="relative z-10 flex min-h-screen items-center"
       >
         <div className="container mx-auto px-4 py-20">
@@ -66,7 +72,7 @@ export default function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex items-center gap-2 text-sm text-blue-300"
+                className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-300"
               >
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
@@ -82,7 +88,7 @@ export default function HeroSection() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={isVisible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.8, delay: 0.3 }}
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
+                  className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight"
                 >
                   Transform{' '}
                   <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
@@ -95,7 +101,7 @@ export default function HeroSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isVisible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed"
+                  className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed"
                 >
                   Intelligent classroom management system that makes teaching and learning more engaging, efficient, and effective with AI-powered insights.
                 </motion.p>
@@ -110,7 +116,7 @@ export default function HeroSection() {
               >
                 <Button 
                   size="lg" 
-                  className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 group"
+                  className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 group"
                 >
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -119,7 +125,7 @@ export default function HeroSection() {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 transition-all duration-300 group"
+                  className="text-lg px-8 py-6 bg-background/10 backdrop-blur-sm border-border text-foreground hover:bg-background/20 transition-all duration-300 group"
                 >
                   <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   Watch Demo
@@ -131,19 +137,19 @@ export default function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10"
+                className="grid grid-cols-3 gap-8 pt-8 border-t border-border"
               >
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">10K+</div>
-                  <div className="text-sm text-gray-400">Active Teachers</div>
+                  <div className="text-3xl font-bold text-foreground mb-1">10K+</div>
+                  <div className="text-sm text-muted-foreground">Active Teachers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">500K+</div>
-                  <div className="text-sm text-gray-400">Students Managed</div>
+                  <div className="text-3xl font-bold text-foreground mb-1">500K+</div>
+                  <div className="text-sm text-muted-foreground">Students Managed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">99.9%</div>
-                  <div className="text-sm text-gray-400">Uptime</div>
+                  <div className="text-3xl font-bold text-foreground mb-1">99.9%</div>
+                  <div className="text-sm text-muted-foreground">Uptime</div>
                 </div>
               </motion.div>
             </motion.div>
@@ -168,24 +174,24 @@ export default function HeroSection() {
                     repeat: Infinity, 
                     ease: "easeInOut" 
                   }}
-                  className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl"
+                  className="bg-card/80 backdrop-blur-lg rounded-2xl p-6 border border-border shadow-2xl"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
                       <BookOpen className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <div className="text-white font-semibold">ClassroomAI Dashboard</div>
-                      <div className="text-gray-400 text-sm">Real-time insights</div>
+                      <div className="text-foreground font-semibold">ClassroomAI Dashboard</div>
+                      <div className="text-muted-foreground text-sm">Real-time insights</div>
                     </div>
                   </div>
                   
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-300">Attendance Rate</span>
+                      <span className="text-muted-foreground">Attendance Rate</span>
                       <span className="text-green-400 font-semibold">94.5%</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: '94.5%' }}
@@ -195,10 +201,10 @@ export default function HeroSection() {
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-300">AI Grading</span>
+                      <span className="text-muted-foreground">AI Grading</span>
                       <span className="text-blue-400 font-semibold">87 assignments</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: '78%' }}
@@ -261,12 +267,12 @@ export default function HeroSection() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
+          className="w-6 h-10 border-2 border-border rounded-full flex justify-center"
         >
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-3 bg-white/50 rounded-full mt-2"
+            className="w-1 h-3 bg-muted-foreground rounded-full mt-2"
           />
         </motion.div>
       </motion.div>
