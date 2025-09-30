@@ -1,6 +1,5 @@
-import ChatFullPage from "@/components/chat-full-page";
+import UltraModernAIAssistant from "@/components/ultra-modern-ai-assistant";
 
 export default function DashboardAssistantPage() {
-  // This page renders inside the dashboard layout and shows the full AI chat
-  return <ChatFullPage />;
+  return <UltraModernAIAssistant />;
 }
