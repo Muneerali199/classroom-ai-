@@ -77,9 +77,9 @@ export default function TeacherTimetablePanel() {
 
   return (
     <div className="space-y-6">
-      <Card className="neo-surface">
+      <Card className="huly-card">
         <CardHeader>
-          <CardTitle className="text-gray-800 flex items-center gap-2"><CalendarPlus className="w-4 h-4"/> Publish Weekly Timetable</CardTitle>
+          <CardTitle className="text-foreground flex items-center gap-2"><CalendarPlus className="w-4 h-4"/> Publish Weekly Timetable</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="grid gap-4 sm:grid-cols-2" onSubmit={onSubmit}>
@@ -113,7 +113,7 @@ export default function TeacherTimetablePanel() {
         </CardContent>
       </Card>
 
-      <Card className="neo-surface">
+      <Card className="huly-card">
         <CardHeader>
           <div className="flex items-center justify-between gap-3">
             <CardTitle className="text-gray-800">Latest Timetables</CardTitle>
