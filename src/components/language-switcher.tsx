@@ -81,14 +81,14 @@ export default function LanguageSwitcher() {
 
     return (
       <div key={groupName}>
-        <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1">
+        <DropdownMenuLabel className="text-xs !text-gray-400 px-2 py-1">
           {groupName}
         </DropdownMenuLabel>
         {groupLanguages.map((code) => (
           <DropdownMenuItem
             key={code}
             onClick={() => handleSelect(code as keyof typeof LOCALE_LABELS)}
-            className={`${code === locale ? 'font-semibold bg-accent' : ''} cursor-pointer`}
+            className={`${code === locale ? 'font-semibold !bg-gray-700 !text-white' : '!text-gray-300 hover:!text-white hover:!bg-gray-700'} cursor-pointer`}
           >
             <span className="flex items-center justify-between w-full">
               {LOCALE_LABELS[code]}
@@ -104,15 +104,15 @@ export default function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 px-2">
-          <Globe className="h-4 w-4 mr-2" />
-          <span className="hidden sm:inline">
+        <Button variant="ghost" className="h-8 px-1 md:px-2 !text-white hover:!bg-gray-700">
+          <Globe className="h-4 w-4 md:mr-2" />
+          <span className="hidden md:inline text-sm">
             {LOCALE_LABELS[locale]?.split(' ')[0] ?? locale}
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 max-h-96 overflow-y-auto">
-        <DropdownMenuLabel>Select Language</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-72 md:w-80 max-h-96 overflow-y-auto !bg-gray-800 !border-gray-700">
+        <DropdownMenuLabel className="!text-white">Select Language</DropdownMenuLabel>
         <div className="px-2 pb-2">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
