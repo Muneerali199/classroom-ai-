@@ -195,7 +195,7 @@ export default function TeamSection() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-black transition-colors duration-300"
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -205,7 +205,7 @@ export default function TeamSection() {
         className="text-center mb-16"
       >
         <motion.h2
-          className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white"
+          className="text-4xl sm:text-5xl font-bold mb-6 text-white"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -214,13 +214,13 @@ export default function TeamSection() {
           Meet Our Team
         </motion.h2>
         <motion.div
-          className="max-w-3xl mx-auto p-6 rounded-3xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+          className="max-w-3xl mx-auto p-6 rounded-3xl bg-black border border-white/10 shadow-sm"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-xl text-gray-400">
             A passionate team of developers and designers dedicated to
             transforming educational technology with cutting-edge solutions.
           </p>
@@ -237,7 +237,7 @@ export default function TeamSection() {
         {teamMembers.map((member, index) => (
           <motion.div
             key={index}
-            className="group text-center p-6 rounded-3xl transition-all duration-300 cursor-pointer bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg"
+            className="group text-center p-6 rounded-3xl transition-all duration-300 cursor-pointer bg-black border border-white/10 shadow-sm hover:shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0, y: 50 }}
@@ -264,7 +264,7 @@ export default function TeamSection() {
 
             {/* Name and Role */}
             <motion.h3
-              className="text-xl font-bold text-gray-900 dark:text-white mb-2"
+              className="text-xl font-bold text-white mb-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -273,7 +273,7 @@ export default function TeamSection() {
               {member.name}
             </motion.h3>
             <motion.p
-              className="text-blue-500 dark:text-blue-400 font-medium mb-4"
+              className="text-cyan-400 font-medium mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -284,7 +284,7 @@ export default function TeamSection() {
 
             {/* Background */}
             <motion.p
-              className="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed"
+              className="text-sm text-gray-400 mb-4 leading-relaxed"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -295,14 +295,14 @@ export default function TeamSection() {
 
             {/* Expand/Collapse Button */}
             <motion.button
-              className="flex items-center justify-center mx-auto mb-4 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+              className="flex items-center justify-center mx-auto mb-4 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-200"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               {expandedMember === index ? (
-                <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                <ChevronUp className="w-4 h-4 text-gray-400" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                <ChevronDown className="w-4 h-4 text-gray-400" />
               )}
             </motion.button>
 
@@ -319,11 +319,11 @@ export default function TeamSection() {
                   <div className="space-y-4 mb-6">
                     {/* Expertise */}
                     <div className="text-left">
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Expertise</h4>
+                      <h4 className="font-semibold text-white mb-2">Expertise</h4>
                       <ul className="space-y-1">
                         {member.expertise.map((skill, skillIndex) => (
-                          <li key={skillIndex} className="text-sm text-gray-600 dark:text-gray-300 flex items-center">
-                            <div className="w-2 h-2 rounded-full bg-blue-400 mr-2 flex-shrink-0" />
+                          <li key={skillIndex} className="text-sm text-gray-400 flex items-center">
+                            <div className="w-2 h-2 rounded-full bg-cyan-400 mr-2 flex-shrink-0" />
                             {skill}
                           </li>
                         ))}
@@ -332,11 +332,11 @@ export default function TeamSection() {
 
                     {/* Contributions */}
                     <div className="text-left">
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Key Contributions</h4>
+                      <h4 className="font-semibold text-white mb-2">Key Contributions</h4>
                       <ul className="space-y-1">
                         {member.contributions.map((contribution, contribIndex) => (
-                          <li key={contribIndex} className="text-sm text-gray-600 dark:text-gray-300 flex items-center">
-                            <div className="w-2 h-2 rounded-full bg-green-400 mr-2 flex-shrink-0" />
+                          <li key={contribIndex} className="text-sm text-gray-400 flex items-center">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400 mr-2 flex-shrink-0" />
                             {contribution}
                           </li>
                         ))}
@@ -365,12 +365,12 @@ export default function TeamSection() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg transition-colors duration-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                  className="p-2 rounded-lg transition-colors duration-200 bg-white/5 hover:bg-white/10"
                   whileHover={{ scale: 1.2, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Icon className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                  <Icon className="w-4 h-4 text-gray-400" />
                 </motion.a>
               ))}
             </motion.div>
@@ -386,28 +386,28 @@ export default function TeamSection() {
         transition={{ duration: 0.8, delay: 0.6 }}
         viewport={{ once: true }}
       >
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Team Excellence</h3>
+        <h3 className="text-2xl font-bold text-white mb-8">Team Excellence</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <div className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg">
               <User className="w-8 h-8 text-white" />
             </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">6 Team Members</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Diverse expertise across all domains</p>
+            <h4 className="font-semibold text-white mb-2">6 Team Members</h4>
+            <p className="text-sm text-gray-400">Diverse expertise across all domains</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg">
               <Code className="w-8 h-8 text-white" />
             </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">20+ Years Experience</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Combined industry expertise</p>
+            <h4 className="font-semibold text-white mb-2">20+ Years Experience</h4>
+            <p className="text-sm text-gray-400">Combined industry expertise</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg">
               <TrendingUp className="w-8 h-8 text-white" />
             </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Full-Stack Coverage</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Frontend, backend, design, and QA</p>
+            <h4 className="font-semibold text-white mb-2">Full-Stack Coverage</h4>
+            <p className="text-sm text-gray-400">Frontend, backend, design, and QA</p>
           </div>
         </div>
       </motion.div>
