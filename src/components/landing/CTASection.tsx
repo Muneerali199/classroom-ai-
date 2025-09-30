@@ -1,22 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Heart, Play, Shield, Zap, Users, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function CTASection() {
-  const [buttonPressed, setButtonPressed] = useState<Record<string, boolean>>({});
-
   const ctaBenefits = [
     { icon: Shield, text: "Enterprise Security" },
     { icon: Zap, text: "Lightning Fast" },
     { icon: Users, text: "24/7 Support" },
   ];
-
-  const handleButtonPress = (buttonId: string, isPressed: boolean) => {
-    setButtonPressed(prev => ({ ...prev, [buttonId]: isPressed }));
-  };
 
   return (
     <motion.section
@@ -24,21 +18,14 @@ export default function CTASection() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #e5e5e5 0%, #d8d8d8 100%)'
-      }}
+      className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
     >
-      {/* Subtle neumorphic background elements */}
+      {/* Modern floating elements */}
       <motion.div
-        className="absolute top-10 left-10 w-32 h-32 rounded-full"
-        style={{
-          background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
-          boxShadow: '16px 16px 32px #c0c0c0, -16px -16px 32px #ffffff'
-        }}
+        className="absolute top-10 left-10 w-32 h-32 rounded-full bg-gradient-to-br from-blue-400/20 to-cyan-400/20 backdrop-blur-sm"
         animate={{
           scale: [1, 1.1, 1],
-          opacity: [0.5, 0.8, 0.5],
+          opacity: [0.3, 0.6, 0.3],
         }}
         transition={{
           duration: 8,
@@ -47,14 +34,10 @@ export default function CTASection() {
         }}
       />
       <motion.div
-        className="absolute bottom-10 right-10 w-40 h-40 rounded-full"
-        style={{
-          background: 'linear-gradient(145deg, #e8e8e8, #d2d2d2)',
-          boxShadow: '20px 20px 40px #c0c0c0, -20px -20px 40px #ffffff'
-        }}
+        className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-gradient-to-br from-cyan-400/20 to-blue-400/20 backdrop-blur-sm"
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.6, 0.3],
+          opacity: [0.2, 0.5, 0.2],
         }}
         transition={{
           duration: 10,
@@ -81,18 +64,14 @@ export default function CTASection() {
           <motion.div
             animate={{ rotate: [0, 5, -5, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="inline-block p-4 rounded-2xl"
-            style={{
-              background: 'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
-              boxShadow: '12px 12px 24px #bebebe, -12px -12px 24px #ffffff'
-            }}
+            className="inline-block p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 shadow-lg"
           >
-            <Sparkles className="w-12 h-12 text-gray-600" />
+            <Sparkles className="w-12 h-12 text-white" />
           </motion.div>
         </motion.div>
 
         <motion.h2
-          className="text-4xl sm:text-5xl font-bold mb-6 text-gray-700"
+          className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900 dark:text-white"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -102,17 +81,13 @@ export default function CTASection() {
         </motion.h2>
 
         <motion.div
-          className="max-w-2xl mx-auto mb-8 p-6 rounded-3xl"
-          style={{
-            background: 'linear-gradient(145deg, #efefef, #d9d9d9)',
-            boxShadow: 'inset 8px 8px 16px #c8c8c8, inset -8px -8px 16px #ffffff'
-          }}
+          className="max-w-2xl mx-auto mb-8 p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
           viewport={{ once: true }}
         >
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-700 dark:text-gray-300">
             Contact your institution&apos;s dean to get secure access to EduTrack&apos;s
             comprehensive attendance and student management platform.
           </p>
@@ -125,22 +100,10 @@ export default function CTASection() {
           transition={{ duration: 0.8, delay: 1 }}
           viewport={{ once: true }}
         >
-          <motion.div
-            onMouseDown={() => handleButtonPress('primary', true)}
-            onMouseUp={() => handleButtonPress('primary', false)}
-            onMouseLeave={() => handleButtonPress('primary', false)}
-          >
+          <motion.div>
             <Link href="/login">
               <motion.button
-                className="px-8 py-4 rounded-2xl font-semibold text-gray-700 flex items-center gap-2 transition-all duration-200"
-                style={{
-                  background: buttonPressed.primary ? 
-                    'linear-gradient(145deg, #d0d0d0, #f0f0f0)' : 
-                    'linear-gradient(145deg, #f0f0f0, #d0d0d0)',
-                  boxShadow: buttonPressed.primary ?
-                    'inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff' :
-                    '8px 8px 16px #bebebe, -8px -8px 16px #ffffff'
-                }}
+                className="px-8 py-4 rounded-xl font-semibold text-white flex items-center gap-2 transition-all duration-200 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -150,21 +113,9 @@ export default function CTASection() {
             </Link>
           </motion.div>
 
-          <motion.div
-            onMouseDown={() => handleButtonPress('secondary', true)}
-            onMouseUp={() => handleButtonPress('secondary', false)}
-            onMouseLeave={() => handleButtonPress('secondary', false)}
-          >
+          <motion.div>
             <motion.button
-              className="px-8 py-4 rounded-2xl font-semibold text-gray-700 flex items-center gap-2 transition-all duration-200"
-              style={{
-                background: buttonPressed.secondary ? 
-                  'linear-gradient(145deg, #d5d5d5, #ebebeb)' : 
-                  'linear-gradient(145deg, #ebebeb, #d5d5d5)',
-                boxShadow: buttonPressed.secondary ?
-                  'inset 6px 6px 12px #c4c4c4, inset -6px -6px 12px #ffffff' :
-                  '6px 6px 12px #c4c4c4, -6px -6px 12px #ffffff'
-              }}
+              className="px-8 py-4 rounded-xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2 transition-all duration-200 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 bg-white dark:bg-gray-900"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -175,7 +126,7 @@ export default function CTASection() {
         </motion.div>
 
         <motion.div
-          className="flex items-center justify-center space-x-8 text-sm text-gray-600"
+          className="flex items-center justify-center space-x-8 text-sm text-gray-600 dark:text-gray-300"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.2 }}
@@ -184,18 +135,14 @@ export default function CTASection() {
           {ctaBenefits.map((benefit, index) => (
             <motion.div
               key={index}
-              className="flex items-center space-x-2 px-4 py-2 rounded-xl"
-              style={{
-                background: 'linear-gradient(145deg, #ededed, #d7d7d7)',
-                boxShadow: '4px 4px 8px #c8c8c8, -4px -4px 8px #ffffff'
-              }}
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
               whileHover={{ scale: 1.05 }}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 1.3 + index * 0.1 }}
               viewport={{ once: true }}
             >
-              <benefit.icon className="w-4 h-4 text-gray-500" />
+              <benefit.icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span>{benefit.text}</span>
             </motion.div>
           ))}
