@@ -56,9 +56,9 @@ const StepCard = ({
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: delay + 0.3 }}
-        className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white dark:bg-white/5 backdrop-blur-lg border border-gray-200 dark:border-white/10 flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-white/10 group-hover:border-blue-500/30 transition-all duration-300"
+        className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 flex items-center justify-center group-hover:bg-white/10 group-hover:border-cyan-500/30 transition-all duration-300"
       >
-        <Icon className="w-10 h-10 text-blue-500 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300" />
+        <Icon className="w-10 h-10 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
       </motion.div>
       
       {/* Content */}
@@ -67,7 +67,7 @@ const StepCard = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: delay + 0.4 }}
-        className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300"
+        className="text-2xl font-bold text-white mb-4 group-hover:text-cyan-400 transition-colors duration-300"
       >
         {title}
       </motion.h3>
@@ -77,7 +77,7 @@ const StepCard = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: delay + 0.5 }}
-        className="text-gray-600 dark:text-gray-300 leading-relaxed max-w-sm mx-auto group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300"
+        className="text-gray-400 leading-relaxed max-w-sm mx-auto group-hover:text-gray-300 transition-colors duration-300"
       >
         {description}
       </motion.p>
@@ -107,9 +107,9 @@ export default function HowItWorksSection() {
   ];
 
   return (
-    <section className="relative py-24 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black">
+    <section className="relative py-24 bg-black">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                            radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`
@@ -130,7 +130,7 @@ export default function HowItWorksSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
           >
             {t('title')}
           </motion.h2>
@@ -140,7 +140,7 @@ export default function HowItWorksSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+            className="text-xl text-gray-400 max-w-2xl mx-auto"
           >
             {t('subtitle')}
           </motion.p>
@@ -168,11 +168,11 @@ export default function HowItWorksSection() {
           className="max-w-4xl mx-auto"
         >
           <div
-            className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-600/10 dark:to-purple-600/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-white/10"
+            className="bg-gradient-to-r from-cyan-950/50 to-blue-950/50 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/10"
           >
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <h3 className="text-3xl font-bold text-white mb-6">
                   See It In Action
                 </h3>
                 <div className="space-y-4 mb-8">
@@ -190,8 +190,8 @@ export default function HowItWorksSection() {
                       transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
                       className="flex items-center gap-3"
                     >
-                      <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                      <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                      <span className="text-gray-300">{feature}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -201,7 +201,7 @@ export default function HowItWorksSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 1.2 }}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 group transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/25"
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 group transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-cyan-500/50"
                 >
                   Watch Demo Video
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -215,46 +215,46 @@ export default function HowItWorksSection() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="bg-white/80 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 dark:border-white/10 relative overflow-hidden"
+                  className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 relative overflow-hidden"
                 >
                   {/* Browser Chrome */}
                   <div className="flex items-center gap-2 mb-4 pb-4 border-b border-white/10">
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                    <div className="ml-4 text-gray-500 dark:text-gray-400 text-sm">classroom-ai.com/dashboard</div>
+                    <div className="ml-4 text-gray-400 text-sm">classroom-ai.com/dashboard</div>
                   </div>
                   
                   {/* Dashboard Content */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <div className="text-gray-900 dark:text-white font-semibold">Today's Overview</div>
-                      <div className="text-green-400 text-sm">Live</div>
+                      <div className="text-white font-semibold">Today's Overview</div>
+                      <div className="text-emerald-400 text-sm">Live</div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-blue-500/20 rounded-lg p-3">
-                        <div className="text-blue-600 dark:text-blue-300 text-sm">Present</div>
-                        <div className="text-gray-900 dark:text-white text-2xl font-bold">28/30</div>
+                      <div className="bg-cyan-500/20 rounded-lg p-3">
+                        <div className="text-cyan-300 text-sm">Present</div>
+                        <div className="text-white text-2xl font-bold">28/30</div>
                       </div>
-                      <div className="bg-purple-500/20 rounded-lg p-3">
-                        <div className="text-purple-600 dark:text-purple-300 text-sm">Graded</div>
-                        <div className="text-gray-900 dark:text-white text-2xl font-bold">45</div>
+                      <div className="bg-blue-500/20 rounded-lg p-3">
+                        <div className="text-blue-300 text-sm">Graded</div>
+                        <div className="text-white text-2xl font-bold">45</div>
                       </div>
                     </div>
                     
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-700 dark:text-gray-300">AI Processing</span>
-                        <span className="text-blue-400">92%</span>
+                        <span className="text-gray-300">AI Processing</span>
+                        <span className="text-cyan-400">92%</span>
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div className="w-full bg-gray-700 rounded-full h-2">
                         <motion.div 
                           initial={{ width: 0 }}
                           whileInView={{ width: '92%' }}
                           viewport={{ once: true }}
                           transition={{ duration: 2, delay: 1.5 }}
-                          className="bg-gradient-to-r from-blue-400 to-purple-500 h-2 rounded-full"
+                          className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full"
                         />
                       </div>
                     </div>
