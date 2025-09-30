@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import responsive utilities */
+@import '../styles/responsive.css';
+
 /* Smooth scrolling without Lenis */
 html {
   scroll-behavior: smooth;
@@ -59,43 +62,100 @@ body {
 
 @layer base {
   :root {
+    /* Huly Light Theme - Professional Black/White System */
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 0 0% 0%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 346.8 77.2% 49.8%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 346.8 77.2% 49.8%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.75rem;
+    --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 346.8 77.2% 49.8%;
-    --sidebar-primary-foreground: 355.7 100% 97.3%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 346.8 77.2% 49.8%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 0%;
     
-    /* Additional modern design tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(346.8 77.2% 49.8%) 0%, hsl(262.1 83.3% 57.8%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(173 58% 39%) 0%, hsl(197 37% 24%) 100%);
+    /* Huly Button Variables */
+    --button-primary-BackgroundColor: #000;
+    --button-primary-BorderColor: transparent;
+    --button-primary-hover-BackgroundColor: rgba(0, 0, 0, 0.8);
+    --button-primary-active-BackgroundColor: rgba(0, 0, 0, 0.9);
+    --button-primary-loading-LabelColor: #fff;
+    
+    --button-secondary-BackgroundColor: #fff;
+    --button-secondary-BorderColor: rgba(0, 0, 0, 0.1);
+    --button-secondary-hover-BackgroundColor: rgba(0, 0, 0, 0.04);
+    --button-secondary-active-BackgroundColor: rgba(0, 0, 0, 0.08);
+    
+    --button-tertiary-hover-BackgroundColor: rgba(0, 0, 0, 0.04);
+    --button-tertiary-active-BackgroundColor: rgba(0, 0, 0, 0.08);
+    
+    --button-negative-BackgroundColor: #dc2626;
+    --button-negative-BorderColor: transparent;
+    --button-negative-hover-BackgroundColor: #b91c1c;
+    --button-negative-active-BackgroundColor: #991b1b;
+    --button-negative-loading-LabelColor: #fff;
+    
+    --button-disabled-BackgroundColor: rgba(0, 0, 0, 0.12);
+    --button-disabled-LabelColor: rgba(0, 0, 0, 0.4);
+    --button-disabled-IconColor: rgba(0, 0, 0, 0.4);
+    
+    --button-accent-IconColor: #fff;
+    --button-accent-LabelColor: #fff;
+    --button-subtle-IconColor: #000;
+    --button-subtle-LabelColor: #000;
+    
+    --button-menu-active-BorderColor: rgba(0, 0, 0, 0.1);
+    
+    /* Global Focus */
+    --global-focus-BorderColor: rgba(0, 0, 0, 0.2);
+    
+    /* Spacing Variables */
+    --spacing-0_25: 0.125rem;
+    --spacing-0_5: 0.25rem;
+    --spacing-1: 0.5rem;
+    --spacing-1_25: 0.625rem;
+    --spacing-1_5: 0.75rem;
+    --spacing-2: 1rem;
+    --spacing-2_5: 1.25rem;
+    
+    /* Size Variables */
+    --global-large-Size: 2.5rem;
+    --global-medium-Size: 2rem;
+    --global-small-Size: 1.75rem;
+    --global-extra-small-Size: 1.5rem;
+    --global-min-Size: 1.25rem;
+    
+    /* Border Radius */
+    --medium-BorderRadius: 0.5rem;
+    --small-BorderRadius: 0.375rem;
+    --extra-small-BorderRadius: 0.25rem;
+    --large-BorderRadius: 0.75rem;
+    --min-BorderRadius: 0.125rem;
+    
+    /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -103,39 +163,75 @@ body {
   }
   
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 346.8 77.2% 49.8%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
+    /* Huly Dark Theme - Professional Black/White System */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 346.8 77.2% 49.8%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 100%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --radius: 0.75rem;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 346.8 77.2% 49.8%;
-    --sidebar-primary-foreground: 355.7 100% 97.3%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 346.8 77.2% 49.8%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 100%;
+    
+    /* Huly Button Variables - Dark */
+    --button-primary-BackgroundColor: #fff;
+    --button-primary-BorderColor: transparent;
+    --button-primary-hover-BackgroundColor: rgba(255, 255, 255, 0.9);
+    --button-primary-active-BackgroundColor: rgba(255, 255, 255, 0.8);
+    --button-primary-loading-LabelColor: #000;
+    
+    --button-secondary-BackgroundColor: rgba(255, 255, 255, 0.02);
+    --button-secondary-BorderColor: rgba(255, 255, 255, 0.09);
+    --button-secondary-hover-BackgroundColor: rgba(255, 255, 255, 0.04);
+    --button-secondary-active-BackgroundColor: rgba(255, 255, 255, 0.08);
+    
+    --button-tertiary-hover-BackgroundColor: rgba(255, 255, 255, 0.04);
+    --button-tertiary-active-BackgroundColor: rgba(255, 255, 255, 0.08);
+    
+    --button-negative-BackgroundColor: #dc2626;
+    --button-negative-BorderColor: transparent;
+    --button-negative-hover-BackgroundColor: #b91c1c;
+    --button-negative-active-BackgroundColor: #991b1b;
+    --button-negative-loading-LabelColor: #fff;
+    
+    --button-disabled-BackgroundColor: rgba(255, 255, 255, 0.12);
+    --button-disabled-LabelColor: rgba(255, 255, 255, 0.4);
+    --button-disabled-IconColor: rgba(255, 255, 255, 0.4);
+    
+    --button-accent-IconColor: #000;
+    --button-accent-LabelColor: #000;
+    --button-subtle-IconColor: #fff;
+    --button-subtle-LabelColor: #fff;
+    
+    --button-menu-active-BorderColor: rgba(255, 255, 255, 0.09);
+    
+    /* Global Focus - Dark */
+    --global-focus-BorderColor: rgba(255, 255, 255, 0.2);
     
     /* Dark mode shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
@@ -596,39 +692,257 @@ body {
     box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #3a3a3a;
   }
   
-  /* Modern Design Utilities - Replacement for Neumorphism */
+  /* Huly Button System - Professional Black/White Design */
   
-  /* Modern card variants */
-  .modern-card {
-    @apply bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
+  .hulyButton {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--spacing-1);
+    border: 1px solid transparent;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
   }
   
-  .modern-card-elevated {
-    @apply bg-card border border-border rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+  .hulyButton:not(:disabled, .disabled, .loading) { 
+    cursor: pointer; 
   }
   
-  .modern-card-interactive {
-    @apply bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 
-           transition-all duration-300 cursor-pointer hover:-translate-y-0.5;
+  .hulyButton .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--spacing-2_5);
+    min-height: var(--spacing-2_5);
   }
   
-  /* Modern button variants */
-  .modern-button {
-    @apply bg-background border border-border rounded-lg px-4 py-2 text-sm font-medium 
-           hover:bg-accent hover:text-accent-foreground transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  .hulyButton span { 
+    white-space: nowrap; 
   }
   
-  .modern-button-primary {
-    @apply bg-primary text-primary-foreground border-0 rounded-lg px-4 py-2 text-sm font-medium 
-           hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md
-           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  .hulyButton:not(.no-focus):focus {
+    outline: 2px solid var(--global-focus-BorderColor);
+    outline-offset: 2px;
   }
   
-  .modern-button-ghost {
-    @apply bg-transparent border-0 rounded-lg px-4 py-2 text-sm font-medium 
-           hover:bg-accent hover:text-accent-foreground transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  /* Size variants */
+  .hulyButton.large {
+    height: var(--global-large-Size);
+    border-radius: var(--medium-BorderRadius);
+    padding: 0 var(--spacing-2);
+  }
+  
+  .hulyButton.medium {
+    height: var(--global-medium-Size);
+    border-radius: var(--medium-BorderRadius);
+    padding: 0 var(--spacing-2);
+  }
+  
+  .hulyButton.small {
+    height: var(--global-small-Size);
+    gap: var(--spacing-0_5);
+    border-radius: var(--small-BorderRadius);
+    padding: 0 var(--spacing-1);
+  }
+  
+  .hulyButton.extra-small {
+    height: var(--global-extra-small-Size);
+    gap: var(--spacing-0_5);
+    border-radius: var(--extra-small-BorderRadius);
+    padding: 0 var(--spacing-1);
+  }
+  
+  .hulyButton.min {
+    height: var(--global-min-Size);
+    border: 0;
+    border-radius: var(--min-BorderRadius);
+    padding: 0 var(--spacing-0_5);
+  }
+  
+  /* Icon only variants */
+  .hulyButton.iconOnly {
+    padding: 0;
+  }
+  
+  .hulyButton.large.iconOnly {
+    width: var(--global-large-Size);
+  }
+  
+  .hulyButton.medium.iconOnly {
+    width: var(--global-medium-Size);
+  }
+  
+  .hulyButton.small.iconOnly {
+    width: var(--global-small-Size);
+  }
+  
+  .hulyButton.extra-small.iconOnly {
+    width: var(--global-extra-small-Size);
+  }
+  
+  .hulyButton.min.iconOnly {
+    width: var(--global-min-Size);
+  }
+  
+  /* Round variants */
+  .hulyButton.round.large,
+  .hulyButton.round.medium {
+    border-radius: var(--large-BorderRadius);
+  }
+  
+  .hulyButton.round.small,
+  .hulyButton.round.extra-small,
+  .hulyButton.round.min {
+    border-radius: var(--large-BorderRadius);
+  }
+  
+  /* Color variants */
+  .hulyButton.primary {
+    border-color: var(--button-primary-BorderColor);
+    background-color: var(--button-primary-BackgroundColor);
+    color: var(--button-accent-LabelColor);
+  }
+  
+  .hulyButton.primary .icon {
+    color: var(--button-accent-IconColor);
+  }
+  
+  .hulyButton.primary:not(.disabled, :disabled):hover {
+    background-color: var(--button-primary-hover-BackgroundColor);
+  }
+  
+  .hulyButton.primary:not(.disabled, :disabled):active,
+  .hulyButton.primary.pressed:not(.disabled, :disabled) {
+    background-color: var(--button-primary-active-BackgroundColor);
+  }
+  
+  .hulyButton.secondary {
+    border-color: var(--button-secondary-BorderColor);
+    background-color: var(--button-secondary-BackgroundColor);
+    color: var(--button-subtle-LabelColor);
+  }
+  
+  .hulyButton.secondary .icon {
+    color: var(--button-subtle-IconColor);
+  }
+  
+  .hulyButton.secondary:not(.disabled, :disabled):hover {
+    background-color: var(--button-secondary-hover-BackgroundColor);
+  }
+  
+  .hulyButton.secondary:not(.disabled, :disabled):active,
+  .hulyButton.secondary.pressed:not(.disabled, :disabled) {
+    background-color: var(--button-secondary-active-BackgroundColor);
+  }
+  
+  .hulyButton.tertiary {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--button-subtle-LabelColor);
+  }
+  
+  .hulyButton.tertiary .icon {
+    color: var(--button-subtle-IconColor);
+  }
+  
+  .hulyButton.tertiary:not(.disabled, :disabled):hover {
+    background-color: var(--button-tertiary-hover-BackgroundColor);
+  }
+  
+  .hulyButton.tertiary:not(.disabled, :disabled):active,
+  .hulyButton.tertiary.pressed:not(.disabled, :disabled) {
+    background-color: var(--button-tertiary-active-BackgroundColor);
+  }
+  
+  .hulyButton.negative {
+    border-color: var(--button-negative-BorderColor);
+    background-color: var(--button-negative-BackgroundColor);
+    color: var(--button-accent-LabelColor);
+  }
+  
+  .hulyButton.negative .icon {
+    color: var(--button-accent-IconColor);
+  }
+  
+  .hulyButton.negative:not(.disabled, :disabled):hover {
+    background-color: var(--button-negative-hover-BackgroundColor);
+  }
+  
+  .hulyButton.negative:not(.disabled, :disabled):active,
+  .hulyButton.negative.pressed:not(.disabled, :disabled) {
+    background-color: var(--button-negative-active-BackgroundColor);
+  }
+  
+  /* Disabled state */
+  .hulyButton:disabled:not(.loading),
+  .hulyButton.disabled:not(.loading) {
+    border-color: transparent;
+    background-color: var(--button-disabled-BackgroundColor);
+    cursor: not-allowed;
+  }
+  
+  .hulyButton:disabled:not(.loading) .icon,
+  .hulyButton.disabled:not(.loading) .icon {
+    color: var(--button-disabled-IconColor);
+  }
+  
+  .hulyButton:disabled:not(.loading) span,
+  .hulyButton.disabled:not(.loading) span {
+    color: var(--button-disabled-LabelColor);
+  }
+  
+  /* Loading state */
+  .hulyButton.loading {
+    cursor: not-allowed;
+  }
+  
+  .hulyButton.primary.loading {
+    background-color: var(--button-primary-active-BackgroundColor);
+  }
+  
+  .hulyButton.primary.loading span {
+    color: var(--button-primary-loading-LabelColor);
+  }
+  
+  .hulyButton.secondary.loading {
+    background-color: var(--button-secondary-active-BackgroundColor);
+  }
+  
+  .hulyButton.secondary.loading span {
+    color: var(--button-disabled-LabelColor);
+  }
+  
+  .hulyButton.tertiary.loading {
+    background-color: var(--button-tertiary-active-BackgroundColor);
+  }
+  
+  .hulyButton.tertiary.loading span {
+    color: var(--button-disabled-LabelColor);
+  }
+  
+  .hulyButton.negative.loading {
+    background-color: var(--button-negative-active-BackgroundColor);
+  }
+  
+  .hulyButton.negative.loading span {
+    color: var(--button-negative-loading-LabelColor);
+  }
+  
+  /* Modern card variants - Huly Style */
+  .huly-card {
+    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  
+  .huly-card-elevated {
+    @apply bg-card border border-border rounded-lg shadow-md hover:shadow-lg transition-all duration-200;
+  }
+  
+  .huly-card-interactive {
+    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md hover:border-foreground/20 
+           transition-all duration-200 cursor-pointer;
   }
   
   /* Responsive dark mode neumorphic adjustments */
