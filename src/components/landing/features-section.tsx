@@ -26,21 +26,21 @@ const FeatureCard = ({
       y: -10,
       transition: { duration: 0.3 }
     }}
-    className="group relative bg-white dark:bg-gray-900/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-200 dark:border-white/10 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/10"
+    className="group relative bg-black backdrop-blur-lg rounded-2xl p-8 border border-white/10 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/20"
   >
     {/* Gradient overlay on hover */}
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     
     <div className="relative z-10">
       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
         <Icon className="w-8 h-8 text-white" />
       </div>
       
-      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors duration-300">
+      <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-cyan-400 transition-colors duration-300">
         {title}
       </h3>
       
-      <p className="text-gray-600 dark:text-gray-300 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
+      <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
         {description}
       </p>
       
@@ -49,7 +49,7 @@ const FeatureCard = ({
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ delay: delay * 0.1 + 0.3 }}
-        className="mt-6 flex items-center text-blue-500 dark:text-blue-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="mt-6 flex items-center text-cyan-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       >
         Learn more
         <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -85,16 +85,16 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section className="relative py-24 bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black">
+    <section id="features" className="relative py-24 bg-black">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-100/20 dark:via-gray-900/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/50 to-black" />
       
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400/10 dark:bg-blue-400/20 rounded-full"
+            className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -126,7 +126,7 @@ export default function FeaturesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
           >
             {t('title')}
           </motion.h2>
@@ -136,7 +136,7 @@ export default function FeaturesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            className="text-xl text-gray-400 max-w-3xl mx-auto"
           >
             {t('subtitle')}
           </motion.p>
@@ -155,17 +155,16 @@ export default function FeaturesSection() {
           ))}
         </div>
 
-        {/* Feature Highlights */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-600/10 dark:to-purple-600/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-white/10"
+          className="bg-gradient-to-r from-cyan-950/50 to-blue-950/50 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/10 dark:bg-gradient-to-r dark:from-cyan-600/10 dark:to-blue-600/10"
         >
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-3xl font-bold text-white mb-6">
                 Why Choose ClassroomAI?
               </h3>
               
@@ -184,8 +183,8 @@ export default function FeaturesSection() {
                     transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
+                    <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                    <span className="text-gray-300">{benefit}</span>
                   </motion.div>
                 ))}
               </div>
@@ -197,13 +196,10 @@ export default function FeaturesSection() {
                 transition={{ duration: 0.6, delay: 1 }}
                 className="mt-8"
               >
-                <Button 
-                  size="lg" 
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg group"
-                >
+                <button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold group inline-flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50">
                   Start Free Trial
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </button>
               </motion.div>
             </div>
             
@@ -214,41 +210,41 @@ export default function FeaturesSection() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="bg-white/80 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-gray-200 dark:border-white/10"
+                className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                   <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">ClassroomAI Dashboard</span>
+                  <span className="text-gray-400 text-sm ml-2">ClassroomAI Dashboard</span>
                 </div>
                 
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-700 dark:text-gray-300">Students Present</span>
-                    <span className="text-green-400 font-semibold">28/30</span>
+                    <span className="text-gray-300">Students Present</span>
+                    <span className="text-emerald-400 font-semibold">28/30</span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-gray-700 rounded-full h-2">
                     <motion.div 
                       initial={{ width: 0 }}
                       whileInView={{ width: '93%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 2, delay: 1 }}
-                      className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full"
+                      className="bg-gradient-to-r from-emerald-400 to-cyan-500 h-2 rounded-full"
                     />
                   </div>
                   
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-700 dark:text-gray-300">Assignments Graded</span>
-                    <span className="text-blue-400 font-semibold">45/50</span>
+                    <span className="text-gray-300">Assignments Graded</span>
+                    <span className="text-cyan-400 font-semibold">45/50</span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-gray-700 rounded-full h-2">
                     <motion.div 
                       initial={{ width: 0 }}
                       whileInView={{ width: '90%' }}
                       viewport={{ once: true }}
                       transition={{ duration: 2, delay: 1.5 }}
-                      className="bg-gradient-to-r from-blue-400 to-purple-500 h-2 rounded-full"
+                      className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full"
                     />
                   </div>
                 </div>
