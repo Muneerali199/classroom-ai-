@@ -1,108 +1,42 @@
-
+import { cookies } from 'next/headers';
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, User, Users, Settings, School, Bot } from 'lucide-react';
-import Header from '@/components/header';
-import { Logo } from '@/components/icons';
-import { Link } from '@/routing';
+import ModernHeader from '@/components/modern-header';
 import DashboardAuthWrapper from '@/components/dashboard-auth-wrapper';
+import UltraModernDeanSidebar from '@/components/ultra-modern-dean-sidebar';
 import ChatbotMount from '@/components/chatbot-mount';
+import { DashboardDataProvider } from '@/contexts/dashboard-data-context';
 
-import { useTranslations } from 'next-intl';
-
-function DeanSidebar() {
-  const t = useTranslations('DeanNav');
-  return (
-    <Sidebar className="neo-bg">
-      <SidebarHeader>
-        <div className="flex items-center gap-2 p-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <Logo className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            EduTrack Dean
-          </span>
-        </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu className="px-2 space-y-2">
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive className="neo-surface hover:shadow-lg rounded-xl">
-                <Link href="/dean/dashboard">
-                  <Home />
-                  {t('dashboard')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
-                <Link href="#">
-                  <Users />
-                  {t('userManagement')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
-                <School />
-                {t('courseManagement')}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton className="neo-surface hover:shadow-lg rounded-xl">
-                <Settings />
-                {t('systemSettings')}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
-                <Link href={'/dashboard/assistant'}>
-                  <Bot />
-                  {t('assistant')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="neo-surface hover:shadow-lg rounded-xl">
-                <Link href="/dashboard/profile">
-                  <User />
-                  {t('profile')}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  );
-}
-
-export default function DeanLayout({
+export default async function DeanLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
+
   return (
     <DashboardAuthWrapper>
-      <SidebarProvider>
-        <DeanSidebar />
-        <SidebarInset className="neo-bg min-h-screen">
-          <Header />
-          <main className="p-4 sm:p-6 lg:p-8">{children}</main>
-          {/* Floating AI Chatbot for dean dashboard */}
-          <ChatbotMount />
-        </SidebarInset>
-      </SidebarProvider>
+      <DashboardDataProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
+          <UltraModernDeanSidebar />
+          <SidebarInset className="flex flex-1 flex-col bg-black relative overflow-hidden">
+            {/* Animated Background */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+              <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] animate-pulse" />
+              <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+            </div>
+            <ModernHeader />
+            <div className="flex-1 overflow-y-auto relative z-10">
+              <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+            </div>
+            <ChatbotMount />
+          </SidebarInset>
+        </SidebarProvider>
+      </DashboardDataProvider>
     </DashboardAuthWrapper>
   );
 }
