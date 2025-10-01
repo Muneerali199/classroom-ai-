@@ -1,7 +1,7 @@
 'use client';
 
-import UltraModernProfile from '@/components/ultra-modern-profile';
+import RealTeacherProfile from '@/components/real-teacher-profile';
 
 export default function ProfilePage() {
-  return <UltraModernProfile />;
+  return <RealTeacherProfile />;
 }
