@@ -1,0 +1,71 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   FIX PROFILE UPDATE & PHOTO UPLOAD ERRORS                    ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+PROBLEM 1: "Could not find 'first_name' column"
+  → Teachers table missing first_name/last_name columns
+
+PROBLEM 2: "new row violates row-level security policy"  
+  → Storage bucket policies too restrictive
+
+═══════════════════════════════════════════════════════════════
+
+SOLUTION - Run These 2 Steps:
+
+STEP 1: Run FIX_TEACHERS_TABLE.sql
+  1. Open Supabase → SQL Editor
+  2. Copy ALL from: FIX_TEACHERS_TABLE.sql
+  3. Paste and Run ▶️
+  4. You should see:
+     ✅ Teachers table fixed!
+     ✅ All profile columns added
+     ✅ RLS policies updated
+     ✅ Storage policies simplified
+
+STEP 2: Restart Server
+  npm run dev
+
+═══════════════════════════════════════════════════════════════
+
+WHAT THE FIX DOES:
+
+1. Adds missing columns to teachers table:
+   - first_name, last_name
+   - phone, department, role, bio
+   - avatar_url, address, city, country
+
+2. Migrates existing 'name' column (if exists):
+   - Splits "John Doe" → first_name: "John", last_name: "Doe"
+
+3. Fixes RLS policies with proper ::text casting:
+   - Prevents UUID = text errors
+   - Uses CASE statements for null safety
+
+4. Simplifies storage policies:
+   - Any authenticated user can upload
+   - Any authenticated user can update/delete
+   - Public can view (for avatars)
+
+═══════════════════════════════════════════════════════════════
+
+TEST AFTER RUNNING:
+
+✓ Go to Profile page
+✓ Click Edit Profile
+✓ Change your name → Save
+✓ Should save without "first_name column" error
+
+✓ Click upload icon on avatar
+✓ Select any JPG or PNG image
+✓ Should upload without "row-level security" error
+
+═══════════════════════════════════════════════════════════════
+
+IF YOU WANT TO CHECK YOUR TABLE FIRST:
+
+Run CHECK_TEACHERS_TABLE.sql to see what columns exist
+Then run FIX_TEACHERS_TABLE.sql to add missing ones
+
+═══════════════════════════════════════════════════════════════
