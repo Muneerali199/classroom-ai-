@@ -168,26 +168,38 @@ export default function ChatFullPage() {
 
   return (
     <div className="w-full min-h-screen bg-background">
-      <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-        <Card className="huly-card flex flex-col min-h-[80vh]">
-          <CardHeader className="pb-3 border-b">
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Bot className="h-5 w-5" />
-                {t('aiAssistant')}
-                <Badge variant="secondary" className="ml-2">{userRole}</Badge>
+      <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+        <Card className="huly-card flex flex-col min-h-[85vh] shadow-xl border-border/50">
+          <CardHeader className="pb-4 border-b bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <CardTitle className="flex items-center gap-3 text-xl font-bold">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+                  <Bot className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    {t('aiAssistant')}
+                    <Badge variant="secondary" className="ml-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0">{userRole}</Badge>
+                  </div>
+                  <p className="text-xs font-normal text-muted-foreground mt-0.5">Your intelligent teaching companion</p>
+                </div>
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <Button variant={showPerformance ? 'default' : 'outline'} size="sm" onClick={() => setShowPerformance(!showPerformance)}>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button 
+                  variant={showPerformance ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setShowPerformance(!showPerformance)}
+                  className={showPerformance ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600' : ''}
+                >
                   <BarChart3 className="h-4 w-4 mr-1" />
                   {t('showPerformance')}
                 </Button>
-                <div className="hidden sm:flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md border bg-background/50">
+                  <Globe className="h-4 w-4 text-blue-500" />
                   <select
                     value={voiceLang}
                     onChange={(e) => setVoiceLang(e.target.value)}
-                    className="text-xs rounded-md border border-border px-2 py-1 bg-background text-foreground"
+                    className="text-xs bg-transparent border-0 outline-none cursor-pointer"
                   >
                     {languageOptions.map(opt => (
                       <option key={opt.code} value={opt.code}>{opt.label}</option>
@@ -205,28 +217,47 @@ export default function ChatFullPage() {
           )}
 
           <CardContent className="flex-1 flex flex-col p-0">
-            <ScrollArea className="flex-1 p-4">
+            <ScrollArea className="flex-1 p-4 md:p-6">
               <div className="space-y-4">
                 {messages.map((m) => (
-                  <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] rounded-lg p-3 ${m.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                      <div className="flex items-start gap-2">
-                        {m.role === 'assistant' ? <Bot className="w-4 h-4 mt-0.5" /> : <User className="w-4 h-4 mt-0.5" />}
-                        <div>
-                          <div className="text-sm whitespace-pre-wrap">{m.content}</div>
-                          <div className="text-xs opacity-70 mt-1">{m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                  <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
+                    <div className={`max-w-[85%] md:max-w-[75%] rounded-2xl p-4 shadow-sm ${
+                      m.role === 'user'
+                        ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white'
+                        : 'bg-card border border-border/50'
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        {m.role === 'assistant' && (
+                          <div className="flex-shrink-0 p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+                            <Bot className="w-4 h-4 text-white" />
+                          </div>
+                        )}
+                        {m.role === 'user' && (
+                          <div className="flex-shrink-0 p-1.5 rounded-lg bg-white/20">
+                            <User className="w-4 h-4 text-white" />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">{m.content}</div>
+                          <div className={`text-xs mt-2 ${m.role === 'user' ? 'text-white/70' : 'text-muted-foreground'}`}>
+                            {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-muted rounded-lg p-3">
-                      <div className="flex items-center gap-2">
-                        <Bot className="w-4 h-4" />
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span className="text-sm">{t('thinking')}</span>
+                  <div className="flex justify-start animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 animate-pulse">
+                          <Bot className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                          <span className="text-sm text-muted-foreground">{t('thinking')}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -238,8 +269,8 @@ export default function ChatFullPage() {
             <Separator />
 
             {/* Input and Voice controls */}
-            <div className="p-4 space-y-3">
-              <div className="flex gap-2">
+            <div className="p-4 md:p-6 space-y-3 bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+              <div className="flex gap-3">
                 <div className="flex-1">
                   <Input
                     value={inputMessage}
@@ -247,11 +278,16 @@ export default function ChatFullPage() {
                     onKeyDown={handleKeyPress as any}
                     placeholder={t('typeOrSpeak')}
                     disabled={isLoading}
-                    className=""
+                    className="h-11 rounded-xl border-border/50 focus-visible:ring-2 focus-visible:ring-blue-500/50"
                   />
                 </div>
-                <Button onClick={() => handleSend(inputMessage)} disabled={isLoading || !inputMessage.trim()} size="sm">
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                <Button 
+                  onClick={() => handleSend(inputMessage)} 
+                  disabled={isLoading || !inputMessage.trim()} 
+                  size="lg"
+                  className="h-11 px-6 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                 </Button>
               </div>
 
