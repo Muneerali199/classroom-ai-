@@ -1,0 +1,51 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   FINAL SOLUTION - RUN JUST ONE FILE!                        ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+STEP 1: Open Supabase Dashboard → SQL Editor
+
+STEP 2: Open this file: ALL_IN_ONE_FINAL.sql
+
+STEP 3: Copy EVERYTHING from the file
+
+STEP 4: Paste in SQL Editor and click RUN ▶️
+
+STEP 5: You should see:
+        ╔════════════════════════════════════════╗
+        ║   ALL-IN-ONE MIGRATION COMPLETE!      ║
+        ╚════════════════════════════════════════╝
+        
+        ✅ Helper functions created (5)
+        ✅ Timetable RLS policies fixed
+        ✅ Meetings tables created
+        ✅ Storage bucket configured
+        ✅ Teachers profile columns added
+        ✅ Teachers RLS policies created (CORRECT!)
+        
+        🎉 Everything is ready!
+
+STEP 6: In terminal, restart server:
+        npm run dev
+
+╔═══════════════════════════════════════════════════════════════╗
+║   THAT'S IT! Everything should work now                       ║
+╚═══════════════════════════════════════════════════════════════╝
+
+TEST IT:
+  ✓ Create timetable - should work
+  ✓ Create meeting with subject - should work
+  ✓ Upload profile photo - should work
+  ✓ Edit and save profile - should work
+
+THE KEY FIX:
+  In Step 6 of ALL_IN_ONE_FINAL.sql, we cast BOTH sides to text:
+  
+  auth_user_id::text = (auth.uid())::text
+  
+  This ensures we compare text = text, NOT uuid = text!
+
+╔═══════════════════════════════════════════════════════════════╗
+║   If you still get errors, send me the exact error message    ║
+╚═══════════════════════════════════════════════════════════════╝
