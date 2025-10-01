@@ -17,6 +17,10 @@ interface DashboardContext {
   assignmentData: any[];
   gradeData: any[];
   studentData?: any[];
+  timetableData: any[];
+  notificationsData: any[];
+  submissionsData: any[];
+  upcomingClasses: any[];
   currentDate: string;
   academicYear: string;
   semester: string;
@@ -78,7 +82,7 @@ async function fetchDashboardContext(userId: string, userRole: string): Promise<
     const { data: assignmentData } = await supabase
       .from('assignments')
       .select('*')
-      .eq(userRole === 'student' ? 'student_id' : 'teacher_id', userId)
+      .eq('created_by', userId)
       .order('created_at', { ascending: false })
       .limit(50);
 
@@ -92,12 +96,84 @@ async function fetchDashboardContext(userId: string, userRole: string): Promise<
 
     // Fetch student data (for teachers)
     let studentData = null;
-    if (userRole === 'teacher') {
+    if (userRole === 'teacher' || userRole === 'dean') {
       const { data } = await supabase
         .from('students')
+        .select('*');
+      studentData = data;
+    }
+
+    // NEW: Fetch timetable data
+    let timetableData: any[] = [];
+    let upcomingClasses: any[] = [];
+    
+    if (userRole === 'student') {
+      // Get student's timetable
+      const { data: studentRecord } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', userId)
+        .single();
+      
+      if (studentRecord) {
+        const { data: timetable } = await supabase
+          .from('student_timetable_view')
+          .select('*')
+          .eq('student_id', studentRecord.id);
+        timetableData = timetable || [];
+        
+        // Get today's and upcoming classes
+        const today = new Date().getDay();
+        upcomingClasses = (timetable || []).filter((c: any) => 
+          c.day_of_week === today || c.day_of_week === (today + 1) % 7
+        );
+      }
+    } else {
+      // Get teacher's timetable
+      const { data: timetable } = await supabase
+        .from('teacher_timetable_view')
         .select('*')
         .eq('teacher_id', userId);
-      studentData = data;
+      timetableData = timetable || [];
+    }
+
+    // NEW: Fetch notifications
+    let notificationsData: any[] = [];
+    if (userRole === 'student') {
+      const { data: studentRecord } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', userId)
+        .single();
+      
+      if (studentRecord) {
+        const { data: notifications } = await supabase
+          .from('student_notifications')
+          .select('*')
+          .eq('student_id', studentRecord.id)
+          .order('created_at', { ascending: false })
+          .limit(20);
+        notificationsData = notifications || [];
+      }
+    }
+
+    // NEW: Fetch assignment submissions (for students)
+    let submissionsData: any[] = [];
+    if (userRole === 'student') {
+      const { data: studentRecord } = await supabase
+        .from('students')
+        .select('id')
+        .eq('auth_user_id', userId)
+        .single();
+      
+      if (studentRecord) {
+        const { data: submissions } = await supabase
+          .from('assignment_submissions')
+          .select('*')
+          .eq('student_id', studentRecord.id)
+          .order('submitted_at', { ascending: false });
+        submissionsData = submissions || [];
+      }
     }
 
     return {
@@ -106,6 +182,10 @@ async function fetchDashboardContext(userId: string, userRole: string): Promise<
       assignmentData: assignmentData || [],
       gradeData: gradeData || [],
       studentData: studentData || undefined,
+      timetableData: timetableData || [],
+      notificationsData: notificationsData || [],
+      submissionsData: submissionsData || [],
+      upcomingClasses: upcomingClasses || [],
       currentDate,
       academicYear,
       semester
@@ -118,6 +198,10 @@ async function fetchDashboardContext(userId: string, userRole: string): Promise<
       attendanceData: [],
       assignmentData: [],
       gradeData: [],
+      timetableData: [],
+      notificationsData: [],
+      submissionsData: [],
+      upcomingClasses: [],
       currentDate,
       academicYear,
       semester
@@ -151,6 +235,15 @@ async function generateContextualResponse(
     case 'students':
       return generateStudentResponse(message, context);
     
+    case 'timetable':
+      return generateTimetableResponse(message, context);
+    
+    case 'notifications':
+      return generateNotificationsResponse(message, context);
+    
+    case 'schedule':
+      return generateScheduleResponse(message, context);
+    
     default:
       return generateGeneralResponse(message, context);
   }
@@ -162,7 +255,7 @@ function analyzeMessageIntent(message: string): string {
   if (lowerMessage.includes('attendance') || lowerMessage.includes('present') || lowerMessage.includes('absent')) {
     return 'attendance';
   }
-  if (lowerMessage.includes('assignment') || lowerMessage.includes('homework') || lowerMessage.includes('task')) {
+  if (lowerMessage.includes('assignment') || lowerMessage.includes('homework') || lowerMessage.includes('task') || lowerMessage.includes('submit')) {
     return 'assignments';
   }
   if (lowerMessage.includes('grade') || lowerMessage.includes('score') || lowerMessage.includes('mark')) {
@@ -173,6 +266,15 @@ function analyzeMessageIntent(message: string): string {
   }
   if (lowerMessage.includes('student') || lowerMessage.includes('class')) {
     return 'students';
+  }
+  if (lowerMessage.includes('timetable') || lowerMessage.includes('time table') || lowerMessage.includes('classes today')) {
+    return 'timetable';
+  }
+  if (lowerMessage.includes('notification') || lowerMessage.includes('alert') || lowerMessage.includes('reminder')) {
+    return 'notifications';
+  }
+  if (lowerMessage.includes('schedule') || lowerMessage.includes('when') || lowerMessage.includes('next class') || lowerMessage.includes('upcoming')) {
+    return 'schedule';
   }
   
   return 'general';
@@ -372,31 +474,181 @@ function generateStudentResponse(message: string, context: DashboardContext): st
   return response;
 }
 
-function generateGeneralResponse(message: string, context: DashboardContext): string {
-  const { userRole, currentDate, academicYear, semester } = context;
+function generateTimetableResponse(message: string, context: DashboardContext): string {
+  const { timetableData, upcomingClasses, currentDate, userRole } = context;
   
-  return `Hello! I'm your AI assistant with access to your complete dashboard data. I can help you analyze:
+  if (timetableData.length === 0) {
+    return "No timetable data available yet. Once your schedule is created, I'll be able to help you with class timings and schedules.";
+  }
+
+  const today = new Date().getDay();
+  const todayClasses = timetableData.filter((c: any) => c.day_of_week === today);
+  
+  let response = `📅 **Your Timetable (Real Dashboard Data)**\n\n`;
+  
+  response += `**Total Classes This Week:** ${timetableData.length}\n`;
+  response += `**Classes Today:** ${todayClasses.length}\n\n`;
+
+  if (todayClasses.length > 0) {
+    response += `**Today's Schedule:**\n`;
+    todayClasses.forEach((cls: any) => {
+      response += `• ${cls.start_time} - ${cls.end_time}: ${cls.title}`;
+      if (cls.room_number) response += ` (Room ${cls.room_number})`;
+      if (cls.subject_name) response += ` - ${cls.subject_name}`;
+      response += `\n`;
+    });
+  }
+
+  if (upcomingClasses.length > 0) {
+    response += `\n**Upcoming Classes:**\n`;
+    upcomingClasses.slice(0, 3).forEach((cls: any) => {
+      response += `• ${cls.day_name}: ${cls.start_time} - ${cls.title}\n`;
+    });
+  }
+
+  response += `\n*Timetable updated as of ${currentDate}*`;
+  return response;
+}
+
+function generateNotificationsResponse(message: string, context: DashboardContext): string {
+  const { notificationsData, currentDate } = context;
+  
+  if (notificationsData.length === 0) {
+    return "You have no notifications at the moment. I'll let you know when you receive any updates!";
+  }
+
+  const unreadCount = notificationsData.filter((n: any) => !n.is_read).length;
+  const types = notificationsData.reduce((acc: any, n: any) => {
+    acc[n.type] = (acc[n.type] || 0) + 1;
+    return acc;
+  }, {});
+
+  let response = `🔔 **Notifications Summary (Real Data)**\n\n`;
+  
+  response += `**Total Notifications:** ${notificationsData.length}\n`;
+  response += `**Unread:** ${unreadCount}\n\n`;
+
+  response += `**By Type:**\n`;
+  Object.keys(types).forEach(type => {
+    const emoji = type === 'assignment' ? '📝' : type === 'timetable' ? '📅' : type === 'grade' ? '⭐' : '📢';
+    response += `${emoji} ${type.charAt(0).toUpperCase() + type.slice(1)}: ${types[type]}\n`;
+  });
+
+  response += `\n**Recent Notifications:**\n`;
+  notificationsData.slice(0, 5).forEach((notif: any) => {
+    const status = notif.is_read ? '✓' : '🔵';
+    response += `${status} ${notif.title}\n`;
+  });
+
+  response += `\n*Updated as of ${currentDate}*`;
+  return response;
+}
+
+function generateScheduleResponse(message: string, context: DashboardContext): string {
+  const { timetableData, upcomingClasses, currentDate } = context;
+  
+  if (timetableData.length === 0) {
+    return "No schedule information available. Once your timetable is set up, I can tell you about upcoming classes!";
+  }
+
+  const now = new Date();
+  const currentDay = now.getDay();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  // Find current and next class
+  const todayClasses = timetableData.filter((c: any) => c.day_of_week === currentDay);
+  let currentClass = null;
+  let nextClass = null;
+
+  todayClasses.forEach((cls: any) => {
+    const [startHour, startMin] = cls.start_time.split(':').map(Number);
+    const [endHour, endMin] = cls.end_time.split(':').map(Number);
+    const startMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
+
+    if (currentTime >= startMinutes && currentTime < endMinutes) {
+      currentClass = cls;
+    } else if (currentTime < startMinutes && !nextClass) {
+      nextClass = cls;
+    }
+  });
+
+  let response = `⏰ **Your Schedule Status**\n\n`;
+
+  if (currentClass) {
+    response += `🟢 **Currently in Class:**\n`;
+    response += `• ${currentClass.title}\n`;
+    response += `• ${currentClass.start_time} - ${currentClass.end_time}\n`;
+    if (currentClass.room_number) response += `• Room: ${currentClass.room_number}\n`;
+    response += `\n`;
+  }
+
+  if (nextClass) {
+    response += `🔵 **Next Class:**\n`;
+    response += `• ${nextClass.title}\n`;
+    response += `• Starts at: ${nextClass.start_time}\n`;
+    if (nextClass.room_number) response += `• Room: ${nextClass.room_number}\n`;
+  } else if (!currentClass) {
+    response += `✅ **No more classes today!**\n`;
+  }
+
+  if (upcomingClasses.length > 0) {
+    response += `\n**Tomorrow's Schedule:**\n`;
+    const tomorrowClasses = timetableData.filter((c: any) => c.day_of_week === (currentDay + 1) % 7);
+    tomorrowClasses.forEach((cls: any) => {
+      response += `• ${cls.start_time}: ${cls.title}\n`;
+    });
+  }
+
+  response += `\n*Schedule as of ${currentDate} ${now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}*`;
+  return response;
+}
+
+function generateGeneralResponse(message: string, context: DashboardContext): string {
+  const { userRole, currentDate, academicYear, semester, timetableData, notificationsData, submissionsData } = context;
+  
+  const unreadNotifications = notificationsData.filter((n: any) => !n.is_read).length;
+  const todayClasses = timetableData.filter((c: any) => c.day_of_week === new Date().getDay()).length;
+  
+  return `Hello! I'm your intelligent AI assistant with **complete access** to your dashboard data. I can help you with:
 
 📊 **Real-time Data Analysis:**
 • Attendance patterns and trends
 • Assignment progress and deadlines  
 • Grade performance and insights
 • Academic progress tracking
+• **Timetable and class schedules** 🆕
+• **Notifications and alerts** 🆕
+• **Assignment submissions** 🆕
 
 🎯 **What I can do:**
 • Answer questions about your attendance records
 • Analyze your assignment completion rates
 • Provide grade breakdowns by subject
+• **Tell you about today's classes and schedule**
+• **Show upcoming classes and notifications**
+• **Track your submission history**
 • Give performance insights and recommendations
-• Track your academic progress over time
+• Help you stay organized with reminders
 
-📅 **Current Context:**
+📅 **Your Current Status:**
 • Date: ${currentDate}
 • Academic Year: ${academicYear}
 • Semester: ${semester}
 • Role: ${userRole}
+${unreadNotifications > 0 ? `• 🔔 ${unreadNotifications} unread notifications` : ''}
+${todayClasses > 0 ? `• 📅 ${todayClasses} classes today` : ''}
+${submissionsData.length > 0 ? `• 📝 ${submissionsData.length} total submissions` : ''}
 
-Just ask me anything about your academic data - I have access to all your dashboard information and can provide detailed, data-driven responses!`;
+💡 **Try asking me:**
+• "What's my attendance rate?"
+• "Do I have any pending assignments?"
+• "What are my classes today?"
+• "Show my notifications"
+• "When is my next class?"
+• "What's my average grade?"
+
+I have access to **all your real dashboard data** and provide detailed, accurate responses based on your actual information!`;
 }
 
 async function storeConversation(userId: string, userMessage: string, aiResponse: string) {
