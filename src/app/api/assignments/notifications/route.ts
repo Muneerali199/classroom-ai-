@@ -26,19 +26,17 @@ export async function POST(req: NextRequest) {
 
     // Create notifications for all students
     const notifications = (students || []).map((student: any) => ({
-      id: crypto.randomUUID(),
       student_id: student.id,
       assignment_id,
       title: `New Assignment: ${title}`,
       message: subject_name ? `${title} has been published for ${subject_name}` : `${title} has been published`,
       type: 'assignment',
-      read: false,
-      created_at: new Date().toISOString()
+      is_read: false
     }));
 
     if (notifications.length > 0) {
       const { error: notifError } = await (supabase as any)
-        .from('notifications')
+        .from('student_notifications')
         .insert(notifications);
 
       if (notifError) {
