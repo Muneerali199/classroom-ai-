@@ -1,5 +1,7 @@
-import UltraModernAIAssistant from "@/components/ultra-modern-ai-assistant";
+"use client";
+
+import ChatFullPage from "@/components/chat-full-page";
 
 export default function DashboardAssistantPage() {
-  return <UltraModernAIAssistant />;
+  return <ChatFullPage />;
 }
