@@ -1,0 +1,60 @@
+═══════════════════════════════════════════════════════════════
+  QUICK START - Run These 6 Steps (Takes 5 Minutes)
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Supabase SQL Editor → Run 017_ZERO_COMPARISON.sql
+        (Creates helper functions that read from JWT token)
+        
+STEP 2: Supabase SQL Editor → Run 018_ZERO_COMPARISON.sql
+        (Creates meetings table)
+        
+STEP 3: Supabase SQL Editor → Run 019_fix_storage_bucket.sql
+        (Fixes photo upload)
+        
+STEP 4: Supabase SQL Editor → Run this SQL:
+        
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS phone TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS department TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'Teacher';
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS bio TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS address TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS city TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS country TEXT;
+        ALTER TABLE teachers ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+STEP 5: Supabase SQL Editor → Run this SQL:
+        
+        ALTER TABLE teachers ENABLE ROW LEVEL SECURITY;
+        
+        DROP POLICY IF EXISTS "Teachers can view own profile" ON teachers;
+        DROP POLICY IF EXISTS "Teachers can update own profile" ON teachers;
+        
+        CREATE POLICY "Teachers can view own profile" ON teachers
+            FOR SELECT USING (auth_user_id = (auth.uid())::text);
+        
+        CREATE POLICY "Teachers can update own profile" ON teachers
+            FOR UPDATE 
+            USING (auth_user_id = (auth.uid())::text)
+            WITH CHECK (auth_user_id = (auth.uid())::text);
+
+STEP 6: Terminal → npm run dev
+        (Restart your server)
+
+═══════════════════════════════════════════════════════════════
+  That's It! Everything Should Work Now
+═══════════════════════════════════════════════════════════════
+
+TEST:
+✓ Create timetable - should work
+✓ Create meeting - should work  
+✓ Upload photo - should work
+✓ Update profile - should save
+
+DEBUGGING:
+If profile doesn't save, open browser console and look for:
+  "Update successful: [...]"
+
+For full details, see: FINAL_SOLUTION.md
+
+═══════════════════════════════════════════════════════════════
