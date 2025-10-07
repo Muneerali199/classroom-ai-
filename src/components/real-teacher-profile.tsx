@@ -78,18 +78,18 @@ export default function RealTeacherProfile() {
         // Fallback to auth user data
         const profileData = {
           id: user?.id || '',
-          first_name: user?.user_metadata?.first_name || '',
-          last_name: user?.user_metadata?.last_name || '',
+          first_name: (user?.user_metadata?.first_name as string) || '',
+          last_name: (user?.user_metadata?.last_name as string) || '',
           email: user?.email || '',
-          phone: user?.user_metadata?.phone || '',
-          department: user?.user_metadata?.department || '',
-          role: user?.user_metadata?.role || 'Teacher',
-          bio: user?.user_metadata?.bio || '',
-          avatar_url: user?.user_metadata?.avatar_url || '',
-          address: user?.user_metadata?.address || '',
-          city: user?.user_metadata?.city || '',
-          country: user?.user_metadata?.country || '',
-          created_at: user?.created_at || new Date().toISOString()
+          phone: (user?.user_metadata?.phone as string) || '',
+          department: (user?.user_metadata?.department as string) || '',
+          role: (user?.user_metadata?.role as string) || 'Teacher',
+          bio: (user?.user_metadata?.bio as string) || '',
+          avatar_url: (user?.user_metadata?.avatar_url as string) || '',
+          address: (user?.user_metadata?.address as string) || '',
+          city: (user?.user_metadata?.city as string) || '',
+          country: (user?.user_metadata?.country as string) || '',
+          created_at: (user as any)?.created_at || new Date().toISOString()
         };
         setProfile(profileData);
         setFormData(profileData);
