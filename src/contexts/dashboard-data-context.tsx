@@ -111,18 +111,26 @@ export function DashboardDataProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
-      // Fetch all dashboard data in parallel
-      const [attendanceRes, assignmentsRes, gradesRes, studentsRes] = await Promise.all([
-        fetch('/api/attendance'),
-        fetch('/api/assignments'),
-        fetch('/api/grades'),
-        user.user_metadata?.role === 'teacher' ? fetch('/api/students') : Promise.resolve(null)
-      ]);
+      // Fetch all dashboard data in parallel with error handling for each
+      const fetchWithFallback = async (url: string) => {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            return await res.json();
+          }
+          return [];
+        } catch (err) {
+          console.warn(`Failed to fetch ${url}:`, err);
+          return [];
+        }
+      };
 
-      const attendanceData = attendanceRes.ok ? await attendanceRes.json() : [];
-      const assignmentsData = assignmentsRes.ok ? await assignmentsRes.json() : [];
-      const gradesData = gradesRes.ok ? await gradesRes.json() : [];
-      const studentsData = studentsRes?.ok ? await studentsRes.json() : [];
+      const [attendanceData, assignmentsData, gradesData, studentsData] = await Promise.all([
+        fetchWithFallback('/api/attendance'),
+        fetchWithFallback('/api/assignments'),
+        fetchWithFallback('/api/grades'),
+        user.user_metadata?.role === 'teacher' ? fetchWithFallback('/api/students') : Promise.resolve([])
+      ]);
 
       // Calculate attendance stats
       const attendanceStats = calculateAttendanceStats(attendanceData);
