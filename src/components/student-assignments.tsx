@@ -216,15 +216,15 @@ export default function StudentAssignments() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'submitted':
-        return <Badge className="bg-blue-500">Submitted</Badge>;
+        return <Badge className="bg-blue-500/20 border-blue-500/30 text-blue-400">Submitted</Badge>;
       case 'graded':
-        return <Badge className="bg-green-500">Graded</Badge>;
+        return <Badge className="bg-emerald-500/20 border-emerald-500/30 text-emerald-400">Graded</Badge>;
       case 'late':
-        return <Badge className="bg-orange-500">Late</Badge>;
+        return <Badge className="bg-orange-500/20 border-orange-500/30 text-orange-400">Late</Badge>;
       case 'missing':
-        return <Badge className="bg-red-500">Missing</Badge>;
+        return <Badge className="bg-red-500/20 border-red-500/30 text-red-400">Missing</Badge>;
       default:
-        return <Badge variant="outline">Pending</Badge>;
+        return <Badge variant="outline" className="bg-gray-500/20 border-gray-500/30 text-gray-400">Pending</Badge>;
     }
   };
 
@@ -233,24 +233,24 @@ export default function StudentAssignments() {
 
   if (loading) {
     return (
-      <Card className="huly-card">
+      <Card className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10">
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="huly-card">
-      <CardHeader className="border-b bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+    <Card className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10 shadow-2xl">
+      <CardHeader className="border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
         <CardTitle className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25">
             <BookOpen className="h-5 w-5 text-white" />
           </div>
           <div>
-            <div>My Assignments</div>
-            <p className="text-xs font-normal text-muted-foreground mt-0.5">
+            <div className="text-white">My Assignments</div>
+            <p className="text-xs font-normal text-gray-400 mt-0.5">
               View and submit your assignments
             </p>
           </div>
@@ -259,11 +259,11 @@ export default function StudentAssignments() {
 
       <CardContent className="p-0">
         <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
-            <TabsTrigger value="pending" className="rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent">
+          <TabsList className="w-full justify-start rounded-none border-b border-white/10 bg-transparent p-0">
+            <TabsTrigger value="pending" className="rounded-none border-b-2 border-transparent text-gray-400 data-[state=active]:border-cyan-500 data-[state=active]:bg-transparent data-[state=active]:text-white">
               Pending ({pendingAssignments.length})
             </TabsTrigger>
-            <TabsTrigger value="submitted" className="rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent">
+            <TabsTrigger value="submitted" className="rounded-none border-b-2 border-transparent text-gray-400 data-[state=active]:border-cyan-500 data-[state=active]:bg-transparent data-[state=active]:text-white">
               Submitted ({submittedAssignments.length})
             </TabsTrigger>
           </TabsList>
@@ -271,30 +271,31 @@ export default function StudentAssignments() {
           <TabsContent value="pending" className="p-4 space-y-4">
             {pendingAssignments.length === 0 ? (
               <div className="text-center py-12">
-                <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3 opacity-50" />
-                <p className="text-sm text-muted-foreground">All caught up!</p>
-                <p className="text-xs text-muted-foreground mt-1">No pending assignments</p>
+                <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3 opacity-50" />
+                <p className="text-sm text-gray-400">All caught up!</p>
+                <p className="text-xs text-gray-500 mt-1">No pending assignments</p>
               </div>
             ) : (
               pendingAssignments.map((assignment) => (
-                <Card key={assignment.id} className="border-2">
+                <Card key={assignment.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{assignment.title}</CardTitle>
+                        <CardTitle className="text-lg text-white">{assignment.title}</CardTitle>
                         {assignment.description && (
-                          <p className="text-sm text-muted-foreground mt-2">{assignment.description}</p>
+                          <p className="text-sm text-gray-400 mt-2">{assignment.description}</p>
                         )}
                         <div className="flex flex-wrap gap-2 mt-3">
                           {assignment.subject_name && (
-                            <Badge variant="outline">
+                            <Badge variant="outline" className="bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
                               <FileText className="h-3 w-3 mr-1" />
                               {assignment.subject_name}
                             </Badge>
                           )}
                           {assignment.due_date && (
                             <Badge variant="outline" className={cn(
-                              new Date(assignment.due_date) < new Date() && "border-red-500 text-red-500"
+                              "bg-blue-500/10 border-blue-500/30 text-blue-400",
+                              new Date(assignment.due_date) < new Date() && "bg-red-500/10 border-red-500/30 text-red-400"
                             )}>
                               <Calendar className="h-3 w-3 mr-1" />
                               Due: {new Date(assignment.due_date).toLocaleDateString()}
@@ -303,7 +304,7 @@ export default function StudentAssignments() {
                           {getStatusBadge(getStatus(assignment))}
                         </div>
                         {assignment.file_url && (
-                          <Button variant="outline" size="sm" className="mt-3" asChild>
+                          <Button variant="outline" size="sm" className="mt-3 bg-white/5 border-white/20 text-white hover:bg-white/10" asChild>
                             <a href={assignment.file_url} target="_blank" rel="noopener noreferrer">
                               <Download className="h-3 w-3 mr-1" />
                               Download Attachment
@@ -314,9 +315,9 @@ export default function StudentAssignments() {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="border-t bg-gradient-to-r from-blue-500/5 to-cyan-500/5 space-y-4">
+                  <CardContent className="border-t border-white/10 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 space-y-4">
                     <div>
-                      <Label htmlFor={`text-${assignment.id}`}>Your Response</Label>
+                      <Label htmlFor={`text-${assignment.id}`} className="text-gray-300">Your Response</Label>
                       <Textarea
                         id={`text-${assignment.id}`}
                         placeholder="Write your answer here..."
@@ -326,12 +327,12 @@ export default function StudentAssignments() {
                           [assignment.id]: e.target.value 
                         }))}
                         rows={4}
-                        className="mt-2"
+                        className="mt-2 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-cyan-500"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor={`file-${assignment.id}`}>Attach File (Optional)</Label>
+                      <Label htmlFor={`file-${assignment.id}`} className="text-gray-300">Attach File (Optional)</Label>
                       <Input
                         id={`file-${assignment.id}`}
                         type="file"
@@ -339,10 +340,10 @@ export default function StudentAssignments() {
                           ...prev,
                           [assignment.id]: e.target.files?.[0] || null
                         }))}
-                        className="mt-2"
+                        className="mt-2 bg-white/5 border-white/20 text-white file:text-white focus:border-cyan-500"
                       />
                       {submissionFiles[assignment.id] && (
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-gray-400 mt-1">
                           Selected: {submissionFiles[assignment.id]?.name}
                         </p>
                       )}
@@ -351,7 +352,7 @@ export default function StudentAssignments() {
                     <Button
                       onClick={() => submitAssignment(assignment.id)}
                       disabled={submitting === assignment.id || (!submissionText[assignment.id] && !submissionFiles[assignment.id])}
-                      className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+                      className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-semibold shadow-lg shadow-cyan-500/25"
                     >
                       {submitting === assignment.id ? (
                         <>
@@ -374,25 +375,25 @@ export default function StudentAssignments() {
           <TabsContent value="submitted" className="p-4 space-y-4">
             {submittedAssignments.length === 0 ? (
               <div className="text-center py-12">
-                <AlertCircle className="h-12 w-12 text-blue-500 mx-auto mb-3 opacity-50" />
-                <p className="text-sm text-muted-foreground">No submissions yet</p>
-                <p className="text-xs text-muted-foreground mt-1">Start submitting your assignments</p>
+                <AlertCircle className="h-12 w-12 text-cyan-500 mx-auto mb-3 opacity-50" />
+                <p className="text-sm text-gray-400">No submissions yet</p>
+                <p className="text-xs text-gray-500 mt-1">Start submitting your assignments</p>
               </div>
             ) : (
               submittedAssignments.map((assignment) => (
-                <Card key={assignment.id} className="border-2">
+                <Card key={assignment.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{assignment.title}</CardTitle>
+                        <CardTitle className="text-lg text-white">{assignment.title}</CardTitle>
                         <div className="flex flex-wrap gap-2 mt-3">
                           {assignment.subject_name && (
-                            <Badge variant="outline">{assignment.subject_name}</Badge>
+                            <Badge variant="outline" className="bg-cyan-500/10 border-cyan-500/30 text-cyan-400">{assignment.subject_name}</Badge>
                           )}
                           {getStatusBadge(assignment.submission!.status)}
-                          {assignment.submission?.score !== null && (
-                            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500">
-                              Score: {assignment.submission.score}/{assignment.max_score}
+                          {assignment.submission?.score !== null && assignment.submission?.score !== undefined && (
+                            <Badge className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-400">
+                              Score: {assignment.submission?.score}/{assignment.max_score}
                             </Badge>
                           )}
                         </div>
@@ -403,15 +404,15 @@ export default function StudentAssignments() {
                   <CardContent className="space-y-3">
                     {assignment.submission?.submission_text && (
                       <div>
-                        <Label className="text-xs">Your Submission:</Label>
-                        <p className="text-sm bg-muted p-3 rounded-lg mt-1">
+                        <Label className="text-xs text-gray-300">Your Submission:</Label>
+                        <p className="text-sm bg-white/5 border border-white/10 text-gray-300 p-3 rounded-lg mt-1">
                           {assignment.submission.submission_text}
                         </p>
                       </div>
                     )}
 
                     {assignment.submission?.file_url && (
-                      <Button variant="outline" size="sm" asChild>
+                      <Button variant="outline" size="sm" className="bg-white/5 border-white/20 text-white hover:bg-white/10" asChild>
                         <a href={assignment.submission.file_url} target="_blank" rel="noopener noreferrer">
                           <Download className="h-3 w-3 mr-1" />
                           View Submission
@@ -420,15 +421,15 @@ export default function StudentAssignments() {
                     )}
 
                     {assignment.submission?.feedback && (
-                      <div className="border-t pt-3">
-                        <Label className="text-xs">Teacher Feedback:</Label>
-                        <p className="text-sm text-muted-foreground mt-1">
+                      <div className="border-t border-white/10 pt-3">
+                        <Label className="text-xs text-gray-300">Teacher Feedback:</Label>
+                        <p className="text-sm text-gray-400 mt-1">
                           {assignment.submission.feedback}
                         </p>
                       </div>
                     )}
 
-                    <div className="flex gap-4 text-xs text-muted-foreground border-t pt-3">
+                    <div className="flex gap-4 text-xs text-gray-500 border-t border-white/10 pt-3">
                       <div>
                         <Clock className="h-3 w-3 inline mr-1" />
                         Submitted: {new Date(assignment.submission!.submitted_at).toLocaleString()}
