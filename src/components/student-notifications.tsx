@@ -192,15 +192,15 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'assignment':
-        return 'from-blue-500 to-cyan-500';
+        return 'from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-cyan-400';
       case 'grade':
-        return 'from-green-500 to-emerald-500';
+        return 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-400';
       case 'attendance':
-        return 'from-orange-500 to-amber-500';
+        return 'from-orange-500/20 to-amber-500/20 border-orange-500/30 text-orange-400';
       case 'timetable':
-        return 'from-purple-500 to-pink-500';
+        return 'from-purple-500/20 to-pink-500/20 border-purple-500/30 text-purple-400';
       default:
-        return 'from-gray-500 to-gray-600';
+        return 'from-gray-500/20 to-gray-600/20 border-gray-500/30 text-gray-400';
     }
   };
 
@@ -220,23 +220,23 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
   }
 
   return (
-    <Card className="huly-card">
-      <CardHeader className="pb-3 border-b">
+    <Card className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10 shadow-2xl">
+      <CardHeader className="pb-3 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25">
               <Bell className="h-5 w-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                Notifications
+                <span className="text-white">Notifications</span>
                 {unreadCount > 0 && (
-                  <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-500/30 text-red-400">
                     {unreadCount} new
                   </Badge>
                 )}
               </div>
-              <p className="text-xs font-normal text-muted-foreground mt-0.5">
+              <p className="text-xs font-normal text-gray-400 mt-0.5">
                 Stay updated with your assignments and classes
               </p>
             </div>
@@ -246,7 +246,7 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
               variant="outline"
               size="sm"
               onClick={markAllAsRead}
-              className="text-xs"
+              className="text-xs bg-white/5 border-white/20 text-white hover:bg-white/10"
             >
               <CheckCheck className="h-3 w-3 mr-1" />
               Mark all read
@@ -259,14 +259,14 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
         <ScrollArea style={{ height: maxHeight }}>
           {loading ? (
             <div className="p-6 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-              <p className="text-sm text-muted-foreground mt-2">Loading notifications...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500 mx-auto"></div>
+              <p className="text-sm text-gray-400 mt-2">Loading notifications...</p>
             </div>
           ) : notifications.length === 0 ? (
             <div className="p-8 text-center">
-              <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-              <p className="text-sm text-muted-foreground">No notifications yet</p>
-              <p className="text-xs text-muted-foreground mt-1">You'll be notified about assignments and updates here</p>
+              <Bell className="h-12 w-12 text-gray-500 mx-auto mb-3 opacity-50" />
+              <p className="text-sm text-gray-400">No notifications yet</p>
+              <p className="text-xs text-gray-500 mt-1">You'll be notified about assignments and updates here</p>
             </div>
           ) : (
             <div className="p-2 space-y-2">
@@ -274,10 +274,10 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
                 <div
                   key={notification.id}
                   className={cn(
-                    "p-4 rounded-xl border transition-all duration-200 hover:shadow-md group",
+                    "p-4 rounded-xl border transition-all duration-200 hover:shadow-md group cursor-pointer",
                     notification.is_read
-                      ? "bg-card border-border/30"
-                      : "bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/30"
+                      ? "bg-white/5 border-white/10 hover:bg-white/10"
+                      : "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border-cyan-500/30 hover:border-cyan-500/50"
                   )}
                   onClick={() => !notification.is_read && markAsRead(notification.id)}
                   role="button"
@@ -286,16 +286,15 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
                   <div className="flex items-start gap-3">
                     <div className={`flex-shrink-0 p-2 rounded-lg bg-gradient-to-br ${getTypeColor(notification.type)}`}>
                       {getIcon(notification.type)}
-                      <span className="text-white">{getIcon(notification.type)}</span>
                     </div>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1">
-                          <h4 className="font-semibold text-sm leading-tight mb-1">
+                          <h4 className="font-semibold text-sm leading-tight mb-1 text-white">
                             {notification.title}
                           </h4>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
+                          <p className="text-xs text-gray-400 leading-relaxed">
                             {notification.message}
                           </p>
                         </div>
@@ -303,7 +302,7 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-white/10"
                           onClick={(e) => {
                             e.stopPropagation();
                             deleteNotification(notification.id);
@@ -314,10 +313,10 @@ export default function StudentNotifications({ variant = 'full', maxHeight = '40
                       </div>
                       
                       <div className="flex items-center gap-2 mt-2">
-                        <Badge variant="outline" className="text-xs capitalize">
+                        <Badge variant="outline" className={`text-xs capitalize bg-gradient-to-br ${getTypeColor(notification.type)}`}>
                           {notification.type}
                         </Badge>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-gray-500">
                           {new Date(notification.created_at).toLocaleDateString()} at{' '}
                           {new Date(notification.created_at).toLocaleTimeString([], { 
                             hour: '2-digit', 
