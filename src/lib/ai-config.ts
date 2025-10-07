@@ -284,11 +284,16 @@ export async function callAI(
   const model = options.model || provider.defaultModel || provider.models[0]?.id;
 
   try {
+    // Lower maxTokens for faster response for Gemini and Mistral
+    const fastOptions = {
+      ...options,
+      maxTokens: 256
+    };
     switch (providerId) {
       case 'gemini':
-        return await callGemini(apiKey, model!, prompt, options);
+        return await callGemini(apiKey, model!, prompt, fastOptions);
       case 'mistral':
-        return await callMistral(apiKey, model!, prompt, options);
+        return await callMistral(apiKey, model!, prompt, fastOptions);
       case 'groq':
         return await callGroq(apiKey, model!, prompt, options);
       case 'openai':
@@ -316,7 +321,7 @@ async function callGemini(apiKey: string, model: string, prompt: string, options
       }],
       generationConfig: {
         temperature: options.temperature || 0.7,
-        maxOutputTokens: options.maxTokens || 1000,
+        maxOutputTokens: 256,
       }
     })
   });
