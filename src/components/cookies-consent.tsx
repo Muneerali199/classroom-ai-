@@ -49,20 +49,19 @@ export default function CookiesConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-6"
-          style={{
-            background: 'linear-gradient(135deg, #e3e3e3 0%, #d6d6d6 100%)'
-          }}
+          className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
         >
           <div className="max-w-7xl mx-auto">
             <div 
-              className="neumorphic-card p-8"
+              className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-xl shadow-2xl"
               style={{
-                background: 'linear-gradient(145deg, #ebebeb, #d5d5d5)',
-                boxShadow: '8px 8px 16px #c4c4c4, -8px -8px 16px #ffffff'
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)'
               }}
             >
-              <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-blue-500/10 rounded-2xl pointer-events-none" />
+              
+              <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-6">
                 {/* Cookie Icon */}
                 <motion.div
                   className="flex-shrink-0"
@@ -70,13 +69,9 @@ export default function CookiesConsent() {
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <div 
-                    className="w-16 h-16 neumorphic-sm-inset rounded-2xl flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(145deg, #d0d0d0, #f0f0f0)',
-                      boxShadow: 'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
-                    }}
+                    className="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30"
                   >
-                    <Cookie className="w-8 h-8 text-gray-600" />
+                    <Cookie className="w-7 h-7 md:w-8 md:h-8 text-cyan-400" />
                   </div>
                 </motion.div>
 
@@ -84,23 +79,23 @@ export default function CookiesConsent() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-700 mb-3 flex items-center gap-2">
-                        <span className="text-2xl">🍪</span>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3 flex items-center gap-2">
+                        <span className="text-xl md:text-2xl">🍪</span>
                         We value your privacy
                       </h3>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
                         We use cookies to enhance your experience, analyze site traffic, and personalize content.
                         By continuing to use our site, you agree to our{' '}
                         <I18nLink
                           href="/privacy-policy"
-                          className="text-blue-600 hover:underline font-medium neumorphic-badge px-2 py-1"
+                          className="text-cyan-400 hover:text-cyan-300 underline font-medium transition-colors"
                         >
                           Privacy Policy
                         </I18nLink>
                         {' '}and{' '}
                         <I18nLink
                           href="/terms-and-conditions"
-                          className="text-blue-600 hover:underline font-medium neumorphic-badge px-2 py-1"
+                          className="text-cyan-400 hover:text-cyan-300 underline font-medium transition-colors"
                         >
                           Terms & Conditions
                         </I18nLink>
@@ -117,26 +112,22 @@ export default function CookiesConsent() {
                             className="mt-4"
                           >
                             <div 
-                              className="neumorphic-sm-inset p-4 rounded-xl"
-                              style={{
-                                background: 'linear-gradient(145deg, #d0d0d0, #f0f0f0)',
-                                boxShadow: 'inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff'
-                              }}
+                              className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 rounded-xl"
                             >
                               <div className="grid md:grid-cols-2 gap-4">
                                 <div>
-                                  <h4 className="font-semibold text-gray-700 mb-2 flex items-center">
-                                    <Shield className="w-4 h-4 mr-2 text-green-500" />
+                                  <h4 className="font-semibold text-white mb-2 flex items-center">
+                                    <Shield className="w-4 h-4 mr-2 text-emerald-400" />
                                     Necessary Cookies
                                   </h4>
-                                  <p className="text-xs text-gray-600">Required for basic site functionality and security.</p>
+                                  <p className="text-xs text-gray-400">Required for basic site functionality and security.</p>
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-700 mb-2 flex items-center">
-                                    <FileText className="w-4 h-4 mr-2 text-blue-500" />
+                                  <h4 className="font-semibold text-white mb-2 flex items-center">
+                                    <FileText className="w-4 h-4 mr-2 text-cyan-400" />
                                     Analytics Cookies
                                   </h4>
-                                  <p className="text-xs text-gray-600">Help us understand how visitors use our site.</p>
+                                  <p className="text-xs text-gray-400">Help us understand how visitors use our site.</p>
                                 </div>
                               </div>
                             </div>
@@ -148,59 +139,50 @@ export default function CookiesConsent() {
                     {/* Close Button */}
                     <button
                       onClick={handleClose}
-                      className="flex-shrink-0 p-2 neumorphic-sm rounded-xl hover:neumorphic-sm-inset transition-all duration-300"
+                      className="flex-shrink-0 p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300"
                       aria-label="Close cookie banner"
                     >
-                      <X className="w-5 h-5 text-gray-600" />
+                      <X className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
                     </button>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-                  <motion.div
+                <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0 w-full lg:w-auto">
+                  <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={acceptAllCookies}
+                    className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-sm rounded-xl hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 shadow-lg shadow-cyan-500/25"
                   >
-                    <button
-                      onClick={acceptAllCookies}
-                      className="neumorphic-button px-6 py-3 text-gray-700 font-medium text-sm"
-                    >
-                      Accept All
-                    </button>
-                  </motion.div>
+                    Accept All
+                  </motion.button>
 
-                  <motion.div
+                  <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={acceptNecessaryOnly}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-medium text-sm rounded-xl border border-white/20 transition-all duration-300"
                   >
-                    <button
-                      onClick={acceptNecessaryOnly}
-                      className="neumorphic-sm px-6 py-3 text-gray-700 font-medium text-sm hover:neumorphic-sm-inset transition-all duration-300"
-                    >
-                      Necessary Only
-                    </button>
-                  </motion.div>
+                    Necessary Only
+                  </motion.button>
 
-                  <motion.div
+                  <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="px-4 py-2 text-gray-400 hover:text-white text-sm font-medium transition-colors"
                   >
-                    <button
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      className="neumorphic-badge px-4 py-2 text-gray-600 hover:text-gray-700 text-sm font-medium"
-                    >
-                      {isExpanded ? 'Less Info' : 'More Info'}
-                    </button>
-                  </motion.div>
+                    {isExpanded ? 'Less Info' : 'More Info'}
+                  </motion.button>
                 </div>
               </div>
 
               {/* Decline All Option */}
-              <div className="mt-6 pt-4 border-t border-gray-300/50">
+              <div className="relative mt-6 pt-4 border-t border-white/10">
                 <button
                   onClick={declineAllCookies}
-                  className="text-sm text-gray-500 hover:text-gray-700 underline neumorphic-sm px-3 py-1 rounded-lg transition-all duration-300"
+                  className="text-sm text-gray-500 hover:text-gray-300 underline transition-colors"
                 >
                   Decline All Cookies
                 </button>
