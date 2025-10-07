@@ -277,6 +277,7 @@ export default function TimetableManagement() {
       title: entry.title,
       subject_id: entry.subject_id ? entry.subject_id.toString() : '',
       room_id: entry.room_id ? entry.room_id.toString() : '',
+      course: '',
       day_of_week: entry.day_of_week,
       start_time: entry.start_time,
       end_time: entry.end_time,
