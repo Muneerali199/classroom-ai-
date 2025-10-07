@@ -156,9 +156,9 @@ export default function StudentTimetableView() {
 
   if (loading) {
     return (
-      <Card className="huly-card">
+      <Card className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10">
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
         </CardContent>
       </Card>
     );
@@ -167,22 +167,22 @@ export default function StudentTimetableView() {
   return (
     <div className="space-y-6">
       {/* Current Status Card */}
-      <Card className="huly-card border-2 border-blue-500/50 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+      <Card className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border-2 border-cyan-500/30 shadow-2xl">
         <CardContent className="p-6">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <h3 className="text-lg font-bold mb-1">Today's Schedule</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-bold mb-1 text-white">Today's Schedule</h3>
+              <p className="text-sm text-gray-400">
                 {DAYS[currentDay]}, {new Date().toLocaleDateString()}
               </p>
               {todayClasses.length > 0 ? (
                 <div className="mt-3">
-                  <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+                  <Badge className="bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold shadow-lg shadow-cyan-500/25">
                     {todayClasses.length} classes today
                   </Badge>
                   {upcomingClass && (
-                    <div className="mt-2 flex items-center gap-2 text-sm">
-                      <Bell className="h-4 w-4 text-orange-500" />
+                    <div className="mt-2 flex items-center gap-2 text-sm text-white">
+                      <Bell className="h-4 w-4 text-orange-400" />
                       <span>
                         Next: <strong>{upcomingClass.title}</strong> at {upcomingClass.start_time}
                       </span>
@@ -190,8 +190,8 @@ export default function StudentTimetableView() {
                   )}
                 </div>
               ) : (
-                <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <div className="mt-3 flex items-center gap-2 text-sm text-gray-400">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                   No classes scheduled today
                 </div>
               )}
@@ -200,6 +200,7 @@ export default function StudentTimetableView() {
               variant="outline"
               size="sm"
               onClick={fetchTimetable}
+              className="bg-white/5 border-white/20 text-white hover:bg-white/10"
             >
               <RefreshCw className="h-4 w-4 mr-1" />
               Refresh
@@ -209,15 +210,15 @@ export default function StudentTimetableView() {
       </Card>
 
       {/* Weekly Timetable */}
-      <Card className="huly-card">
-        <CardHeader className="border-b bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+      <Card className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/10 shadow-2xl">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
           <CardTitle className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25">
               <Calendar className="h-5 w-5 text-white" />
             </div>
             <div>
-              <div>My Weekly Schedule</div>
-              <p className="text-xs font-normal text-muted-foreground mt-0.5">
+              <div className="text-white">My Weekly Schedule</div>
+              <p className="text-xs font-normal text-gray-400 mt-0.5">
                 View your complete class timetable
               </p>
             </div>
@@ -230,29 +231,29 @@ export default function StudentTimetableView() {
               <Card key={dayIndex} className={cn(
                 "border-2 transition-all",
                 isToday 
-                  ? "border-blue-500 bg-gradient-to-br from-blue-500/10 to-cyan-500/10" 
-                  : "border-border",
+                  ? "border-cyan-500 bg-gradient-to-br from-cyan-500/10 to-blue-500/10" 
+                  : "bg-white/5 border-white/10",
                 entries.length === 0 && "opacity-50"
               )}>
                 <CardHeader className={cn(
                   "pb-3",
-                  isToday && "bg-gradient-to-r from-blue-500/20 to-cyan-500/20"
+                  isToday && "bg-gradient-to-r from-cyan-500/20 to-blue-500/20"
                 )}>
                   <CardTitle className="text-base flex items-center justify-between">
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center gap-2 text-white">
                       {day}
                       {isToday && (
-                        <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-xs">
+                        <Badge className="bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs shadow-lg shadow-cyan-500/25">
                           Today
                         </Badge>
                       )}
                     </span>
-                    <Badge variant="outline">{entries.length}</Badge>
+                    <Badge variant="outline" className="bg-white/10 border-white/20 text-gray-400">{entries.length}</Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 space-y-2">
                   {entries.length === 0 ? (
-                    <p className="text-xs text-muted-foreground text-center py-6">
+                    <p className="text-xs text-gray-500 text-center py-6">
                       No classes
                     </p>
                   ) : (
@@ -265,22 +266,22 @@ export default function StudentTimetableView() {
                           key={entry.id}
                           className={cn(
                             "p-3 rounded-lg border transition-all",
-                            isNow && "border-green-500 bg-green-500/10 shadow-lg",
+                            isNow && "border-emerald-500 bg-emerald-500/10 shadow-lg",
                             isNext && "border-orange-500 bg-orange-500/10",
-                            !isNow && !isNext && "bg-card hover:shadow-md"
+                            !isNow && !isNext && "bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-md"
                           )}
                         >
                           <div className="flex items-start justify-between gap-2 mb-2">
-                            <h4 className="font-semibold text-sm leading-tight">{entry.title}</h4>
+                            <h4 className="font-semibold text-sm leading-tight text-white">{entry.title}</h4>
                             {isNow && (
-                              <Badge className="bg-green-500 text-xs">Live</Badge>
+                              <Badge className="bg-emerald-500/20 border-emerald-500/30 text-emerald-400 text-xs">Live</Badge>
                             )}
                             {isNext && (
-                              <Badge className="bg-orange-500 text-xs">Soon</Badge>
+                              <Badge className="bg-orange-500/20 border-orange-500/30 text-orange-400 text-xs">Soon</Badge>
                             )}
                           </div>
 
-                          <div className="space-y-1 text-xs text-muted-foreground">
+                          <div className="space-y-1 text-xs text-gray-400">
                             <div className="flex items-center gap-1">
                               <Clock className="h-3 w-3" />
                               {entry.start_time} - {entry.end_time}
@@ -301,7 +302,7 @@ export default function StudentTimetableView() {
                           </div>
 
                           {entry.description && (
-                            <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
+                            <p className="text-xs text-gray-500 mt-2 line-clamp-2">
                               {entry.description}
                             </p>
                           )}
